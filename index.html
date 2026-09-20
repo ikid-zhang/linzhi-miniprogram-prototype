@@ -18,11 +18,12 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC",system-u
 .page.active{display:flex}
 .page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .page-scroll::-webkit-scrollbar{display:none}
-.navbar{height:44px;display:flex;align-items:center;justify-content:center;position:relative;background:transparent;flex-shrink:0}
-.navbar .back-btn{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px}
+.navbar{height:44px;display:flex;align-items:center;position:relative;background:transparent;flex-shrink:0}
+.navbar .back-btn{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;z-index:2}
 .navbar .back-btn:active{background:var(--muted)}
-.navbar .nav-title{font-size:17px;font-weight:600;color:var(--foreground)}
-.navbar .nav-action{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;height:32px;padding:0 12px;background:var(--gradient);color:#fff;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;border:none;box-shadow:var(--shadow-accent)}
+.navbar .nav-title{flex:1;min-width:0;margin:0 46px;font-size:17px;font-weight:600;color:var(--foreground);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.navbar .nav-action{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:3px;height:28px;padding:0 11px;background:var(--gradient);color:#fff;border-radius:14px;font-size:12px;font-weight:600;cursor:pointer;border:none;box-shadow:var(--shadow-accent);z-index:2}
 .gradient-text{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
 .section-label{display:inline-flex;align-items:center;gap:8px;padding:4px 14px;border-radius:999px;border:1px solid rgba(0,82,255,0.25);background:rgba(0,82,255,0.05);font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent)}
 .section-label .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
@@ -64,8 +65,10 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC",system-u
 .huzheng-card.wide{grid-column:span 2}
 /* 我的申请列表 */
 .list-header{padding:16px 20px 12px}
+.list-header .list-header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .list-header .list-title{font-size:24px;font-weight:700;color:var(--foreground);font-family:"Calistoga","Georgia",serif}
 .list-header .list-sub{font-size:12px;color:var(--muted-foreground);margin-top:4px}
+.nav-action.list-action{height:28px;padding:0 12px;border-radius:14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px;background:var(--gradient);color:#fff;border:none;box-shadow:var(--shadow-accent);cursor:pointer;flex-shrink:0}
 .status-tabs{display:flex;gap:8px;padding:0 16px 16px;overflow-x:auto}
 .status-tabs::-webkit-scrollbar{display:none}
 .status-tab{flex-shrink:0;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:500;color:var(--muted-foreground);background:var(--muted);cursor:pointer;border:1px solid transparent}
@@ -404,9 +407,9 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
     <!-- 我的申请列表 -->
     <div class="page" id="page-my-list">
-      <div class="navbar"><div class="back-btn" onclick="goPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title" id="my-list-title">我的申请</span><button class="nav-action" id="new-apply-btn" onclick="newApply()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>新建申请</button></div>
+      <div class="navbar"><div class="back-btn" onclick="goPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title" id="my-list-title">我的申请</span></div>
       <div class="page-scroll">
-        <div class="list-header"><div class="list-title" id="my-list-biz">全部业务</div><div class="list-sub" id="my-list-sub">您提交的户政业务申请记录</div></div>
+        <div class="list-header"><div class="list-header-row"><div class="list-title" id="my-list-biz">全部业务</div><button class="nav-action list-action" id="new-apply-btn" onclick="newApply()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>新建申请</button></div><div class="list-sub" id="my-list-sub">您提交的户政业务申请记录</div></div>
         <div class="status-tabs" id="status-tabs">
           <div class="status-tab active" data-status="all" onclick="filterStatus(this)">全部</div>
           <div class="status-tab" data-status="pending" onclick="filterStatus(this)">待受理</div>
@@ -844,7 +847,7 @@ function renderList(){
   const biz=BIZ_MAP[currentBiz];
   document.getElementById('my-list-title').textContent=currentBiz==='all'?'我的申请':biz.name+' · 我的申请';
   document.getElementById('my-list-biz').textContent=currentBiz==='all'?'全部业务记录':biz.name;
-  document.getElementById('new-apply-btn').style.display=currentBiz==='all'?'none':'flex';
+  const nab=document.getElementById('new-apply-btn');if(nab)nab.style.display=currentBiz==='all'?'none':'flex';
   let list=records;if(currentBiz!=='all')list=list.filter(r=>r.biz===currentBiz);if(currentStatus!=='all')list=list.filter(r=>r.status===currentStatus);
   const c=document.getElementById('record-list');
   if(!list.length){c.innerHTML='<div class="empty-state"><div class="empty-text">暂无相关申请记录</div></div>';return}
