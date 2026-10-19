@@ -63,6 +63,14 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC",system-u
 .huzheng-card .card-icon{width:56px;height:56px;margin:10px auto 8px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(135deg,rgba(0,82,255,0.08),rgba(77,124,255,0.05))}
 .huzheng-card .card-desc{font-size:11px;color:var(--muted-foreground);line-height:1.6;flex:1}
 .huzheng-card.wide{grid-column:span 2}
+.secondary-biz{padding:4px 16px 26px}
+.secondary-title{font-size:12px;color:var(--muted-foreground);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.secondary-title::before{content:'';width:3px;height:12px;border-radius:2px;background:#C7D2FE}
+.secondary-items{display:flex;gap:10px}
+.secondary-item{flex:1;display:flex;align-items:center;gap:8px;background:var(--muted);border:1px solid var(--border);border-radius:10px;padding:9px 12px;cursor:pointer}
+.secondary-item:active{transform:translateY(-1px)}
+.secondary-item .si-name{font-size:13px;font-weight:600;color:var(--foreground)}
+.secondary-item .si-note{font-size:11px;color:var(--muted-foreground);margin-left:auto;white-space:nowrap}
 /* 我的申请列表 */
 .list-header{padding:16px 20px 12px}
 .list-header .list-header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -401,9 +409,14 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <div class="huzheng-card" onclick="goPage('my-list','biangeng')"><div class="card-title">主项变更更正</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="6" y="8" width="20" height="18" rx="2" fill="#0052FF" opacity="0.15"/><path d="M10 14h12M10 18h8M10 22h10" stroke="#0052FF" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/></svg></div><div class="card-desc">姓名 · 性别 · 出生日期 · 民族 · 身份证号</div></div>
           <div class="huzheng-card" onclick="goPage('my-list','feizhuxiang')"><div class="card-title">非主项变更</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="6" y="8" width="20" height="18" rx="2" fill="#0052FF" opacity="0.12"/><path d="M10 14h12M10 18h10" stroke="#0052FF" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/></svg></div><div class="card-desc">职业 · 服务处所 · 文化程度 · 婚姻状况 · 身高</div></div>
           <div class="huzheng-card" onclick="goPage('my-list','bulu')"><div class="card-title">户籍补录</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="8" y="4" width="16" height="24" rx="2" fill="#0052FF" opacity="0.15"/><circle cx="22" cy="22" r="4" fill="#0052FF" opacity="0.3"/></svg></div><div class="card-desc">无户口人员补登补录 · 漏登补录</div></div>
-          <div class="huzheng-card" onclick="goPage('my-list','swqr')"><div class="card-title">市外迁入</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><path d="M4 16h20M18 10l6 6-6 6" stroke="#0052FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" fill="none"/><path d="M8 4v4M8 24v4" stroke="#0052FF" stroke-width="2" stroke-linecap="round" opacity="0.3"/></svg></div><div class="card-desc">市外户口迁入波密 · 投靠/购房/人才/毕业/调动</div></div>
-          <div class="huzheng-card wide" onclick="goPage('my-list','qianyi')"><div class="card-title">户籍迁移</div><div class="card-desc">市内移居（其他迁移场景，后续启用）</div></div>
-          <div class="huzheng-card wide" onclick="goPage('my-list','smrzm')" style="background:linear-gradient(135deg,#F0F9FF,#E0F2FE);border-color:#7DD3FC"><div class="card-title" style="color:#0369A1">上门办证服务</div><div class="card-desc" style="color:#075985">仅限老弱病残等无法出门人员 · 户口本/身份证补办预约上门</div></div>
+          <div class="huzheng-card" onclick="goPage('my-list','smrzm')" style="background:linear-gradient(135deg,#F0F9FF,#E0F2FE);border-color:#7DD3FC"><div class="card-title" style="color:#0369A1">上门办证服务</div><div class="card-icon" style="background:rgba(3,105,161,0.1)"><svg width="32" height="32" viewBox="0 0 32 32"><path d="M4 16h20M18 10l6 6-6 6" stroke="#0369A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="6" y="20" width="12" height="8" rx="1.5" fill="#0369A1" opacity="0.15" stroke="#0369A1" stroke-width="1.5"/></svg></div><div class="card-desc" style="color:#075985">老弱病残无法出门人员 · 户口本/身份证补办</div></div>
+        </div>
+        <div class="secondary-biz">
+          <div class="secondary-title">更多户政服务（窗口办理）</div>
+          <div class="secondary-items">
+            <div class="secondary-item" onclick="goPage('my-list','swqr')"><span class="si-name">市外迁入</span><span class="si-note">投靠/购房/人才迁入</span></div>
+            <div class="secondary-item" onclick="goPage('my-list','qianyi')"><span class="si-name">户籍迁移</span><span class="si-note">市内移居</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -738,8 +751,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label"><span class="required">*</span>上门地址</label><input class="form-input" placeholder="详细到门牌号，如：扎木镇XX路XX号XX单元XX室"></div>
 
       <div class="form-group"><label class="form-label" style="font-size:14px;font-weight:600;margin-bottom:10px;display:block">办证人信息（实际需上门办理的人员）</label></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>办证人姓名</label><input class="form-input" placeholder="需上门办证人员姓名"></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>办证人公民身份号码</label><input class="form-input" placeholder="办证人18位身份证号"></div>
+      <div class="form-row"><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>办证人姓名</label><input class="form-input" placeholder="需上门办证人员姓名"></div><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>办证人公民身份号码</label><input class="form-input" placeholder="18位身份证号"></div></div>
 
       <div class="form-group"><label class="form-label"><span class="required">*</span>预约上门日期</label><input class="form-input" type="date" min="2026-10-17"></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>预约上门时段</label><div class="select-wrap"><select class="form-input"><option value="">请选择时段（公安上班时间）</option><option>上午 09:00-10:00</option><option>上午 10:00-11:00</option><option>上午 11:00-12:00</option><option>下午 15:00-16:00</option><option>下午 16:00-17:00</option><option>下午 17:00-18:00</option></select></div><div class="form-hint">仅工作日可预约，节假日顺延</div></div>
@@ -805,12 +817,12 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       </div>
       <div class="form-step" data-step="2">
       <div class="form-group"><label class="form-label"><span class="required">*</span>拟登记身份信息</label>
-        <div class="form-row"><div class="form-group" style="margin-bottom:0"><input class="form-input" id="bulu-name" data-group="bulu" data-field="name" placeholder="姓名"></div><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input" data-group="bulu" data-field="gender"><option value="">性别</option><option>男</option><option>女</option></select></div></div></div>
-        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><input class="form-input" type="date" data-group="bulu" data-field="birth"></div><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input" data-group="bulu" data-field="nation"><option value="">民族</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div></div></div>
-        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><div class="region-select" onclick="openRegion('bulu_native')"><span class="region-value placeholder" id="region-val-bulu_native">籍贯（选择）</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bulu_native"></div><div class="form-group" style="margin-bottom:0"><div class="region-select" onclick="openRegion('bulu_birth')"><span class="region-value placeholder" id="region-val-bulu_birth">出生地（选择）</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bulu_birth"></div></div>
+        <div class="form-row"><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>姓名</label><input class="form-input" id="bulu-name" data-group="bulu" data-field="name" placeholder="请输入姓名"></div><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>性别</label><div class="select-wrap"><select class="form-input" data-group="bulu" data-field="gender"><option value="">请选择</option><option>男</option><option>女</option></select></div></div></div>
+        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>出生日期</label><input class="form-input" type="date" data-group="bulu" data-field="birth"></div><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>民族</label><div class="select-wrap"><select class="form-input" data-group="bulu" data-field="nation"><option value="">请选择</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div></div></div>
+        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><label class="form-label">籍贯</label><div class="region-select" onclick="openRegion('bulu_native')"><span class="region-value placeholder" id="region-val-bulu_native">请选择</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bulu_native"></div><div class="form-group" style="margin-bottom:0"><label class="form-label">出生地</label><div class="region-select" onclick="openRegion('bulu_birth')"><span class="region-value placeholder" id="region-val-bulu_birth">请选择</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bulu_birth"></div></div>
         <div class="form-hint">无原始材料的由调查结论确定</div>
       </div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户户主姓名</label><input class="form-input" placeholder="居住地或监护人户口所在地派出所申报"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户户主姓名</label><input class="form-input" placeholder="请输入拟落户户主姓名"><div class="form-hint">在居住地或监护人户口所在地派出所申报</div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>与户主关系</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>本人</option><option>之子/之女</option><option>之孙/之外孙</option><option>其他</option></select></div></div>
       <div class="form-group"><label class="form-label">监护人信息</label><input class="form-input" placeholder="特殊原因无户口人员：民政部门/村（居）委指定监护人书面材料、法院指定监护判决书"><div class="form-hint">监护代办时必填</div></div>
       </div>
