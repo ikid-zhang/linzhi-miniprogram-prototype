@@ -728,7 +728,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>申报人承诺所申报死亡事实真实，所附材料有效，同意依法注销死者户口。</span></div>
     </div>
   </div>
-  <div class="form-footer"><button class="submit-btn" onclick="submitForm('死亡注销申报','swzx','huzheng')">提交申报</button></div>
+  <div class="form-footer"><button class="submit-btn" onclick="submitForm('死亡注销申报','/swzx','swzx')">提交申报</button></div>
 </div>
 <div class="page" id="page-form-smrzm">
   <div class="navbar"><div class="back-btn" onclick="goPage('my-list','smrzm')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">上门办证服务</span></div>
@@ -930,7 +930,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   </div>
 </div>
 <script>
-const BIZ_MAP={all:{name:'全部',form:null},chusheng:{name:'出生登记',form:'chusheng',ep:'/csdj',sqlx:'0101'},huzheng:{name:'户籍证明',form:'huzheng',ep:'/dysq',sqlx:'-'},biangeng:{name:'主项变更更正',form:'biangeng',ep:'/bggzsq',sqlx:'1201'},feizhuxiang:{name:'非主项变更',form:'feizhuxiang',ep:'/bggzsq',sqlx:'1210'},bulu:{name:'户籍补录',form:'bulu',ep:'/bulu',sqlx:'-'},swqr:{name:'市外迁入',form:'swqr',ep:'/swqr',sqlx:'0623'},qianyi:{name:'户籍迁移',form:'qianyi',ep:'/swqr',sqlx:'0601'},smrzm:{name:'上门办证服务',form:'smrzm',ep:'/smrzm',sqlx:'-'}};
+const BIZ_MAP={all:{name:'全部',form:null},chusheng:{name:'出生登记',form:'chusheng',ep:'/csdj',sqlx:'0101'},huzheng:{name:'户籍证明',form:'huzheng',ep:'/dysq',sqlx:'-'},swzx:{name:'死亡注销申报',form:'swzx',ep:'/swzx',sqlx:'0401'},biangeng:{name:'主项变更更正',form:'biangeng',ep:'/bggzsq',sqlx:'1201'},feizhuxiang:{name:'非主项变更',form:'feizhuxiang',ep:'/bggzsq',sqlx:'1210'},bulu:{name:'户籍补录',form:'bulu',ep:'/bulu',sqlx:'-'},swqr:{name:'市外迁入',form:'swqr',ep:'/swqr',sqlx:'0623'},qianyi:{name:'户籍迁移',form:'qianyi',ep:'/swqr',sqlx:'0601'},smrzm:{name:'上门办证服务',form:'smrzm',ep:'/smrzm',sqlx:'-'}};
 
 // 各业务操作指南 + 可下载模板
 const GUIDE_MAP={
@@ -979,7 +979,7 @@ let records=[
   {id:'HLW20260908004',biz:'chusheng',bizName:'出生登记',time:'2026-09-08 09:45',status:'done',statusText:'已办结',summary:'新生儿：次仁旺堆',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{新生儿姓名:'次仁旺堆',性别:'男',出生日期:'2026-09-05',出生医学证明编号:'R540012345',父亲:'扎西',母亲:'卓玛',拟入户地:'扎木镇居委会'},mats:['出生医学证明','父母结婚证','父母身份证','人证核验照']},
   {id:'HLW20260905005',biz:'biangeng',bizName:'主项变更更正',time:'2026-09-05 16:30',status:'rejected',statusText:'已退回',summary:'姓名变更：卓玛→卓玛措',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:2,rejectReason:'材料不齐全，请补充户口本原件照片',detail:{变更项目:'姓名',原信息:'卓玛',申请变更为:'卓玛措',变更事由:'因宗教信仰需要更改名字',审批层级:'县局核准'},mats:['身份证人像面','身份证国徽面','姓名变更申请','人证核验照']},
   {id:'HLW20260902006',biz:'bulu',bizName:'户籍补录',time:'2026-09-02 11:12',status:'pending',statusText:'待受理',summary:'3岁以上从未申报户口',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:3,detail:{补录人员:'卓玛（本人）',补录人员出生日期:'1990-05-12',无户口原因:'历史原因未申报',拟入户地:'扎木镇居委会',调查情况:'需社区民警走访核实',审批层级:'市局审批'},mats:['身份证人像面','身份证国徽面','无户口情况说明','人证核验照','社区证明']}
-,{id:'HLW20260916007',biz:'huzheng',bizName:'死亡注销申报',time:'2026-09-16 15:30',status:'done',statusText:'已办结',summary:'死者：扎西（配偶）',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{死者:'扎西',死亡日期:'2026-09-14',死亡原因:'正常死亡（病亡）',申报人关系:'配偶',注销结果:'户口已注销'},mats:['死亡医学证明','户口簿','申报人身份证']}
+,{id:'HLW20260916007',biz:'swzx',bizName:'死亡注销申报',time:'2026-09-16 15:30',status:'done',statusText:'已办结',summary:'死者：扎西（配偶）',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{死者:'扎西',死亡日期:'2026-09-14',死亡原因:'正常死亡（病亡）',申报人关系:'配偶',注销结果:'户口已注销'},mats:['死亡医学证明','户口簿','申报人身份证']}
 ,{id:'HLW20260917008',biz:'chusheng',bizName:'出生登记',time:'2026-09-17 10:15',status:'reviewing',statusText:'审核中',summary:'新生儿：格桑梅朵',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{新生儿姓名:'格桑梅朵',性别:'女',出生日期:'2026-09-16',父亲:'扎西',母亲:'卓玛',拟入户地:'扎木镇居委会'},mats:['出生医学证明','父母结婚证','父母身份证']}
 ,{id:'HLW20260903009',biz:'chusheng',bizName:'出生登记',time:'2026-09-03 14:20',status:'rejected',statusText:'已退回',summary:'新生儿：旦增',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,rejectReason:'出生医学证明信息与身份证信息不一致，请核对后重新上传',detail:{新生儿姓名:'旦增',出生日期:'2026-08-20',拟入户地:'扎木镇居委会'},mats:['出生医学证明','父母身份证']}
 ,{id:'HLW20260912010',biz:'huzheng',bizName:'户籍证明',time:'2026-09-12 09:30',status:'reviewing',statusText:'审核中',summary:'子女上学用',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{证明事项:'户籍证明',证明用途:'子女入学',出具方式:'电子证照'},mats:['身份证人像面','身份证国徽面','人证核验照']}
@@ -1017,8 +1017,6 @@ function renderLicenses(){
   const done=records.filter(r=>r.status==='done');
   const hz=done.find(r=>r.biz==='huzheng');
   if(hz)certs.push({t:'huzheng',name:'户籍证明',desc:'主要用于证明公民身份、家庭关系及户籍信息',time:hz.time});
-  const cs=done.find(r=>r.biz==='chusheng');
-  certs.push({t:'chusheng',name:'出生证明',desc:'用于证明新生儿出生事实及出生登记信息，亮码可核验',time:cs?cs.time:'2026-09-08'});
   certs.push({t:'',name:'无犯罪记录证明',desc:'由国家公安机关开具，用于证明居民无犯罪事实',time:'2026-08-12',demo:true});
   docs.push({name:'居民身份证',desc:'用于证明公民身份的法定证件',demo:true});
   docs.push({name:'电子户口簿',desc:'用于证明户籍登记信息的电子证照',demo:true});
@@ -1086,7 +1084,7 @@ function renderList(){
     }
     return
   }
-  c.innerHTML=list.map(r=>'<div class="record-card" onclick="openResult(\''+r.id+'\')"><div class="record-top"><div><div class="record-biz">'+r.bizName+'</div><div class="record-no">'+r.id+'</div></div><span class="status-badge '+r.status+'">'+r.statusText+'</span></div><div class="record-meta"><div class="meta-item"><span class="meta-label">申请人</span><span class="meta-value">'+r.applicant+'</span></div><div class="meta-item"><span class="meta-label">时间</span><span class="meta-value">'+r.time+'</span></div></div><div style="font-size:12px;color:var(--muted-foreground);margin-bottom:10px">'+r.summary+'</div>'+(r.status==='rejected'?'<div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.28);border-radius:10px;padding:10px 12px;margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#DC2626;margin-bottom:4px;display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>退回原因</div><div style="font-size:12px;color:#B91C1C;line-height:1.6">'+(r.rejectReason||'材料不齐全或不符合要求，请查看审批意见后重新提交')+'</div></div>':'')+'<div class="record-actions"><button class="record-btn" onclick="event.stopPropagation();openResult(\''+r.id+'\')">查看进度</button>'+(r.status==='done'&&(r.biz==='chusheng'||r.biz==='huzheng')?'<button class="record-btn primary" onclick="event.stopPropagation();openCertFromRec(\''+r.id+'\')">查看电子证件</button>':'')+'</div></div>').join('');
+  c.innerHTML=list.map(r=>'<div class="record-card" onclick="openResult(\''+r.id+'\')"><div class="record-top"><div><div class="record-biz">'+r.bizName+'</div><div class="record-no">'+r.id+'</div></div><span class="status-badge '+r.status+'">'+r.statusText+'</span></div><div class="record-meta"><div class="meta-item"><span class="meta-label">申请人</span><span class="meta-value">'+r.applicant+'</span></div><div class="meta-item"><span class="meta-label">时间</span><span class="meta-value">'+r.time+'</span></div></div><div style="font-size:12px;color:var(--muted-foreground);margin-bottom:10px">'+r.summary+'</div>'+(r.status==='rejected'?'<div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.28);border-radius:10px;padding:10px 12px;margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#DC2626;margin-bottom:4px;display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>退回原因</div><div style="font-size:12px;color:#B91C1C;line-height:1.6">'+(r.rejectReason||'材料不齐全或不符合要求，请查看审批意见后重新提交')+'</div></div>':'')+'<div class="record-actions"><button class="record-btn" onclick="event.stopPropagation();openResult(\''+r.id+'\')">查看进度</button>'+(r.status==='done'&&r.biz==='huzheng'?'<button class="record-btn primary" onclick="event.stopPropagation();openCertFromRec(\''+r.id+'\')">查看电子证件</button>':'')+'</div></div>').join('');
 }
 function filterStatus(el){document.querySelectorAll('.status-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');currentStatus=el.dataset.status;renderList()}
 function newApply(){const b=BIZ_MAP[currentBiz];if(b.form)goPage('form-'+b.form)}
@@ -1393,15 +1391,15 @@ let currentRecId='';
 function openResult(id){currentRecId=id;goPage('result')}
 function openCertFromRec(id){
   const r=records.find(x=>x.id===id);if(!r)return;
-  if(r.biz!=='chusheng'&&r.biz!=='huzheng'){toast('该业务办结后暂无电子证明');return}
-  renderCert(r.biz==='chusheng'?'chusheng':'huzheng','my-list');goPage('cert');
+  if(r.biz!=='huzheng'){toast('该业务办结后暂无电子证明');return}
+  renderCert('huzheng','my-list');goPage('cert');
 }
 function renderResultPage(){
   const btn=document.getElementById('result-cert-btn');
   const r=records.find(x=>x.id===currentRecId);
   const t=document.getElementById('result-title');
   if(r){t.textContent=r.status==='done'?r.bizName+' · 已办结':r.status==='rejected'?r.bizName+' · 已退回':r.bizName+' · 办理中'}
-  const can=r&&r.status==='done'&&(r.biz==='chusheng'||r.biz==='huzheng');
+  const can=r&&r.status==='done'&&r.biz==='huzheng';
   if(btn)btn.style.display=can?'flex':'none';
 }
 
