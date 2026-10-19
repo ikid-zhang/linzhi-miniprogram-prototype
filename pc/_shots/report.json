@@ -1,0 +1,131 @@
+{
+  "src": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/index.html",
+  "url": "file:///Volumes/z/demo/5_%E4%BA%A4%E4%BB%98%E9%A1%B9%E7%9B%AE/%E8%A5%BF%E8%97%8F/%E6%9E%97%E8%8A%9D/6.%E9%9C%80%E6%B1%82%E6%94%B6%E9%9B%86/%E6%88%B7%E7%B1%8D%E4%B8%9A%E5%8A%A1/%E5%86%85%E7%BD%91PC%E8%AF%81%E4%BB%B6%E6%9D%90%E6%96%99%E7%AE%A1%E7%90%86/index.html",
+  "outdir": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "screenshot": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/_shots/index_desktop.jpg",
+      "screenshotBytes": 60197,
+      "truncated": false,
+      "structure": {
+        "title": "波密县公安局 · 户政证件材料管理（内网）",
+        "firstH1": "波密县公安局 · 户政证件材料管理",
+        "viewport": {
+          "w": 1440,
+          "h": 757
+        },
+        "fullpage": {
+          "w": 1440,
+          "h": 757
+        },
+        "counts": {
+          "section": 0,
+          "h1": 1,
+          "h2": 0,
+          "img": 0,
+          "canvas": 1,
+          "svg": 3,
+          "links": 0,
+          "buttons": 27
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "reportSource": "cdp"
+    },
+    "mobile": {
+      "screenshot": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/_shots/index_mobile.jpg",
+      "screenshotBytes": 159869,
+      "truncated": false,
+      "structure": {
+        "title": "波密县公安局 · 户政证件材料管理（内网）",
+        "firstH1": "波密县公安局 · 户政证件材料管理",
+        "viewport": {
+          "w": 500,
+          "h": 701
+        },
+        "fullpage": {
+          "w": 500,
+          "h": 3983
+        },
+        "counts": {
+          "section": 0,
+          "h1": 1,
+          "h2": 0,
+          "img": 0,
+          "canvas": 1,
+          "svg": 3,
+          "links": 0,
+          "buttons": 27
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "reportSource": "cdp"
+    }
+  },
+  "engine": "chrome_cli",
+  "chromiumExec": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "engineDegraded": true,
+  "engineDegradedReason": "playwright 未装",
+  "elapsedSec": 8.75,
+  "schemaVersion": 2,
+  "status": "pass",
+  "engineInfo": {
+    "name": "chrome_cli",
+    "degraded": true,
+    "degradedReasons": [
+      "playwright 未装"
+    ]
+  },
+  "input": {
+    "original": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/index.html",
+    "resolvedPath": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/index.html",
+    "baseUrl": "file:///Volumes/z/demo/5_%E4%BA%A4%E4%BB%98%E9%A1%B9%E7%9B%AE/%E8%A5%BF%E8%97%8F/%E6%9E%97%E8%8A%9D/6.%E9%9C%80%E6%B1%82%E6%94%B6%E9%9B%86/%E6%88%B7%E7%B1%8D%E4%B8%9A%E5%8A%A1/%E5%86%85%E7%BD%91PC%E8%AF%81%E4%BB%B6%E6%9D%90%E6%96%99%E7%AE%A1%E7%90%86/index.html",
+    "protocol": "file",
+    "cwd": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理",
+    "mediaMode": {
+      "reducedMotion": true
+    }
+  },
+  "artifacts": {
+    "screenshots": [
+      {
+        "viewport": "desktop",
+        "path": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/_shots/index_desktop.jpg",
+        "size": 60197,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      },
+      {
+        "viewport": "mobile",
+        "path": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/_shots/index_mobile.jpg",
+        "size": 159869,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      }
+    ]
+  },
+  "summary": {
+    "blocker": 0,
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "findings": [],
+  "prioritizedActions": [],
+  "reportPath": "/Volumes/z/demo/5_交付项目/西藏/林芝/6.需求收集/户籍业务/内网PC证件材料管理/_shots/report.json"
+}

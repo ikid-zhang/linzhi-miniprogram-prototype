@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- design-intent: system-icons: 政务内网高密数据工具页，功能图标采用系统级细描边以保持信息密度与统一（豁免 7b） -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>波密县公安局 · 户政证件材料管理（内网）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect width=%2724%27 height=%2724%27 rx=%275%27 fill=%27%230B3C8C%27/%3E%3Cpath d=%27M12 4l5 2v4c0 3.5-2 6.6-5 7.6-3-1-5-4.1-5-7.6V6l5-2z%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%271.6%27/%3E%3Cpath d=%27M9.5 12l2 2 3.5-4%27 stroke=%27%23fff%27 stroke-width=%271.6%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#EFF2F7; --panel:#FFFFFF; --line:#E2E8F0; --ink:#0F172A; --sub:#64748B;
+  --blue:#0B3C8C; --blue2:#1668DC; --blue-soft:#EAF1FB;
+  --green:#0E9F6E; --orange:#D97706; --red:#DC2626; --gray:#94A3B8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;overflow-x:hidden}
+/* ===== 顶部 ===== */
+.topbar{height:62px;background:linear-gradient(120deg,#0B3C8C 0%,#14489F 55%,#1D5BBF 100%);color:#fff;display:flex;align-items:center;padding:0 22px;box-shadow:0 1px 2px rgba(11,60,140,.16),0 10px 24px -10px rgba(11,60,140,.26),0 30px 60px -24px rgba(11,60,140,.22);position:relative;z-index:5}
+.topbar .badge{width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin-right:13px}
+.topbar h1{font-size:19px;font-weight:700;letter-spacing:.5px}
+.topbar .sub{font-size:12px;opacity:.82;margin-top:2px;font-weight:400;letter-spacing:.4px}
+.tb-right{margin-left:auto;display:flex;flex-direction:row;align-items:center;gap:18px;font-size:13px}
+.tb-right .dot{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 0 3px rgba(52,211,153,.25);margin-right:6px;display:inline-block}
+.topbar .net-tag{font-size:12px;background:rgba(255,255,255,.14);padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}
+/* ===== 布局 ===== */
+.layout{display:flex;height:calc(100vh - 62px)}
+/* 左栏 */
+.side{width:196px;background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;overflow:auto;flex-shrink:0}
+.side .side-title{font-size:12px;color:var(--sub);padding:4px 10px 10px;font-weight:600;letter-spacing:1px}
+.biz-item{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:9px;cursor:pointer;color:var(--ink);font-size:13.5px;margin-bottom:3px;transition:.15s;position:relative}
+.biz-item:hover{background:#F1F5F9}
+.biz-item.active{background:var(--blue-soft);color:var(--blue2);font-weight:600}
+.biz-item .ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0}
+.biz-item .cnt{margin-left:auto;font-size:11.5px;color:var(--sub);background:#F1F5F9;border-radius:999px;padding:2px 8px;font-weight:500}
+.biz-item.active .cnt{background:#fff;color:var(--blue2)}
+.side .sec-line{margin:10px 8px;border-top:1px dashed var(--line)}
+.side .note{font-size:11px;color:var(--gray);padding:4px 10px;line-height:1.6}
+/* 中栏 */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.list-head{background:var(--panel);padding:16px 22px 12px;border-bottom:1px solid var(--line)}
+.list-head .row1{display:flex;align-items:center;gap:12px}
+.list-head .crumb{font-size:18px;font-weight:700}
+.list-head .crumb small{font-size:12px;color:var(--sub);font-weight:500;margin-left:8px}
+.list-head .search{margin-left:auto;display:flex;align-items:center;gap:10px}
+.search input{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;width:230px;outline:none}
+.search input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(22,104,220,.12)}
+.stat-chips{display:flex;gap:8px;margin-top:12px}
+.chip{padding:5px 14px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;cursor:pointer;color:var(--sub);background:#fff}
+.chip.active{background:var(--blue2);border-color:var(--blue2);color:#fff;font-weight:600}
+.table-wrap{flex:1;overflow:auto;background:var(--panel);margin:0}
+table{width:100%;border-collapse:collapse;min-width:860px}
+thead th{position:sticky;top:0;background:#F8FAFC;font-size:12px;color:var(--sub);font-weight:600;text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);z-index:2}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+tbody tr{cursor:pointer;transition:.12s}
+tbody tr:hover{background:#F4F8FF}
+tbody tr.sel{background:var(--blue-soft)}
+.td-hlw{font-family:"SFMono-Regular",Menlo,Consolas,monospace;font-size:12.5px;color:var(--sub)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
+.badge .bd-dot{width:6px;height:6px;border-radius:50%}
+.b-st0{color:#2547A8;background:#EFF6FF}.b-st0 .bd-dot{background:#3B6FD9}
+.b-st1{color:#B45309;background:#FFFBEB}.b-st1 .bd-dot{background:#D97706}
+.b-st2{color:#047857;background:#ECFDF5}.b-st2 .bd-dot{background:#059669}
+.b-st3{color:#B91C1C;background:#FEF2F2}.b-st3 .bd-dot{background:#C53030}
+.td-mats{display:flex;gap:4px;flex-wrap:wrap}
+.m-chip{font-size:11px;color:var(--blue2);background:var(--blue-soft);border-radius:5px;padding:2px 7px}
+.m-chip.opt{color:var(--sub);background:#F1F5F9}
+.act-btn{font-size:12px;color:#fff;background:var(--blue2);border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-weight:600}
+.act-btn:hover{background:#1453B5}
+.empty{display:none;text-align:center;color:var(--gray);padding:70px 0;font-size:13px}
+/* 右栏 */
+.right{width:392px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0}
+.right-head{padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.right-head .t{font-size:14px;font-weight:700}
+.right-head .s{font-size:12px;color:var(--sub);margin-top:3px}
+.right-body{flex:1;overflow:auto;padding:14px 18px}
+.rec-card{background:#F8FAFC;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12.5px}
+.rec-card .kv{display:flex;margin-bottom:5px}
+.rec-card .kv .k{color:var(--sub);width:76px;flex-shrink:0}
+.mats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.mat-card{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:.15s;position:relative}
+.mat-card:hover{border-color:var(--blue2);box-shadow:0 1px 2px rgba(11,60,140,.08),0 6px 16px -4px rgba(11,60,140,.12),0 18px 36px -12px rgba(11,60,140,.14)}
+.mat-card .thumb{background:#F1F5F9;display:flex;align-items:center;justify-content:center;height:92px;position:relative}
+.mat-card .thumb canvas{max-width:100%;max-height:88px;border-radius:4px}
+.mat-card .f-type{position:absolute;left:6px;top:6px;font-size:10px;color:#fff;border-radius:4px;padding:2px 6px;font-weight:600}
+.mat-card .meta{padding:8px 10px}
+.mat-card .meta .n{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat-card .meta .d{font-size:11px;color:var(--sub);margin-top:3px;display:flex;justify-content:space-between}
+.right-empty{display:none;text-align:center;color:var(--gray);padding:60px 18px;font-size:12.5px;line-height:1.8}
+.right-empty .big{font-size:15px;color:#CBD5E1;margin-bottom:8px}
+/* 模态 */
+.mask{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:50;opacity:0;transition:opacity .2s}
+.mask.show{display:flex;opacity:1}
+.mask .modal{transform:translateY(12px) scale(.98);transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.mask.show .modal{transform:none}
+.modal{background:#fff;border-radius:20px;width:720px;max-width:92vw;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 8px rgba(15,23,42,.10),0 22px 48px -14px rgba(11,60,140,.22),0 56px 100px -32px rgba(11,60,140,.30)}
+.modal-head{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:#F8FAFC}
+.modal-head .t{font-size:15px;font-weight:700}
+.modal-head .s{font-size:12px;color:var(--sub);margin-left:10px}
+.modal-head .close{margin-left:auto;width:30px;height:30px;border:none;background:#F1F5F9;border-radius:8px;cursor:pointer;font-size:16px;color:var(--sub)}
+.modal-body{flex:1;overflow:auto;padding:18px 20px;background:#F1F4F8;display:flex;align-items:center;justify-content:center;min-height:420px}
+.modal-body canvas{max-width:100%;box-shadow:0 1px 3px rgba(15,23,42,.10),0 8px 20px -6px rgba(15,23,42,.14),0 24px 48px -16px rgba(15,23,42,.18);border-radius:8px}
+.modal-foot{display:flex;align-items:center;gap:10px;padding:12px 20px;border-top:1px solid var(--line)}
+.modal-foot .f1{font-size:12px;color:var(--sub);flex:1}
+.dl-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue2);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13.5px;font-weight:600;cursor:pointer}
+.dl-btn:hover{background:#1453B5}
+.dl-btn svg{width:15px;height:15px}
+.dl-all{margin-left:auto;display:inline-flex;align-items:center;gap:6px;background:var(--blue-soft);color:var(--blue2);border:1px solid rgba(22,104,220,.25);border-radius:8px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.dl-all:hover{background:#DEEAFB}
+.pager{display:flex;gap:8px}
+.pager button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12.5px;color:var(--ink)}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pager .pg-n{font-size:12.5px;color:var(--sub);display:flex;align-items:center;padding:0 6px}
+.toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);background:#0F172A;color:#fff;font-size:13px;padding:10px 20px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:80}
+.toast.show{opacity:1}
+.wm{position:fixed;right:14px;bottom:12px;font-size:11px;color:rgba(15,23,42,.36);background:rgba(255,255,255,.6);padding:3px 12px;border-radius:999px;z-index:60;pointer-events:none;letter-spacing:.3px;box-shadow:0 1px 4px rgba(15,23,42,.08)}
+@media (max-width:1180px){.right{width:340px}.side{width:170px}}
+@media (max-width:860px){.layout{flex-direction:column;height:auto;overflow:visible}.side,.right{width:100%;max-width:100%;min-width:0;border:none;border-bottom:1px solid var(--line)}.main{min-width:0}.main{min-height:60vh}.table-wrap{overflow-x:auto}.side{display:flex;flex-wrap:wrap;gap:4px}.side-title{width:100%}.biz-item{width:calc(50% - 4px)}}
+.right-body,.rec-card,.mats-grid,.td-mats{max-width:100%}.right,.right-head,.right-body,.td-mats,.kv{overflow-wrap:break-word;min-width:0}.right{overflow-x:hidden}.mats-grid{grid-template-columns:1fr 1fr}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+  <div><h1>波密县公安局 · 户政证件材料管理</h1><div class="sub">户籍业务申报材料 · 查看与下载 · 内网专网</div></div>
+  <div class="tb-right">
+    <span class="net-tag"><span class="dot"></span>内网专线</span>
+    <span id="nowDate" style="font-size:12.5px;opacity:.9">--</span>
+    <span style="font-size:13px;font-weight:600">民警 · 户籍窗口</span>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- 左栏：业务导航 -->
+  <div class="side">
+    <div class="side-title">业务分类</div>
+    <div id="bizNav"></div>
+    <div class="sec-line"></div>
+    <div class="note">材料由群众端通过林安码小程序申报上传，经户籍系统审核归档，本页面供户籍窗口查看与下载留档。</div>
+  </div>
+
+  <!-- 中栏：记录列表 -->
+  <div class="main">
+    <div class="list-head">
+      <div class="row1">
+        <div class="crumb" id="crumbBiz">全部业务 <small id="crumbSub"></small></div>
+        <div class="search">
+          <input id="q" placeholder="搜索申请编号 / 申请人 / 证件号码">
+        </div>
+      </div>
+      <div class="stat-chips" id="statChips"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="width:14%">申请编号</th><th style="width:12%">业务类型</th><th style="width:10%">申请人</th>
+          <th style="width:11%">申请时间</th><th style="width:9%">状态</th><th style="width:26%">材料清单</th><th style="width:8%">操作</th>
+        </tr></thead>
+        <tbody id="recBody"></tbody>
+      </table>
+      <div class="empty" id="emptyTip">暂无符合条件的记录</div>
+    </div>
+  </div>
+
+  <!-- 右栏：材料面板 -->
+  <div class="right">
+    <div class="right-head">
+      <div class="t" id="rightTitle">材料查看</div>
+      <div class="s" id="rightSub">请选择一条申请记录查看其证件材料</div>
+    <button class="dl-all" id="dlAllBtn" style="display:none" onclick="dlAll()">全部下载</button>
+    </div>
+    <div class="right-body" id="rightBody"></div>
+  </div>
+</div>
+
+<!-- 预览模态 -->
+<div class="mask" id="mask">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="t" id="mTitle">材料预览</div>
+      <div class="s" id="mSub"></div>
+      <button class="close" onclick="closeModal()" aria-label="关闭"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body"><canvas id="mCanvas" width="720" height="520"></canvas></div>
+    <div class="modal-foot">
+      <div class="f1" id="mInfo"></div>
+      <div class="pager">
+        <button id="pgPrev" onclick="pgMove(-1)">上一页</button>
+        <span class="pg-n" id="pgInfo"></span>
+        <button id="pgNext" onclick="pgMove(1)">下一页</button>
+      </div>
+      <button class="dl-btn" onclick="downloadCur()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>下载材料</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="wm">民警 · 户籍窗口 · <span id="wmTime">--</span> · 查看 / 下载操作将记录审计日志</div>
+</body>
+</html>
+
+<script>
+/* ============ 数据 ============ */
+const BIZS = [
+  {key:'all', name:'全部业务', color:'#1668DC'},
+  {key:'chusheng', name:'出生登记', color:'#0E9F6E'},
+  {key:'huzheng', name:'户籍证明', color:'#1668DC'},
+  {key:'biangeng', name:'主项变更更正', color:'#7B5BD6'},
+  {key:'feizhuxiang', name:'非主项变更', color:'#D97706'},
+  {key:'bulu', name:'户籍补录', color:'#0891B2'},
+  {key:'swqr', name:'市外迁入', color:'#DB2777'},
+  {key:'swzx', name:'死亡注销', color:'#475569'},
+  {key:'smrzm', name:'上门办证', color:'#0D9488'},
+  {key:'qianyi', name:'户籍迁移', color:'#6B7280'}
+];
+const BIZ_NAME = Object.fromEntries(BIZS.map(b=>[b.key,b.name]));
+const STATE = [
+  {v:'0',n:'待受理',cls:'b-st0'},{v:'1',n:'审核中',cls:'b-st1'},
+  {v:'2',n:'已办结',cls:'b-st2'},{v:'3',n:'已退回',cls:'b-st3'}
+];
+/* 材料数据（type 对应绘制器；pages 为证件页面） */
+const RECORDS = [
+/* 出生登记 */
+{biz:'chusheng', hlw:'HLW20260908004', name:'次仁旺堆', time:'2026-09-08 10:12', st:'2', note:'新生儿 · 随父落户', mats:[
+  {name:'出生医学证明', type:'csm', size:'268 KB', up:'2026-09-08 10:12', pages:[{kind:'csm', title:'出生医学证明', no:'P5401042026000123', kid:'次仁旺堆', sex:'男', birth:'2026-08-20 03:45', place:'西藏自治区林芝市波密县人民医院', mother:'卓玛', father:'罗布次仁', stamp:'波密县人民医院 出生医学证明专用章'}]},
+  {name:'父母结婚证', type:'jhz', size:'412 KB', up:'2026-09-08 10:13', pages:[{kind:'jhz', title:'结婚证', no:'藏波字第20240098号', holder:'罗布次仁', partner:'卓玛', date:'2024-05-20'}]},
+  {name:'父亲身份证（人像面）', type:'sfz', size:'188 KB', up:'2026-09-08 10:14', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'罗布次仁', sex:'男', nation:'藏族', birth:'1988-03-12', addr:'波密县扎木镇居委会', id:'542623198803120011', photo:'M'}]},
+  {name:'父亲身份证（国徽面）', type:'sfz-back', size:'187 KB', up:'2026-09-08 10:14', pages:[{kind:'sfz-back', title:'居民身份证 · 国徽面', no:'542623198803120011'}]},
+  {name:'母亲身份证（人像面）', type:'sfz', size:'186 KB', up:'2026-09-08 10:14', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'卓玛', sex:'女', nation:'藏族', birth:'1990-07-05', addr:'波密县扎木镇居委会', id:'542623199007050024', photo:'F'}]},
+  {name:'父亲户口簿（内页）', type:'huben', size:'354 KB', up:'2026-09-08 10:15', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 005312', house:'罗布次仁', addr:'波密县扎木镇居委会XX路8号', members:[['罗布次仁','户主','542623198803120011'],['卓玛','妻','542623199007050024'],['次仁旺堆','之子','（未入户）']]}]},
+  {name:'落户房产证', type:'fcz', size:'520 KB', up:'2026-09-08 10:16', pages:[{kind:'fcz', title:'不动产权证书', no:'藏(2024)波密不动产权第0012098号', owner:'罗布次仁', loc:'波密县扎木镇居委会XX路8号', area:'128.60㎡', type:'国有建设用地使用权 / 房屋所有权'}]}
+]},
+{biz:'chusheng', hlw:'HLW20260917008', name:'格桑梅朵', time:'2026-09-17 14:30', st:'1', note:'新生儿 · 随母落户（婚外）', mats:[
+  {name:'出生医学证明', type:'csm', size:'271 KB', up:'2026-09-17 14:31', pages:[{kind:'csm', title:'出生医学证明', no:'P5401042026000158', kid:'格桑梅朵', sex:'女', birth:'2026-09-01 08:20', place:'波密县倾多镇卫生院', mother:'白玛曲珍', father:'—'}]},
+  {name:'母亲未婚申明书', type:'doc', size:'120 KB', up:'2026-09-17 14:32', pages:[{kind:'doc', title:'未婚申明书', body:'本人白玛曲珍（身份证号54262319920615004X），声明截至2026年9月1日从未登记结婚，本人所生子女格桑梅朵申请随母落户。', sign:'白玛曲珍', date:'2026-09-17'}]},
+  {name:'派出所调查笔录', type:'doc', size:'240 KB', up:'2026-09-17 14:33', pages:[{kind:'doc', title:'派出所调查笔录', body:'询问人：扎西次仁、普布（倾多镇派出所）。被询问人：白玛曲珍。笔录摘要：其陈述与新生儿为母子关系，无婚姻登记记录，实际居住于倾多镇。', sign:'民警：扎西次仁', date:'2026-09-16'}]},
+  {name:'母亲户口簿（内页）', type:'huben', size:'348 KB', up:'2026-09-17 14:34', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 007126', house:'白玛曲珍', addr:'波密县倾多镇XX村', members:[['白玛曲珍','户主','54262319920615004X'],['格桑梅朵','之女','（未入户）']]}]}
+]},
+{biz:'chusheng', hlw:'HLW20260903009', name:'旦增', time:'2026-09-03 09:40', st:'3', note:'新生儿 · 民族确认材料不全', reject:'《民族成份确认书》未上传，父母民族不一致须补充确认书模板及填写后材料。', mats:[
+  {name:'出生医学证明', type:'csm', size:'262 KB', up:'2026-09-03 09:41', pages:[{kind:'csm', title:'出生医学证明', no:'P5401042026000097', kid:'旦增', sex:'男', birth:'2026-08-11 06:15', place:'波密县松宗镇卫生院', mother:'央金', father:'多吉'}]},
+  {name:'民族成份确认书', type:'mzs', size:'0 KB', up:'—', pending:true, pages:[{kind:'mzs', title:'民族成份确认书', name:'旦增', from:'（待上传）', to:'（待上传）'}]}
+]},
+/* 户籍证明 */
+{biz:'huzheng', hlw:'HLW20260915002', name:'卓玛', time:'2026-09-15 10:23', st:'2', note:'本人户籍证明（已出证）', mats:[
+  {name:'户籍证明（电子证照）', type:'cert', size:'96 KB', up:'2026-09-15 10:30', pages:[{kind:'cert', title:'户籍证明', no:'林波户证〔2026〕第00418号', body:'兹证明卓玛（身份证号542623********0024），户籍地址为西藏自治区林芝市波密县扎木镇居委会，户内登记信息与全国人口信息库一致。', stamp:'波密县公安局扎木镇派出所', date:'2026-09-15'}]},
+  {name:'本人居民身份证（人像面）', type:'sfz', size:'184 KB', up:'2026-09-15 10:24', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'卓玛', sex:'女', nation:'藏族', birth:'1990-07-05', addr:'波密县扎木镇居委会', id:'542623199007050024', photo:'F'}]}
+]},
+{biz:'huzheng', hlw:'HLW20260918001', name:'罗布', time:'2026-09-18 09:05', st:'0', note:'本人户籍证明', mats:[
+  {name:'本人居民身份证（人像面）', type:'sfz', size:'181 KB', up:'2026-09-18 09:06', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'罗布', sex:'男', nation:'汉族', birth:'1985-11-02', addr:'波密县玉普乡XX村', id:'542623198511020013', photo:'M'}]},
+  {name:'户口簿（如持有）', type:'huben', size:'330 KB', up:'2026-09-18 09:06', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 002318', house:'罗布', addr:'波密县玉普乡XX村', members:[['罗布','户主','542623198511020013']]}]}
+]},
+{biz:'huzheng', hlw:'HLW20260912010', name:'央金', time:'2026-09-12 16:44', st:'1', note:'本人户籍证明', mats:[
+  {name:'本人居民身份证（人像面）', type:'sfz', size:'187 KB', up:'2026-09-12 16:45', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'央金', sex:'女', nation:'藏族', birth:'1993-01-18', addr:'波密县易贡乡XX村', id:'542623199301180046', photo:'F'}]}
+]},
+{biz:'huzheng', hlw:'HLW20260828011', name:'达瓦', time:'2026-08-28 11:02', st:'3', note:'本人户籍证明', reject:'人证核验照片模糊，请重新上传清晰身份证照片。', mats:[
+  {name:'本人居民身份证（人像面）', type:'sfz', size:'142 KB', up:'2026-08-28 11:03', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'达瓦', sex:'男', nation:'藏族', birth:'1987-09-21', addr:'波密县古乡XX村', id:'542623198709210018', photo:'M', blur:true}]}
+]},
+/* 主项变更 */
+{biz:'biangeng', hlw:'HLW20260905005', name:'白玛', time:'2026-09-05 15:20', st:'3', note:'姓名变更（未成年人）', reject:'另一方父/母同意变更公证书缺失，请补充后再提交。', mats:[
+  {name:'居民户口簿（内页）', type:'huben', size:'342 KB', up:'2026-09-05 15:21', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 001126', house:'白玛', addr:'波密县多吉乡XX村', members:[['白玛','户主','542623198009120015'],['白玛顿珠','之子','542623201205150018']]}]},
+  {name:'居民身份证（人像面）', type:'sfz', size:'185 KB', up:'2026-09-05 15:21', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'白玛', sex:'女', nation:'藏族', birth:'1980-09-12', addr:'波密县多吉乡XX村', id:'542623198009120015', photo:'F'}]},
+  {name:'出生医学证明', type:'csm', size:'255 KB', up:'2026-09-05 15:22', pages:[{kind:'csm', title:'出生医学证明', no:'P5401042012000456', kid:'白玛顿珠', sex:'男', birth:'2012-05-15', place:'波密县人民医院', mother:'白玛', father:'索朗'}]},
+  {name:'离婚证', type:'jhz', size:'298 KB', up:'2026-09-05 15:22', pages:[{kind:'jhz', title:'离婚证', no:'藏波离字〔2019〕第0087号', holder:'白玛', partner:'索朗', date:'2019-08-30'}]},
+  {name:'变更申请书', type:'doc', size:'132 KB', up:'2026-09-05 15:23', pages:[{kind:'doc', title:'户口登记项目变更申请书', body:'申请人白玛为未成年人白玛顿珠申请变更姓名，变更原因为父母离异后随母生活，原姓名与生活使用姓名不一致。', sign:'白玛（监护人）', date:'2026-09-05'}]}
+]},
+{biz:'biangeng', hlw:'HLW20260914012', name:'扎西次仁', time:'2026-09-14 11:30', st:'2', note:'民族成份更正（已满16周岁）', mats:[
+  {name:'居民户口簿（内页）', type:'huben', size:'340 KB', up:'2026-09-14 11:31', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 009901', house:'扎西次仁', addr:'波密县扎木镇居委会', members:[['扎西次仁','户主','542623200401230011']]}]},
+  {name:'居民身份证（人像面）', type:'sfz', size:'183 KB', up:'2026-09-14 11:31', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'扎西次仁', sex:'男', nation:'藏族', birth:'2004-01-23', addr:'波密县扎木镇居委会', id:'542623200401230011', photo:'M'}]},
+  {name:'民族成份确认书', type:'mzs', size:'218 KB', up:'2026-09-14 11:32', pages:[{kind:'mzs', title:'民族成份确认书', name:'扎西次仁', from:'藏族', to:'汉族', basis:'随父更正民族成份（父亲为汉族）'}]},
+  {name:'无犯罪记录证明', type:'wfz', size:'158 KB', up:'2026-09-14 11:33', pages:[{kind:'wfz', title:'无犯罪记录证明', name:'扎西次仁', id:'542623200401230011', result:'经查询全国违法犯罪人员信息系统，未发现违法犯罪记录。', stamp:'波密县公安局', date:'2026-09-13'}]}
+]},
+{biz:'biangeng', hlw:'HLW20260911013', name:'桑吉', time:'2026-09-11 10:08', st:'1', note:'出生日期更正', mats:[
+  {name:'居民户口簿（内页）', type:'huben', size:'338 KB', up:'2026-09-11 10:09', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 003456', house:'桑吉', addr:'波密县康玉乡XX村', members:[['桑吉','户主','542623198206080019']]}]},
+  {name:'原始户籍档案资料', type:'doc', size:'486 KB', up:'2026-09-11 10:10', pages:[{kind:'doc', title:'原始户籍档案资料', body:'波密县康玉乡派出所原始常住人口登记底册复印件（1982年登记），显示出生日期为1982年6月8日，与现登记一致，系登记笔误。', sign:'康玉乡派出所', date:'2026-09-10'}]}
+]},
+/* 非主项变更 */
+{biz:'feizhuxiang', hlw:'HLW20260918014', name:'索南', time:'2026-09-18 09:50', st:'2', note:'文化程度变更', mats:[
+  {name:'居民户口簿（内页）', type:'huben', size:'335 KB', up:'2026-09-18 09:51', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 006632', house:'索南', addr:'波密县玉许乡XX村', members:[['索南','户主','542623199606200017']]}]},
+  {name:'毕业证书', type:'doc', size:'402 KB', up:'2026-09-18 09:52', pages:[{kind:'doc', title:'毕业证书', body:'索南，男，1996年6月生，于2026年6月毕业于西藏农牧学院，专业：农业经济管理，学历：本科。', sign:'西藏农牧学院（印章）', date:'2026-06-30'}]}
+]},
+{biz:'feizhuxiang', hlw:'HLW20260917015', name:'次旦', time:'2026-09-17 15:12', st:'0', note:'婚姻状况变更', mats:[
+  {name:'居民户口簿（内页）', type:'huben', size:'331 KB', up:'2026-09-17 15:13', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 004429', house:'次旦', addr:'波密县八盖乡XX村', members:[['次旦','户主','54262319910202003X']]}]},
+  {name:'结婚证', type:'jhz', size:'410 KB', up:'2026-09-17 15:14', pages:[{kind:'jhz', title:'结婚证', no:'藏波字第20260056号', holder:'次旦', partner:'尼玛', date:'2026-06-18'}]}
+]},
+/* 户籍补录 */
+{biz:'bulu', hlw:'HLW20260902006', name:'仁青', time:'2026-09-02 14:20', st:'0', note:'无户口人员补登补录', mats:[
+  {name:'本人或监护人书面申请', type:'doc', size:'145 KB', up:'2026-09-02 14:21', pages:[{kind:'doc', title:'补录户口书面申请', body:'申请人仁青，女，1968年生，自幼流浪至波密县玉普乡，无户籍档案，申请补登户口。', sign:'仁青', date:'2026-09-02'}]},
+  {name:'村（居）委会证明', type:'doc', size:'206 KB', up:'2026-09-02 14:22', pages:[{kind:'doc', title:'村（居）委会证明', body:'兹证明仁青自1995年起实际居住于本村，无户籍登记记录，情况属实。', sign:'玉普乡XX村村委会（印章）', date:'2026-09-01'}]},
+  {name:'相片及人像比对', type:'photo', size:'320 KB', up:'2026-09-02 14:23', pages:[{kind:'photo', title:'证件相片及人像比对', name:'仁青', id:'—', note:'年满16周岁须提供2张证件照，并完成人像/指纹比对'}]}
+]},
+{biz:'bulu', hlw:'HLW20260909016', name:'洛桑', time:'2026-09-09 10:35', st:'1', note:'收养子女补录', mats:[
+  {name:'本人或监护人书面申请', type:'doc', size:'150 KB', up:'2026-09-09 10:36', pages:[{kind:'doc', title:'补录户口书面申请', body:'申请人洛桑申请为收养子女补录户口，情况说明附后。', sign:'洛桑', date:'2026-09-09'}]},
+  {name:'合法收养证明', type:'doc', size:'388 KB', up:'2026-09-09 10:37', pages:[{kind:'doc', title:'收养登记证', no:'藏波收养字第20220017号', body:'收养人洛桑与被收养人（2019年出生，原名：布琼）于2022年3月依法办理收养登记。', sign:'波密县民政局（印章）', date:'2022-03-15'}]},
+  {name:'出生证明材料', type:'csm', size:'260 KB', up:'2026-09-09 10:37', pages:[{kind:'csm', title:'出生医学证明', no:'P5401042019000788', kid:'布琼', sex:'男', birth:'2019-11-06', place:'波密县人民医院', mother:'（福利院）', father:'（福利院）'}]}
+]},
+{biz:'bulu', hlw:'HLW20260825017', name:'多吉', time:'2026-08-25 09:15', st:'2', note:'漏登补录（已办结）', mats:[
+  {name:'本人或监护人书面申请', type:'doc', size:'138 KB', up:'2026-08-25 09:16', pages:[{kind:'doc', title:'补录户口书面申请', body:'申请人多吉因当年出生后未及时申报，属漏登，申请补录。', sign:'多吉', date:'2026-08-25'}]},
+  {name:'村（居）委会证明', type:'doc', size:'198 KB', up:'2026-08-25 09:17', pages:[{kind:'doc', title:'村（居）委会证明', body:'兹证明多吉（1979年生）确系本村村民，因历史原因漏登户口。', sign:'松宗镇XX村委会（印章）', date:'2026-08-24'}]},
+  {name:'社区民警调查意见', type:'doc', size:'276 KB', up:'2026-08-25 09:18', pages:[{kind:'doc', title:'社区民警调查意见', body:'经走访2名知情人并核对原始底册，认定多吉漏登情况属实，同意补录。', sign:'民警：普布次仁、达瓦', date:'2026-08-24'}]}
+]},
+{biz:'bulu', hlw:'HLW20260820018', name:'拉姆', time:'2026-08-20 16:30', st:'3', note:'刑释解教恢复户口', reject:'缺少原户籍地未入户证明及走访笔录，请补充后重新提交。', mats:[
+  {name:'本人或监护人书面申请', type:'doc', size:'142 KB', up:'2026-08-20 16:31', pages:[{kind:'doc', title:'补录户口书面申请', body:'申请人拉姆原系波密县户籍，因服刑注销户口，现刑满释放申请恢复户口。', sign:'拉姆', date:'2026-08-20'}]},
+  {name:'刑满释放证明', type:'doc', size:'212 KB', up:'2026-08-20 16:32', pages:[{kind:'doc', title:'刑满释放证明书', no:'藏刑释〔2026〕第0032号', body:'拉姆，女，1985年生，于2026年8月18日刑满释放。', sign:'西藏自治区XX监狱（印章）', date:'2026-08-18'}]}
+]},
+/* 市外迁入 */
+{biz:'swqr', hlw:'HLW20260918031', name:'王芳', time:'2026-09-18 10:20', st:'1', note:'夫妻投靠迁入（0623）', mats:[
+  {name:'迁移人身份证（人像面）', type:'sfz', size:'186 KB', up:'2026-09-18 10:21', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'王芳', sex:'女', nation:'汉族', birth:'1992-04-16', addr:'四川省成都市武侯区XX路', id:'510107199204160028', photo:'F'}]},
+  {name:'拟迁入户主户口簿（内页）', type:'huben', size:'345 KB', up:'2026-09-18 10:22', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 002145', house:'顿珠', addr:'波密县扎木镇居委会', members:[['顿珠','户主','542623198803120011'],['王芳','之妻','（迁入待登记）']]}]},
+  {name:'结婚证', type:'jhz', size:'415 KB', up:'2026-09-18 10:22', pages:[{kind:'jhz', title:'结婚证', no:'藏波字第20250120号', holder:'顿珠', partner:'王芳', date:'2025-02-14'}]},
+  {name:'迁移人户口簿（内页）', type:'huben', size:'338 KB', up:'2026-09-18 10:23', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 881206', house:'王志远', addr:'四川省成都市武侯区XX路', members:[['王志远','户主','510107196812160016'],['王芳','之女','510107199204160028']]}]}
+]},
+{biz:'swqr', hlw:'HLW20260912032', name:'陈晓', time:'2026-09-12 09:50', st:'2', note:'毕业生落单位集体户（0627）', mats:[
+  {name:'迁移人身份证（人像面）', type:'sfz', size:'182 KB', up:'2026-09-12 09:51', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'陈晓', sex:'男', nation:'汉族', birth:'2001-08-30', addr:'青海省西宁市城西区', id:'630104200108300015', photo:'M'}]},
+  {name:'毕业证书', type:'doc', size:'398 KB', up:'2026-09-12 09:52', pages:[{kind:'doc', title:'毕业证书', body:'陈晓，男，2001年8月生，于2026年6月毕业于西南民族大学，专业：藏语言文学，学历：本科。', sign:'西南民族大学（印章）', date:'2026-06-25'}]},
+  {name:'单位接收证明及劳动合同', type:'doc', size:'560 KB', up:'2026-09-12 09:53', pages:[{kind:'doc', title:'单位接收证明', body:'兹证明陈晓已与我单位签订劳动合同，同意接收其户口迁入我单位集体户。', sign:'波密县XX国企（印章）', date:'2026-09-01'}]},
+  {name:'单位集体户口簿首页', type:'huben', size:'300 KB', up:'2026-09-12 09:54', pages:[{kind:'huben', title:'单位集体户口簿首页', no:'户号 009988', house:'波密县XX国企集体户', addr:'波密县扎木镇XX路18号', members:[['（集体户）','—','—']]}]}
+]},
+{biz:'swqr', hlw:'HLW20260905033', name:'李强', time:'2026-09-05 11:40', st:'3', note:'父母投靠子女（0625）', reject:'亲属关系证明材料不全（仅上传户口簿，缺原始关系证明），请补充。', mats:[
+  {name:'迁移人身份证（人像面）', type:'sfz', size:'180 KB', up:'2026-09-05 11:41', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'李强', sex:'男', nation:'汉族', birth:'1960-02-11', addr:'河南省南阳市宛城区', id:'411302196002110016', photo:'M'}]},
+  {name:'拟迁入户主户口簿（内页）', type:'huben', size:'340 KB', up:'2026-09-05 11:42', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 007788', house:'李伟', addr:'波密县易贡乡XX村', members:[['李伟','户主','54262319880509001X'],['李强','之父','（迁入待登记）']]}]}
+]},
+/* 死亡注销 */
+{biz:'swzx', hlw:'HLW20260916007', name:'卓玛', time:'2026-09-16 15:30', st:'2', note:'死者扎西（配偶）· 户口已注销', mats:[
+  {name:'居民死亡医学证明（推断）书', type:'swzm', size:'289 KB', up:'2026-09-16 15:31', pages:[{kind:'swzm', title:'居民死亡医学证明（推断）书', no:'藏波死证〔2026〕第0412号', dead:'扎西', sex:'男', birth:'1985-06-14', died:'2026-09-14 19:20', cause:'心源性猝死（正常死亡）', place:'波密县人民医院', sign:'波密县人民医院（印章）', date:'2026-09-15'}]},
+  {name:'居民户口簿（内页）', type:'huben', size:'344 KB', up:'2026-09-16 15:32', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 005312', house:'罗布次仁', addr:'波密县扎木镇居委会XX路8号', members:[['罗布次仁','户主','542623198803120011'],['卓玛','妻','542623199007050024'],['扎西','之子','（已注销）']]}]},
+  {name:'申报人居民身份证（人像面）', type:'sfz', size:'184 KB', up:'2026-09-16 15:33', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'卓玛', sex:'女', nation:'藏族', birth:'1990-07-05', addr:'波密县扎木镇居委会', id:'542623199007050024', photo:'F'}]},
+  {name:'死者居民身份证（国徽面）', type:'sfz', size:'179 KB', up:'2026-09-16 15:33', pages:[{kind:'sfz-back', title:'居民身份证 · 国徽面', no:'54262319850614001X'}]}
+]},
+/* 上门办证 */
+{biz:'smrzm', hlw:'HLW20260918040', name:'次仁拉姆', time:'2026-09-18 09:30', st:'0', note:'身份证补办 · 上门预约', mats:[
+  {name:'办证人身份证（人像面）', type:'sfz', size:'176 KB', up:'2026-09-18 09:31', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'次仁拉姆', sex:'女', nation:'藏族', birth:'1948-02-03', addr:'波密县玉许乡XX村', id:'542623194802030026', photo:'F', aged:true}]},
+  {name:'残疾证（佐证无法出门）', type:'doc', size:'232 KB', up:'2026-09-18 09:32', pages:[{kind:'doc', title:'残疾人证', no:'藏残字第202000118号', body:'次仁拉姆，女，1948年生，残疾类别：肢体残疾一级，行动不便，确需上门办理。', sign:'波密县残联（印章）', date:'2026-09-10'}]}
+]},
+/* 户籍迁移（占位） */
+{biz:'qianyi', hlw:'HLW20260915050', name:'格桑', time:'2026-09-15 09:10', st:'1', note:'市内移居（0601 迁往新居）', mats:[
+  {name:'迁移人身份证（人像面）', type:'sfz', size:'183 KB', up:'2026-09-15 09:11', pages:[{kind:'sfz', title:'居民身份证 · 人像面', name:'格桑', sex:'男', nation:'藏族', birth:'1975-12-01', addr:'波密县扎木镇居委会', id:'542623197512010017', photo:'M'}]},
+  {name:'拟落户户口簿（内页）', type:'huben', size:'336 KB', up:'2026-09-15 09:12', pages:[{kind:'huben', title:'常住人口登记卡', no:'户号 008877', house:'格桑', addr:'波密县扎木镇XX路22号', members:[['格桑','户主','542623197512010017']]}]}
+]}
+];
+
+/* ============ 状态与渲染 ============ */
+let curBiz='all', curSt='all', selIdx=-1, curMatIdx=-1, curPg=0;
+
+function fmtSt(v){const s=STATE.find(x=>x.v===v);return s?`<span class="badge ${s.cls}"><span class="bd-dot"></span>${s.n}</span>`:''}
+function matsOf(r){return r.mats}
+function bizColor(k){return (BIZS.find(b=>b.key===k)||{color:'#1668DC'}).color}
+</script>
+<script>
+/* ============ 列表渲染 ============ */
+function filt(){
+  return RECORDS.filter(r=>(curBiz==='all'||r.biz===curBiz)&&(curSt==='all'||r.st===curSt));
+}
+function renderNav(){
+  const el=document.getElementById('bizNav');
+  el.innerHTML=BIZS.map(b=>{
+    const n=RECORDS.filter(r=>r.biz===b.key).length;
+    return `<div class="biz-item ${curBiz===b.key?'active':''}" onclick="selBiz('${b.key}')">
+      <div class="ico" style="background:${b.color}">${b.name.slice(0,1)}</div><span>${b.name}</span>
+      ${b.key!=='all'?`<span class="cnt">${n}</span>`:''}</div>`;
+  }).join('');
+}
+function renderChips(){
+  const el=document.getElementById('statChips');
+  el.innerHTML=[['all','全部'],['0','待受理'],['1','审核中'],['2','已办结'],['3','已退回']].map(s=>
+    `<span class="chip ${curSt===s[0]?'active':''}" onclick="selSt('${s[0]}')">${s[1]}</span>`).join('');
+}
+function renderList(){
+  const q=(document.getElementById('q').value||'').trim().toLowerCase();
+  let rows=filt();
+  if(q) rows=rows.filter(r=>r.hlw.toLowerCase().includes(q)||r.name.includes(q));
+  const tb=document.getElementById('recBody');
+  if(!rows.length){tb.innerHTML='';document.getElementById('emptyTip').style.display='block';return}
+  document.getElementById('emptyTip').style.display='none';
+  tb.innerHTML=rows.map((r,i)=>{
+    const bc=bizColor(r.biz);
+    const chips=r.mats.map(m=>`<span class="m-chip ${m.pending?'opt':''}">${m.name.slice(0,8)}</span>`).join('');
+    return `<tr onclick="selRec(${i})">
+      <td class="td-hlw">${r.hlw}</td>
+      <td><span style="display:inline-flex;align-items:center;gap:6px"><span class="ico" style="width:20px;height:20px;font-size:10px;border-radius:5px;background:${bc};color:#fff;display:inline-flex;align-items:center;justify-content:center">${BIZ_NAME[r.biz].slice(0,1)}</span>${BIZ_NAME[r.biz]}</span></td>
+      <td>${r.name}</td><td>${r.time}</td><td>${fmtSt(r.st)}</td>
+      <td><div class="td-mats">${chips}</div></td>
+      <td><button class="act-btn" onclick="event.stopPropagation();selRec(${i})">查看材料</button></td>
+    </tr>`;
+  }).join('');
+  selRec(-1);
+}
+function selRec(i){
+  selIdx=i;
+  const trs=document.querySelectorAll('#recBody tr');
+  trs.forEach((t,k)=>t.classList.toggle('sel',k===i));
+  renderRight();
+}
+function selBiz(k){curBiz=k;curSt='all';renderNav();renderChips();renderList()}
+function selSt(s){curSt=s;renderChips();renderList()}
+
+/* ============ 右侧材料面板 ============ */
+function renderRight(){
+  document.getElementById('dlAllBtn').style.display=selIdx>=0?'inline-flex':'none';
+  const body=document.getElementById('rightBody');
+  document.getElementById('rightTitle').textContent= selIdx>=0?`材料查看 · ${RECORDS[selIdx].hlw}`:'材料查看';
+  if(selIdx<0){
+    document.getElementById('rightSub').textContent='请选择一条申请记录查看其证件材料';
+    body.innerHTML='<div class="right-empty" style="display:block"><div class="big">← 选择记录</div>点击左侧列表中的记录，<br>即可查看该业务申报的全部证件材料</div>';
+    return;
+  }
+  const r=RECORDS[selIdx];
+  document.getElementById('rightSub').textContent=`${BIZ_NAME[r.biz]} · ${r.name}`;
+  const rejHtml=r.reject?`<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:9px;padding:9px 11px;font-size:12px;color:#B91C1C;margin-bottom:12px"><b>退回原因：</b>${r.reject}</div>`:'';
+  const cards=r.mats.map((m,mi)=>{
+    const col={csm:'#0E9F6E',jhz:'#DB2777',fcz:'#B45309',sfz:'#1668DC','sfz-back':'#1668DC',huben:'#0B3C8C',cert:'#1668DC',mzs:'#D97706',wfz:'#7B5BD6',doc:'#475569',photo:'#0891B2',swzm:'#475569'}[m.type]||'#64748B';
+    const badge=m.pending?'<span style="position:absolute;right:6px;top:6px;background:#C53030;color:#fff;font-size:10px;border-radius:4px;padding:2px 6px;font-weight:600">缺</span>':'';
+    return `<div class="mat-card" onclick="openPreview(${mi})" title="${m.name}">
+      <div class="thumb"><span class="f-type" style="background:${col}">${m.type==='sfz'||m.type==='sfz-back'?'身份证':m.type==='doc'?'文书':m.type==='huben'?'户口簿':m.type==='csm'?'出生证':m.type==='jhz'?'婚姻证':m.type==='fcz'?'产权证':m.type==='cert'?'电子证照':m.type==='mzs'?'确认书':m.type==='wfz'?'证明':m.type==='photo'?'照片':'材料'}</span>${badge}
+        <canvas width="240" height="176" id="thumb-${mi}"></canvas></div>
+      <div class="meta"><div class="n">${m.name}</div><div class="d"><span>${m.size}</span><span>${m.up}</span></div></div>
+    </div>`;
+  }).join('');
+  body.innerHTML=`<div class="rec-card">
+    <div class="kv"><span class="k">申请编号</span><span class="td-hlw">${r.hlw}</span></div>
+    <div class="kv"><span class="k">业务类型</span><span>${BIZ_NAME[r.biz]}</span></div>
+    <div class="kv"><span class="k">申请人</span><span>${r.name}</span></div>
+    <div class="kv"><span class="k">申请时间</span><span>${r.time}</span></div>
+    <div class="kv"><span class="k">当前状态</span>${fmtSt(r.st)}</div>
+    <div class="kv"><span class="k">办理说明</span><span>${r.note}</span></div>
+  </div>${rejHtml}
+  <div style="font-size:12.5px;color:var(--sub);margin:2px 2px 10px">证件材料（${r.mats.length} 份）· 点击卡片预览，可翻页、下载 PNG 留档</div>
+  <div class="mats-grid">${cards}</div>`;
+  /* 画缩略图 */
+  r.mats.forEach((m,mi)=>{
+    const c=document.getElementById('thumb-'+mi);
+    if(c) drawThumb(c,m);
+  });
+}
+
+/* ============ Canvas 证件绘制 ============ */
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function stamp(ctx,cx,cy,rad,text){ // 红章
+  ctx.save();ctx.translate(cx,cy);
+  ctx.strokeStyle='#C8102E';ctx.fillStyle='#C8102E';
+  ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,rad,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.arc(0,0,rad-14,0,Math.PI*2);ctx.lineWidth=1.5;ctx.stroke();
+  const chs=text.split('');
+  ctx.font='13px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let i=0;i<chs.length;i++){
+    const a=-Math.PI/2+(i-chs.length/2+0.5)*(Math.PI/(chs.length));
+    ctx.save();ctx.rotate(a);ctx.translate(0,-(rad-20));ctx.fillText(chs[i],0,0);ctx.restore();
+  }
+  // 五角星
+  ctx.beginPath();
+  for(let i=0;i<5;i++){const a=-Math.PI/2+i*2*Math.PI/5;const x=Math.cos(a)*13,y=Math.sin(a)*13;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}
+  ctx.closePath();ctx.fillStyle='#C8102E';ctx.fill();
+  ctx.restore();
+}
+function paper(ctx,w,h,accent){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#FFFFFF';roundRect(ctx,0,0,w,h,0);ctx.fill();
+  ctx.strokeStyle=accent;ctx.lineWidth=3;roundRect(ctx,8,8,w-16,h-16,4);ctx.stroke();
+  ctx.strokeStyle='rgba(0,0,0,.12)';ctx.lineWidth=1;roundRect(ctx,14,14,w-28,h-28,2);ctx.stroke();
+}
+function rowKV(ctx,y,label,val,x,fontSize){
+  ctx.fillStyle='#1E293B';ctx.font=`600 ${fontSize}px sans-serif`;ctx.textAlign='left';ctx.fillText(label,x,y);
+  ctx.fillStyle='#0F172A';ctx.font=`500 ${fontSize}px sans-serif`;ctx.fillText(val,x+108,y);
+}
+function docHeader(ctx,w,title,no,accent){
+  ctx.fillStyle=accent;ctx.font='700 26px sans-serif';ctx.textAlign='center';ctx.fillText(title,w/2,52);
+  ctx.fillStyle='#64748B';ctx.font='500 13px sans-serif';ctx.fillText(no,w/2,78);
+  ctx.strokeStyle=accent;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w/2-150,92);ctx.lineTo(w/2+150,92);ctx.stroke();
+}
+function bodyText(ctx,text,x,y,w,size){
+  ctx.fillStyle='#1E293B';ctx.font='500 '+size+'px sans-serif';ctx.textAlign='left';
+  let line='',yy=y;
+  for(const ch of text){line+=ch;if(ctx.measureText(line).width>w){ctx.fillText(line,x,yy);yy+=size+9;line=ch}}
+  if(line)ctx.fillText(line,x,yy);
+  return yy;
+}
+function drawThumb(canvas,m){
+  canvas.width=240;canvas.height=176;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#F1F5F9';ctx.fillRect(0,0,240,176);
+  ctx.save();ctx.scale(0.42,0.42);ctx.translate(-30,-10);
+  drawPage(ctx,720,520,m.pages[0]);
+  ctx.restore();
+  // 首页角标
+  ctx.fillStyle='rgba(15,23,42,.5)';ctx.font='600 10px sans-serif';ctx.fillText(m.name.slice(0,10),8,164);
+}
+function drawPage(ctx,w,h,p){
+  const accent={csm:'#0E9F6E',jhz:'#DB2777',fcz:'#B45309',sfz:'#2547A8','sfz-back':'#2547A8',huben:'#0B3C8C',cert:'#1668DC',mzs:'#D97706',wfz:'#7B5BD6',doc:'#475569',photo:'#0891B2',swzm:'#475569'}[p.kind]||'#475569';
+  const W=w,H=h;
+  if(p.kind==='sfz'){
+    paper(ctx,W,H,'#2547A8');
+    ctx.fillStyle='#0F172A';ctx.font='700 22px sans-serif';ctx.textAlign='center';ctx.fillText('中华人民共和国',W/2,44);
+    ctx.fillStyle='#475569';ctx.font='600 17px sans-serif';ctx.fillText('居民身份证',W/2,72);
+    // 照片位
+    const px=W-190,py=104;
+    ctx.fillStyle='#DBEAFE';roundRect(ctx,px,py,150,176,6);ctx.fill();
+    ctx.strokeStyle='#93C5FD';ctx.lineWidth=1.5;roundRect(ctx,px,py,150,176,6);ctx.stroke();
+    ctx.fillStyle='#2547A8';
+    if(p.photo==='M'){
+      ctx.beginPath();ctx.arc(px+75,py+48,30,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(px+75,py+120,38,42,0,0,Math.PI*2);ctx.fill();
+    }else{
+      ctx.beginPath();ctx.arc(px+75,py+48,28,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(px+75,py+108,34,30,0,0,Math.PI*2);ctx.fill();
+    }
+    if(p.aged){ctx.fillStyle='#1E40AF';ctx.font='700 26px sans-serif';ctx.fillText('作废',px+75,py+150)}
+    if(p.blur){ctx.fillStyle='rgba(37,99,235,.28)';ctx.fillRect(px,py,150,176)}
+    rowKV(ctx,116,'姓　名',p.name,60,17);
+    rowKV(ctx,152,'性　别',p.sex,60,17);
+    rowKV(ctx,188,'民　族',p.nation,60,17);
+    rowKV(ctx,224,'出　生',p.birth,60,17);
+    ctx.fillStyle='#1E293B';ctx.font='600 17px sans-serif';ctx.fillText('住　址',60,260);
+    bodyText(ctx,p.addr,168,260,400,17);
+    ctx.fillStyle='#1E293B';ctx.font='600 17px sans-serif';ctx.fillText('公民身份号码',60,318);
+    ctx.fillStyle='#0F172A';ctx.font='700 19px sans-serif';ctx.fillText(p.id,168,318);
+    ctx.fillStyle='#94A3B8';ctx.font='400 12px sans-serif';ctx.fillText('签发机关：波密县公安局 · 有效期限：长期',60,358);
+    ctx.fillStyle='#94A3B8';ctx.font='400 11px sans-serif';ctx.fillText('（演示材料，仅供内网查看与测试）',60,386);
+    return;
+  }
+  if(p.kind==='sfz-back'){
+    paper(ctx,W,H,'#2547A8');
+    ctx.fillStyle='#C8102E';ctx.font='700 60px sans-serif';ctx.textAlign='center';ctx.fillText('★',W/2,120);
+    ctx.fillStyle='#0F172A';ctx.font='700 24px sans-serif';ctx.fillText('中华人民共和国',W/2,180);
+    ctx.fillStyle='#475569';ctx.font='600 18px sans-serif';ctx.fillText('居民身份证',W/2,214);
+    ctx.fillStyle='#1E293B';ctx.font='500 15px sans-serif';ctx.fillText('签发机关：波密县公安局',W/2,290);
+    ctx.fillStyle='#1E293B';ctx.font='500 15px sans-serif';ctx.fillText('证件号码：'+p.no,W/2,318);
+    ctx.fillStyle='#94A3B8';ctx.font='400 11px sans-serif';ctx.fillText('（演示材料，仅供内网查看与测试）',W/2,400);
+    return;
+  }
+  if(p.kind==='huben'){
+    paper(ctx,W,H,'#0B3C8C');
+    docHeader(ctx,W,'常住人口登记卡',p.no,'#0B3C8C');
+    ctx.fillStyle='#1E293B';ctx.font='600 16px sans-serif';ctx.textAlign='left';
+    ctx.fillText('户主：'+p.house,60,140);
+    ctx.fillText('住址：'+p.addr,60,168);
+    ctx.strokeStyle='#CBD5E1';ctx.lineWidth=1.5;
+    const cols=[60,300,560];const y0=210;
+    ctx.beginPath();ctx.moveTo(60,y0);ctx.lineTo(660,y0);ctx.moveTo(60,y0+40);ctx.lineTo(660,y0+40);ctx.stroke();
+    ctx.fillStyle='#64748B';ctx.font='600 13px sans-serif';
+    ctx.fillText('姓名',cols[0]+16,y0-8);ctx.fillText('与户主关系',cols[1]+16,y0-8);ctx.fillText('公民身份号码',cols[2]+16,y0-8);
+    ctx.strokeStyle='#E2E8F0';
+    p.members.forEach((m,i)=>{
+      const y=y0+40+i*44;
+      ctx.beginPath();ctx.moveTo(60,y);ctx.lineTo(660,y);ctx.stroke();
+      ctx.fillStyle='#0F172A';ctx.font='500 15px sans-serif';
+      ctx.fillText(m[0],cols[0]+16,y+28);ctx.fillText(m[1],cols[1]+16,y+28);ctx.fillText(m[2],cols[2]+16,y+28);
+    });
+    ctx.fillStyle='#94A3B8';ctx.font='400 11px sans-serif';ctx.fillText('波密县公安局 户籍章（演示）',60,470);
+    return;
+  }
+  if(p.kind==='csm'){
+    paper(ctx,W,H,'#0E9F6E');
+    ctx.fillStyle='#0E9F6E';ctx.font='700 26px sans-serif';ctx.textAlign='center';ctx.fillText('出生医学证明',W/2,52);
+    ctx.fillStyle='#64748B';ctx.font='500 13px sans-serif';ctx.fillText('编号：'+p.no,W/2,80);
+    ctx.strokeStyle='#0E9F6E';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2-160,94);ctx.lineTo(W/2+160,94);ctx.stroke();
+    ctx.fillStyle='#1E293B';ctx.font='600 15px sans-serif';ctx.textAlign='left';
+    rowKV(ctx,140,'新生儿',p.kid,60,16);
+    rowKV(ctx,172,'性　别',p.sex,60,16);
+    rowKV(ctx,204,'出生日期',p.birth,60,16);
+    rowKV(ctx,236,'出生地点',p.place,60,16);
+    rowKV(ctx,268,'母　亲',p.mother,60,16);
+    rowKV(ctx,300,'父　亲',p.father,60,16);
+    ctx.fillStyle='#1E293B';ctx.font='500 14px sans-serif';ctx.fillText('接生医疗机构：'+p.place,60,356);
+    ctx.fillStyle='#94A3B8';ctx.font='400 11px sans-serif';ctx.fillText('签发：'+p.stamp,60,388);
+    stamp(ctx,600,420,52,'波密县人民医院出生医学证明专用章');
+    return;
+  }
+  if(p.kind==='jhz'){
+    paper(ctx,W,H,'#DB2777');
+    ctx.fillStyle='#DB2777';ctx.font='700 28px sans-serif';ctx.textAlign='center';ctx.fillText(p.title,W/2,54);
+    ctx.fillStyle='#64748B';ctx.font='500 13px sans-serif';ctx.fillText('字号：'+p.no,W/2,82);
+    ctx.strokeStyle='#DB2777';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2-150,96);ctx.lineTo(W/2+150,96);ctx.stroke();
+    ctx.fillStyle='#1E293B';ctx.font='600 15px sans-serif';ctx.textAlign='left';
+    rowKV(ctx,150,'持证人',p.holder,60,16);
+    rowKV(ctx,186,'登记对象',p.partner,60,16);
+    rowKV(ctx,222,'登记日期',p.date,60,16);
+    ctx.fillStyle='#C8102E';ctx.font='600 16px sans-serif';ctx.fillText('婚姻登记机关：波密县民政局',60,290);
+    stamp(ctx,580,360,56,'波密县民政局婚姻登记专用章');
+    return;
+  }
+  if(p.kind==='fcz'){
+    paper(ctx,W,H,'#B45309');
+    ctx.fillStyle='#B45309';ctx.font='700 25px sans-serif';ctx.textAlign='center';ctx.fillText(p.title,W/2,52);
+    ctx.fillStyle='#64748B';ctx.font='500 13px sans-serif';ctx.fillText('证书编号：'+p.no,W/2,78);
+    ctx.strokeStyle='#B45309';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2-170,92);ctx.lineTo(W/2+170,92);ctx.stroke();
+    ctx.fillStyle='#1E293B';ctx.font='600 15px sans-serif';ctx.textAlign='left';
+    rowKV(ctx,140,'权　利　人',p.owner,60,16);
+    rowKV(ctx,174,'权利类型',p.type,60,16);
+    rowKV(ctx,208,'坐　　落',p.loc,60,16);
+    rowKV(ctx,242,'建筑面积',p.area,60,16);
+    ctx.fillStyle='#94A3B8';ctx.font='400 11px sans-serif';ctx.fillText('登记机构：波密县不动产登记中心（演示）',60,320);
+    stamp(ctx,600,400,52,'波密县不动产登记中心');
+    return;
+  }
+  if(p.kind==='cert'){
+    paper(ctx,W,H,'#1668DC');
+    docHeader(ctx,W,p.title,p.no,'#1668DC');
+    bodyText(ctx,p.body,80,150,560,17);
+    ctx.fillStyle='#1E293B';ctx.font='500 15px sans-serif';ctx.textAlign='left';
+    ctx.fillText('签发单位：'+p.stamp,80,300);
+    ctx.fillText('出具日期：'+p.date,80,330);
+    ctx.fillStyle='#94A3B8';ctx.font='400 11px sans-serif';ctx.fillText('（电子证照 · 亮码可核验）',80,380);
+    stamp(ctx,560,420,56,'波密县公安局户籍业务专用章');
+    return;
+  }
+  if(p.kind==='mzs'||p.kind==='wfz'||p.kind==='doc'||p.kind==='swzm'){
+    const col={mzs:'#D97706',wfz:'#7B5BD6',doc:'#475569',swzm:'#475569'}[p.kind];
+    paper(ctx,W,H,col);
+    docHeader(ctx,W,p.title,p.no||'',col);
+    let y=140;
+    if(p.kind==='mzs'){
+      rowKV(ctx,y,'姓　　名',p.name,60,16);y+=42;
+      rowKV(ctx,y,'原民族成份',p.from,60,16);y+=42;
+      rowKV(ctx,y,'拟确认民族',p.to,60,16);y+=42;
+      ctx.fillStyle='#1E293B';ctx.font='500 14px sans-serif';ctx.fillText('确认依据：'+p.basis,60,y);
+    }else if(p.kind==='wfz'){
+      rowKV(ctx,y,'姓　　名',p.name,60,16);y+=42;
+      rowKV(ctx,y,'公民身份号码',p.id,60,16);y+=42;
+      bodyText(ctx,p.result,60,y,600,16);
+      ctx.fillStyle='#1E293B';ctx.font='500 14px sans-serif';ctx.fillText('查询日期：'+p.date,60,y+120);
+      stamp(ctx,590,430,54,'波密县公安局刑事犯罪记录查询专用章');
+    }else if(p.kind==='swzm'){
+      rowKV(ctx,y,'死者姓名',p.dead,60,16);y+=42;
+      rowKV(ctx,y,'性　　别',p.sex,60,16);y+=42;
+      rowKV(ctx,y,'出生日期',p.birth,60,16);y+=42;
+      rowKV(ctx,y,'死亡日期',p.died,60,16);y+=42;
+      rowKV(ctx,y,'死亡原因',p.cause,60,16);y+=42;
+      rowKV(ctx,y,'死亡地点',p.place,60,16);y+=42;
+      ctx.fillStyle='#1E293B';ctx.font='500 14px sans-serif';ctx.fillText('签发单位：'+p.sign+'　'+p.date,60,y);
+      stamp(ctx,590,440,54,'波密县人民医院死亡医学证明专用章');
+    }else{
+      const end=bodyText(ctx,p.body,60,y,600,16);
+      ctx.fillStyle='#1E293B';ctx.font='500 15px sans-serif';ctx.fillText('落款：'+p.sign,60,end+40);
+      ctx.fillStyle='#1E293B';ctx.font='500 15px sans-serif';ctx.fillText('日期：'+p.date,60,end+70);
+      if(p.no){ctx.fillStyle='#64748B';ctx.font='500 13px sans-serif';ctx.fillText('编号：'+p.no,60,end+100)}
+      stamp(ctx,600,430,52,'波密县公安局户籍业务专用章');
+    }
+    return;
+  }
+  if(p.kind==='photo'){
+    paper(ctx,W,H,'#0891B2');
+    docHeader(ctx,W,p.title,'', '#0891B2');
+    ctx.fillStyle='#DBEAFE';roundRect(ctx,W/2-60,120,120,150,6);ctx.fill();
+    ctx.fillStyle='#0891B2';
+    ctx.beginPath();ctx.arc(W/2,170,26,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(W/2,230,32,34,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#1E293B';ctx.font='600 15px sans-serif';ctx.textAlign='center';
+    ctx.fillText('姓名：'+p.name,W/2,320);
+    ctx.fillText('身份证号：'+(p.id||'—'),W/2,348);
+    ctx.fillStyle='#64748B';ctx.font='500 13px sans-serif';ctx.fillText(p.note||'',W/2,396);
+    return;
+  }
+  paper(ctx,W,H,'#64748B');docHeader(ctx,W,p.title||'材料',p.no||'','#64748B');
+}
+</script>
+<script>
+/* ============ 预览 / 翻页 / 下载 ============ */
+function openPreview(mi){
+  if(selIdx<0) return;
+  const r=RECORDS[selIdx], m=r.mats[mi];
+  if(m.pending){toast('该材料尚未上传');return}
+  curMatIdx=mi;curPg=0;
+  document.getElementById('mTitle').textContent=m.name;
+  document.getElementById('mSub').textContent=`${r.hlw} · ${r.name}`;
+  document.getElementById('mask').classList.add('show');
+  paintModal();
+}
+function paintModal(){
+  const m=RECORDS[selIdx].mats[curMatIdx];
+  let pages=m.pages||[m.pages[0]];
+  if(m.type==='sfz'){
+    const bk=RECORDS[selIdx].mats.find(x=>x.type==='sfz-back');
+    if(bk&&bk.pages) pages=[pages[0],bk.pages[0]];
+  }
+  window.__curPages=pages;
+  const c=document.getElementById('mCanvas');
+  const ctx=c.getContext('2d');
+  drawPage(ctx,c.width,c.height,pages[curPg]);
+  document.getElementById('mInfo').textContent=`材料：${m.name} · ${m.size} · 上传于 ${m.up} · 第 ${curPg+1}/${pages.length} 页`;
+  document.getElementById('pgInfo').textContent=pages.length>1?`${curPg+1} / ${pages.length}`:'';
+  document.getElementById('pgPrev').disabled=curPg<=0;
+  document.getElementById('pgNext').disabled=curPg>=pages.length-1;
+}
+function pgMove(d){
+  const n=window.__curPages?window.__curPages.length:1;
+  curPg=Math.min(Math.max(0,curPg+d),n-1);
+  paintModal();
+}
+function closeModal(){document.getElementById('mask').classList.remove('show')}
+function downloadCur(){
+  const m=RECORDS[selIdx].mats[curMatIdx];
+  const c=document.getElementById('mCanvas');
+  c.toBlob(blob=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=`${RECORDS[selIdx].hlw}_${m.name}_p${curPg+1}.png`;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    toast('已下载：'+a.download);
+  },'image/png');
+}
+function dlAll(){
+  if(selIdx<0) return;
+  const r=RECORDS[selIdx], items=r.mats.filter(m=>!m.pending);
+  if(!items.length){toast('该记录暂无已上传材料');return}
+  const c=document.createElement('canvas');c.width=720;c.height=520;
+  const ctx=c.getContext('2d');
+  const jobs=[];
+  items.forEach(m=>(m.pages&&m.pages.length?m.pages:[m.pages[0]]).forEach((p,pi)=>jobs.push([m,p,pi])));
+  jobs.forEach((j,i)=>{
+    setTimeout(()=>{
+      const [m,p,pi]=j;
+      ctx.clearRect(0,0,720,520);
+      drawPage(ctx,720,520,p);
+      c.toBlob(blob=>{
+        if(!blob) return;
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download=`${r.hlw}_${m.name}_p${pi+1}.png`;
+        a.click();
+        setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+      },'image/png');
+    }, i*260);
+  });
+  toast('开始下载 '+jobs.length+' 张材料，请留意浏览器下载栏');
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function initDate(){
+  const d=new Date();
+  const p=n=>String(n).padStart(2,'0');
+  document.getElementById('nowDate').textContent=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  const wm=document.getElementById('wmTime');
+  if(wm) wm.textContent=document.getElementById('nowDate').textContent;
+}
+document.getElementById('q').addEventListener('input',renderList);
+document.getElementById('mask').addEventListener('click',e=>{if(e.target.id==='mask')closeModal()});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('mask').classList.contains('show'))closeModal();
+  if(e.key==='ArrowLeft')pgMove(-1);
+  if(e.key==='ArrowRight')pgMove(1);
+});
+renderNav();renderChips();renderList();initDate();
+</script>
