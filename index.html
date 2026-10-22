@@ -405,7 +405,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         </div>
         <div class="huzheng-grid">
           <div class="huzheng-card" onclick="goPage('my-list','chusheng')"><div class="card-title">出生登记</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="12" r="6" fill="#0052FF" opacity="0.3"/><path d="M6 28c0-6 4.5-10 10-10s10 4 10 10" fill="#0052FF" opacity="0.2"/></svg></div><div class="card-desc">新生儿入户 · 收养登记 · 国外出生子女落户</div></div>
-          <div class="huzheng-card" onclick="goPage('my-list','huzheng')"><div class="card-title">户籍证明</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="8" y="6" width="16" height="22" rx="2" fill="#0052FF" opacity="0.2"/><circle cx="22" cy="24" r="4" fill="#0052FF" opacity="0.3"/></svg></div><div class="card-desc">户籍证明开具 · 亲属关系证明 · 死亡注销申报</div></div>
+          <div class="huzheng-card" onclick="goPage('my-list','huzheng')"><div class="card-title">户籍证明</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="8" y="6" width="16" height="22" rx="2" fill="#0052FF" opacity="0.2"/><circle cx="22" cy="24" r="4" fill="#0052FF" opacity="0.3"/></svg></div><div class="card-desc">户籍证明开具 · 亲属关系证明 · 临时身份证明</div></div>
+          <div class="huzheng-card" onclick="goPage('my-list','swzx')" style="background:linear-gradient(135deg,#F8FAFC,#F1F5F9);border-color:#CBD5E1"><div class="card-title" style="color:#334155">死亡注销申报</div><div class="card-icon" style="background:rgba(51,65,85,0.08)"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="9" y="5" width="14" height="22" rx="2" fill="#334155" opacity="0.18"/><path d="M13 12h6M13 17h6" stroke="#334155" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/></svg></div><div class="card-desc" style="color:#64748B">申报死亡后注销户口 · 派出所审核</div></div>
           <div class="huzheng-card" onclick="goPage('my-list','biangeng')"><div class="card-title">主项变更更正</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="6" y="8" width="20" height="18" rx="2" fill="#0052FF" opacity="0.15"/><path d="M10 14h12M10 18h8M10 22h10" stroke="#0052FF" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/></svg></div><div class="card-desc">姓名 · 性别 · 出生日期 · 民族 · 身份证号</div></div>
           <div class="huzheng-card" onclick="goPage('my-list','feizhuxiang')"><div class="card-title">非主项变更</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="6" y="8" width="20" height="18" rx="2" fill="#0052FF" opacity="0.12"/><path d="M10 14h12M10 18h10" stroke="#0052FF" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/></svg></div><div class="card-desc">职业 · 服务处所 · 文化程度 · 婚姻状况 · 身高</div></div>
           <div class="huzheng-card" onclick="goPage('my-list','bulu')"><div class="card-title">户籍补录</div><div class="card-icon"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="8" y="4" width="16" height="24" rx="2" fill="#0052FF" opacity="0.15"/><circle cx="22" cy="22" r="4" fill="#0052FF" opacity="0.3"/></svg></div><div class="card-desc">无户口人员补登补录 · 漏登补录</div></div>
@@ -426,7 +427,6 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="navbar"><div class="back-btn" onclick="goPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title" id="my-list-title">我的申请</span></div>
       <div class="page-scroll">
         <div class="list-header"><div class="list-header-row"><div class="list-title" id="my-list-biz">全部业务</div><button class="nav-action list-action" id="new-apply-btn" onclick="newApply()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>新建申请</button></div><div class="list-sub" id="my-list-sub">您提交的户政业务申请记录</div></div>
-        <div id="huzheng-extra" style="display:none;margin:0 16px 8px;padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,#0F172A,#1e3a8a);color:#fff;align-items:center;justify-content:space-between;cursor:pointer" onclick="goPage('my-list','swzx')"><div><div style="font-size:15px;font-weight:600">死亡注销申报</div><div style="font-size:12px;opacity:0.8;margin-top:3px">重要户政事项 · 申报死亡后办理户口注销</div></div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
         <div class="status-tabs" id="status-tabs">
           <div class="status-tab active" data-status="all" onclick="filterStatus(this)">全部</div>
           <div class="status-tab" data-status="pending" onclick="filterStatus(this)">待受理</div>
@@ -545,7 +545,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <div class="page" id="page-form-chusheng">
   <div class="navbar"><div class="back-btn" onclick="goPage('my-list','chusheng')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">出生登记</span></div>
   <div class="page-scroll">
-    <div class="form-header"><div class="form-title">新生儿出生登记</div><div class="form-desc">分3步填写 · 婚生婴儿申报户口 · 6周岁以下当场办结</div></div>
+    <div class="form-header"><div class="form-title">新生儿出生登记</div><div class="form-desc">分3步填写 · 婚生婴儿申报户口 · 3周岁以下当场办结</div></div>
     <div class="form-body">
       <div class="step-bar">
         <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-name">基本信息</div></div>
@@ -564,7 +564,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         </div>
       </div>
 
-      <div class="form-group" id="cs-out-parent" style="display:none"><label class="form-label"><span class="required">*</span>婚外落户方</label><div class="select-wrap"><select class="form-input" id="cs-out-side" onchange="onCsOutSideChange()"><option value="">请选择随父或随母落户</option><option value="mother">随母落户</option><option value="father">随父落户（需亲子鉴定）</option></select></div><div class="form-hint">随父落户须提供亲子鉴定证明；随母落户须提供母亲未婚申明书</div></div>
+      <div class="form-group" id="cs-out-parent" style="display:none"><label class="form-label"><span class="required">*</span>非婚生落户方</label><div class="select-wrap"><select class="form-input" id="cs-out-side" onchange="onCsOutSideChange()"><option value="">请选择随父或随母落户</option><option value="mother">随母落户</option><option value="father">随父落户（需亲子鉴定）</option></select></div><div class="form-hint">随父落户须提供亲子鉴定证明；随母落户须提供母亲未婚申明书</div></div>
 
       <div class="form-group"><label class="form-label"><span class="required">*</span>新生儿姓名</label><input class="form-input" id="cs-name" placeholder="须与《出生医学证明》记载一致"></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>出生医学证明编号</label><input class="form-input" id="cs-csmbh" placeholder="《出生医学证明》编号（11位，见证明右上方）"></div>
@@ -572,8 +572,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label"><span class="required">*</span>出生地（全国县级行政区划）</label>
         <div class="region-select" onclick="openRegion('birthplace')"><span class="region-value placeholder" id="region-val-birthplace">请选择出生地省/市/县（支持全国）</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-birthplace">
       </div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>民族成份</label><div class="select-wrap"><select class="form-input" id="cs-mzdm" onchange="onCsNationChange()"><option value="">请选择</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div><div class="form-hint">新生儿民族原则上在父母民族中选择；父母民族不一致时需上传《民族成份确认书》</div></div>
-      <div class="form-group" id="cs-nation-confirm" style="display:none"><div style="background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:12px"><div style="font-size:12.5px;font-weight:600;color:#C2410C;margin-bottom:8px">检测到父母民族不一致，须上传《民族成份确认书》</div><a onclick="toast('演示下载模板')" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--accent);cursor:pointer;margin-bottom:10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>下载《民族成份确认书》模板</a><div class="upload-add" onclick="toast('上传已填写的确认书')" style="padding:10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">上传已填写的《民族成份确认书》</span></div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>民族成份</label><div class="select-wrap"><select class="form-input" id="cs-mzdm" onchange="onCsNationChange()"><option value="">请选择</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div><div class="form-hint">新生儿民族原则上在父母民族中选择；父母民族不一致时，在第三步「材料确认」上传《民族成份确认书》并双方线上签字</div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>籍贯（随祖父居住地）</label>
         <div class="region-select" onclick="openRegion('native')"><span class="region-value placeholder" id="region-val-native">请选择籍贯行政区划</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-native">
       </div>
@@ -596,7 +595,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <div class="id-photos"><div class="id-photo" style="position:relative"><div class="ph-img"><svg width="60" height="38" viewBox="0 0 60 38"><rect x="1" y="1" width="58" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1"/><circle cx="16" cy="14" r="5.5" fill="#E2E8F0"/><path d="M8 27c0-3.8 3.6-6 8-6s8 2.2 8 6" fill="#E2E8F0"/><rect x="30" y="8" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="30" y="15" width="24" height="3" rx="1.5" fill="#E2E8F0"/><rect x="30" y="22" width="16" height="3" rx="1.5" fill="#E2E8F0"/></svg></div><div class="ph-label">身份证人像面</div></div><div class="id-photo" style="position:relative"><div class="ph-img"><svg width="60" height="38" viewBox="0 0 60 38"><rect x="1" y="1" width="58" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1"/><circle cx="18" cy="12" r="6" fill="#E2E8F0"/><path d="M12 21l6-9 6 9" fill="#E2E8F0"/><rect x="31" y="8" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="31" y="15" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="31" y="26" width="12" height="3" rx="1.5" fill="#E2E8F0"/></svg></div><div class="ph-label">身份证国徽面</div></div></div>
         </div>
       </div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>落户方</label><div class="select-wrap"><select class="form-input" id="cs-luohu" onchange="onCsLuohuChange()"><option value="">请选择</option><option value="father">随父落户</option><option value="mother">随母落户</option><option value="other">随祖父母/外祖父母</option></select></div></div>
+      <div class="form-group" id="cs-luohu-block"><label class="form-label"><span class="required">*</span>落户方</label><div class="select-wrap"><select class="form-input" id="cs-luohu" onchange="onCsLuohuChange()"><option value="">请选择</option><option value="father">随父落户</option><option value="mother">随母落户</option><option value="other">随祖父母/外祖父母</option></select></div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户地派出所（限波密县内）</label><div class="select-wrap"><select class="form-input"><option value="">请选择拟落户派出所</option><option>扎木镇派出所</option><option>倾多镇派出所</option><option>松宗镇派出所</option><option>古乡派出所</option><option>玉普乡派出所</option><option>易贡乡派出所</option><option>多吉乡派出所</option><option>康玉乡派出所</option><option>玉许乡派出所</option><option>八盖乡派出所</option></select></div><div class="form-hint">新生儿须落户在波密县内父/母户内，不支持跨县落户</div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>落户类别</label><div class="select-wrap"><select class="form-input" id="cs-luohu-type" onchange="onCsLuohuTypeChange()"><option value="">请选择落户类别</option><option value="family">家庭户（落在房屋上）</option><option value="unit">单位集体户</option><option value="community">社区集体户</option></select></div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户户主姓名</label><input class="form-input" placeholder="拟落户户口簿户主姓名"></div>
@@ -607,6 +606,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label"><span class="required">*</span>申领人身份</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>父亲</option><option>母亲</option><option>其他监护人</option></select></div></div>
       <div class="form-group"><label class="form-label">申请人信息（自动带出）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value">139****5678</span></div><div class="info-row"><span class="label">户籍住址</span><span class="value">扎木镇居委会</span></div></div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list" id="cs-mats"></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div><div style="margin-top:10px;padding:10px;background:rgba(0,82,255,0.05);border-radius:8px;font-size:11.5px;color:var(--muted-foreground);line-height:1.6">注：出生登记不生成电子证件，审批通过后由户籍系统回调，林安码向申请人手机发送办理结果短信。</div></div>
+      <div class="form-group" id="cs-nation-confirm" style="display:none"><div style="background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:12px"><div style="font-size:12.5px;font-weight:600;color:#C2410C;margin-bottom:8px">父母民族不一致，须上传《民族成份确认书》并由父母双方线上签字</div><a onclick="toast('演示下载模板')" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--accent);cursor:pointer;margin-bottom:10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>下载《民族成份确认书》模板</a><div class="upload-add" onclick="toast('上传已填写的确认书')" style="padding:10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">上传已填写的《民族成份确认书》</span></div><div style="margin-top:12px;font-size:12.5px;font-weight:600;color:#C2410C;margin-bottom:8px">父母双方线上签字（必备）</div><div style="display:flex;gap:10px"><div id="cs-sign-father" onclick="csSign('father')" style="flex:1;border:1.5px dashed #FDBA74;border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;background:#fff"><div style="font-size:12.5px;font-weight:600;color:var(--foreground)">父亲签字</div><div id="cs-sign-father-tip" style="font-size:11px;color:var(--muted-foreground);margin-top:4px">点击进入手写签名（未签）</div></div><div id="cs-sign-mother" onclick="csSign('mother')" style="flex:1;border:1.5px dashed #FDBA74;border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;background:#fff"><div style="font-size:12.5px;font-weight:600;color:var(--foreground)">母亲签字</div><div id="cs-sign-mother-tip" style="font-size:11px;color:var(--muted-foreground);margin-top:4px">点击进入手写签名（未签）</div></div></div></div></div>
     </div></div></div>
     <div class="form-footer"><div class="step-actions">
       <button class="step-btn" id="step-prev" onclick="goStep(-1)" style="display:none">上一步</button>
@@ -620,7 +620,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="form-header"><div class="form-title">开具户籍类证明</div><div class="form-desc">全程网办 · 电子证照下载 · 本辖区当场出具</div></div>
     <div class="form-body">
       <div class="form-group"><label class="form-label">申请人信息（读证自动回填）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value" data-group="applicant" data-field="name">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value" data-group="applicant" data-field="idcard">542623********0024</span></div><div class="info-row"><span class="label">户籍地址</span><span class="value" data-group="applicant" data-field="addr">扎木镇居委会</span></div><div class="info-row"><span class="label">联系电话</span><span class="value" data-group="applicant" data-field="phone">139****5678</span></div></div><div class="id-actions"><button class="id-btn" onclick="openScan('code','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>证明事项</label><div class="form-static">户籍证明</div><div class="form-hint">当前业务仅支持开具本人户籍证明，证明户籍登记信息（姓名、性别、公民身份号码、户籍地址、户内关系等）</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>证明事项</label><div class="select-wrap"><select class="form-input" id="hz-matters"><option value="">请选择证明事项</option><option>户口登记项目内容变更更正证明</option><option>注销户口证明</option><option>亲属关系证明</option><option>临时身份证明</option><option>其他户籍证明</option></select></div><div class="form-hint">请选择需要开具的户籍类证明事项</div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>证明用途</label><textarea class="form-input" rows="3" style="min-height:88px;resize:none" placeholder="用于判断证明范围与是否属公安主管事项，如：办理社保、子女入学"></textarea></div>
       <div class="form-group"><label class="form-label">与被证明人关系</label><div class="form-static">本人</div><div class="form-hint">仅限本人申请开具户籍证明，每次办理需做人证核验</div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">本人居民身份证</div><div class="upload-status">已上传</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">户口簿（如持有）</div><div class="upload-status">已上传</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
@@ -632,36 +632,26 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="navbar"><div class="back-btn" onclick="goPage('my-list','biangeng')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">主项变更更正</span></div>
   <div class="page-scroll">
     <div class="form-header"><div class="form-title">户口登记项目变更更正</div><div class="form-desc">主项变更二级审批 · 副项当场办结 · 免费</div></div>
-      <div style="background:linear-gradient(135deg,#0F172A,#1e3a8a);border-radius:12px;padding:14px;margin-bottom:16px;color:#fff"><div style="font-size:13px;font-weight:600;margin-bottom:10px">办理流程（6 步）</div><div style="display:flex;align-items:flex-start;justify-content:space-between;font-size:10.5px;opacity:0.92;line-height:1.5"><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">1</div>林安码<br>提交申报</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">2</div>户籍系统<br>形式审核</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">3</div>社区民警<br>上门笔录</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">4</div>户籍系统<br>实质审核</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">5</div>大队/分管/<br>支队审批</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">6</div>办结+短信<br>通知群众</div></div></div>
-    <div class="form-body">
+      <div style="display:flex;background:var(--muted);border-radius:12px;padding:4px;margin-bottom:16px">
+      <div id="bg-tab-apply" onclick="switchBgVersion('apply')" style="flex:1;text-align:center;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,0.08)">在线申报</div>
+      <div id="bg-tab-guide" onclick="switchBgVersion('guide')" style="flex:1;text-align:center;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--muted-foreground)">办理指引</div>
+    </div>
+    <div class="bg-apply-only" style="background:linear-gradient(135deg,#0F172A,#1e3a8a);border-radius:12px;padding:14px;margin-bottom:16px;color:#fff"><div style="font-size:13px;font-weight:600;margin-bottom:10px">办理流程（6 步）</div><div style="display:flex;align-items:flex-start;justify-content:space-between;font-size:10.5px;opacity:0.92;line-height:1.5"><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">1</div>林安码<br>提交申报</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">2</div>户籍系统<br>形式审核</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">3</div>社区民警<br>上门笔录</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">4</div>户籍系统<br>实质审核</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">5</div>大队/分管/<br>支队审批</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">6</div>办结+短信<br>通知群众</div></div></div>
+    <div class="form-body bg-apply-only">
       <div class="form-group"><label class="form-label">变更人信息（登录账号自动带出，不可修改）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value">139****5678</span></div></div></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>变更项目类别</label><div class="select-wrap"><select class="form-input" id="bg-category" onchange="onBgCatChange()"><option value="">请选择变更类别</option>
-<option value="xm">姓名（姓氏/名字）</option>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更项目类别</label><div class="select-wrap"><select class="form-input" id="bg-category" onchange="onBgCatChange()"><option value="">请选择变更项目</option>
+<option value="xm">姓名</option>
 <option value="xb">性别</option>
-<option value="csrq">出生日期</option>
+<option value="csrq">出生日期（年龄）</option>
 <option value="mz">民族成份</option>
-<option value="sfzh">公民身份号码</option>
-<option value="xxdm">血型</option>
-<option value="xldm">文化程度</option>
-<option value="hyzkdm">婚姻状况</option>
-<option value="zjxydm">宗教信仰</option>
-<option value="sg">身高</option>
-<option value="byzkdm">兵役状况</option>
-<option value="cyzk_dwmc">服务处所（从业单位）</option>
-<option value="cyzk_zy">职业</option>
-<option value="cyzk_zylbdm">从业状况职业类别</option>
-<option value="csd">出生地</option>
-<option value="lxdh">联系电话</option>
-<option value="po">配偶信息</option>
-<option value="fq">父亲信息</option>
-<option value="mq">母亲信息</option>
-<option value="jhry">监护人信息</option>
-</select></div><div class="form-hint">有字典的类别点击下拉选择，无字典的自行填写；出生地、父母/配偶/监护人等信息按需录入</div></div>
+<option value="jg">籍贯</option>
+<option value="sfzh">公民身份号码</option></select></div><div class="form-hint">仅受理上述主项户口登记项目的变更更正</div></div>
+      <div class="form-group" id="bg-reason-block" style="display:none"><label class="form-label"><span class="required">*</span>变更原因</label><div class="select-wrap"><select class="form-input" id="bg-reason" onchange="renderBgMats()"><option value="">请选择变更原因</option></select></div></div>
       <div class="form-group"><label class="form-label">原登记内容（系统自动带出，不可编辑）</label><div class="info-block"><div class="info-row"><span class="label">当前登记内容</span><span class="value" id="bg-orig">—</span></div></div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>拟变更内容</label><div id="bg-content"><div class="form-input" style="background:var(--muted);color:var(--muted-foreground)">请先选择变更项目类别</div></div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>变更事由</label><textarea class="form-input" placeholder="请说明变更事由，如：因宗教信仰需要更改名字 / 出生日期登记错误等"></textarea></div>
       <div class="form-group"><label class="form-label">申请人与变更人关系</label><div class="form-static">本人（仅受理申请人本人主项变更）</div><div class="form-hint">主项变更仅受理申请人本人；10-18周岁变更姓名须父母双方到场共同申请</div></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>变更人年龄</label><div class="select-wrap"><select class="form-input" id="bg-age" onchange="renderBgMats()"><option value="">请选择</option><option value="adult">已满 16 周岁</option><option value="minor">未满 16 周岁（未成年人）</option></select></div><div class="form-hint">满 16 周岁须额外提供无犯罪记录证明；未成年人须监护人代办</div></div>
+      <div class="form-group" style="display:none"><label class="form-label"><span class="required">*</span>变更人年龄</label><div class="select-wrap"><select class="form-input" id="bg-age" onchange="renderBgMats()"><option value="">请选择</option><option value="adult">已满 16 周岁</option><option value="minor">未满 16 周岁（未成年人）</option></select></div><div class="form-hint">满 16 周岁须额外提供无犯罪记录证明；未成年人须监护人代办</div></div>
       <div class="form-group" id="bg-parents-marriage" style="display:none"><label class="form-label"><span class="required">*</span>父母婚姻状况</label><div class="select-wrap"><select class="form-input" id="bg-marriage" onchange="renderBgMats()"><option value="">请选择</option><option value="within">婚内（父母已婚）</option><option value="divorced">离异</option></select></div><div class="form-hint">仅未成年人变更姓名时选择；离异须补充离婚证及另一方父/母同意变更的公证书</div></div>
       <div class="form-group" id="bg-other-death" style="display:none"><label class="form-label">另一方父/母是否已死亡</label><div class="select-wrap"><select class="form-input" id="bg-other-death-sel" onchange="renderBgMats()"><option value="">请选择</option><option value="alive">另一方在世（须提供公证书）</option><option value="dead">另一方已死亡（须提供死亡证明）</option></select></div></div>
       <div class="form-group"><label class="form-label">监护人信息（未满18周岁必填）</label><div class="id-actions"><button class="id-btn" onclick="openScan('code','guardian')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','guardian')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div>
@@ -671,8 +661,16 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="form-hint" style="margin-top:6px;margin-bottom:10px">材料清单随变更类别自动生成，标注"必填"的须上传</div><div class="upload-list" id="bg-mats"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民户口簿</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民身份证</div><div class="upload-status req">必填</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
       <div class="form-group" style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:14px"><div style="font-size:12px;color:#DC2626;line-height:1.7"><strong>不予受理情形：</strong>刑罚未执行完毕或被采取刑事强制措施；民事案件未审结或未执行完毕；选取姓名违反公序良俗；已由本人/监护人申请并更正过出生日期；年满18周岁后两年内未提出民族成份变更申请。</div></div>
       <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填内容及所提交证明材料均真实有效，如有隐瞒事实、弄虚作假，愿承担相应法律责任。</span></div>
-    </div></div>
-    <div class="form-footer"><button class="submit-btn" onclick="submitForm('主项变更更正','bggzsq','biangeng')">提交申请</button></div>
+    </div>
+    <div class="form-footer bg-apply-only"><button class="submit-btn" onclick="submitForm('主项变更更正','bggzsq','biangeng')">提交申请</button></div>
+    <div id="bg-version-guide" style="display:none">
+      <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:var(--foreground);line-height:1.7">本版仅提供办理流程告知与所需材料、模板下载，无需在线填写与上传；准备齐全后可切换到「在线申报」提交。</div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更项目类别</label><div class="select-wrap"><select class="form-input" id="bg-guide-cat" onchange="onBgGuideCatChange()"><option value="">请选择变更类别</option><option value="xm">姓名</option><option value="xb">性别</option><option value="csrq">出生日期</option><option value="mz">民族成份</option><option value="jg">籍贯</option><option value="sfzh">公民身份号码</option></select></div></div>
+      <div id="bg-guide-flow"></div>
+      <div class="form-group"><label class="form-label">所需材料与模板下载</label><div class="upload-list" id="bg-guide-mats"></div></div>
+    </div>
+  </div>
+
 </div>
 <div class="page" id="page-form-feizhuxiang">
   <div class="navbar"><div class="back-btn" onclick="goPage('my-list','feizhuxiang')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">非主项变更</span></div>
@@ -700,7 +698,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </div>
 
 <div class="page" id="page-form-swzx">
-  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','huzheng')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">死亡注销申报</span></div>
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','swzx')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">死亡注销申报</span></div>
   <div class="page-scroll">
     <div class="form-header"><div class="form-title">死亡人员户口注销申报</div><div class="form-desc">申报死亡后注销户口 · 重要户政事项 · 派出所审核</div></div>
     <div class="form-body">
@@ -709,10 +707,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label"><span class="required">*</span>死者原户籍地址</label><input class="form-input" placeholder="请输入死者户口簿上登记的户籍地址"></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>死亡日期</label><input class="form-input" type="date"></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>死亡原因</label><div class="select-wrap"><select class="form-input" id="sw-reason" onchange="onSwReasonChange()"><option value="">请选择</option><option value="normal">正常死亡（病亡）</option><option value="abnormal">非正常死亡</option><option value="declare">宣告死亡</option></select></div></div>
-      <div class="form-group" id="sw-court-block" style="display:none"><label class="form-label"><span class="required">*</span>法院宣告死亡判决书编号</label><input class="form-input" placeholder="请输入人民法院宣告死亡判决书案号"></div>
-      <div class="form-group" id="sw-cert-block" style="display:none"><label class="form-label"><span class="required">*</span>非正常死亡认定书编号</label><input class="form-input" placeholder="请输入公安/法医出具的非正常死亡认定书编号"></div>
-      <div class="form-group"><label class="form-label">死亡证明编号</label><input class="form-input" placeholder="选填，如持有《居民死亡医学证明（推断）书》请填写编号"></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>申报人信息</label>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span>申报人信息</label>
         <div class="form-row"><div class="form-group" style="margin-bottom:0"><input class="form-input" data-group="applicant" data-field="name" placeholder="申报人姓名"></div><div class="form-group" style="margin-bottom:0"><input class="form-input" placeholder="申报人公民身份号码"></div></div>
         <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input"><option value="">与死者关系</option><option>配偶</option><option>子女</option><option>父母</option><option>兄弟姐妹</option><option>其他亲属</option><option>村居委会</option></select></div></div><div class="form-group" style="margin-bottom:0"><input class="form-input" placeholder="联系电话"></div></div>
       </div>
@@ -759,7 +754,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label"><span class="required">*</span>佐证材料上传</label>
         <div class="upload-list">
           <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">办证人居民身份证或户口簿照片</div><div class="upload-status req">必填</div></div>
-          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">残疾证或医院出具的无法出门证明</div><div class="upload-status req">必填</div></div>
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">残疾证或医院出具的无法出门证明或现场照片</div><div class="upload-status req">必填</div></div>
         </div>
         <div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传佐证材料</span></div>
       </div>
@@ -802,6 +797,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="navbar"><div class="back-btn" onclick="goPage('my-list','bulu')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">户籍补录</span></div>
   <div class="page-scroll">
     <div class="form-header"><div class="form-title">无户口人员补登补录</div><div class="form-desc">分3步填写 · 三级审批 · 派出所→县局→市局 · 10-27个工作日</div></div>
+    <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:var(--foreground);line-height:1.7">除以下可在线办理的补录情形外，其他户籍补录业务请携带相关材料到当地派出所咨询办理。</div>
     <div class="form-body">
       <div class="step-bar">
         <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-name">申请信息</div></div>
@@ -812,7 +808,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       </div>
       <div class="form-step active" data-step="1">
       <div class="form-group"><label class="form-label">申请人信息（读证自动回填）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value" data-group="applicant" data-field="name">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value" data-group="applicant" data-field="idcard">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value" data-group="applicant" data-field="phone">139****5678</span></div><div class="info-row"><span class="label">户籍住址</span><span class="value" data-group="applicant" data-field="addr">扎木镇居委会</span></div></div><div class="id-actions"><button class="id-btn" onclick="openScan('code','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>补录类型</label><div class="select-wrap"><select class="form-input" id="bulu-type"><option value="">请选择</option><option>无户口人员补登补录</option><option>漏登补录</option><option>撤销失踪（死亡）恢复户口</option><option>刑释解教恢复户口</option></select></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>补录类型</label><div class="select-wrap"><select class="form-input" id="bulu-type"><option value="">请选择</option><option>被宣告失踪或者宣告死亡后户口被注销人员</option><option>农村地区因婚嫁被注销原籍户口的人员</option><option>户口迁移证件遗失或者超过有效期限造成的无户口人员</option><option>我国公民与外国人、无国籍人非婚生育的无户口人员</option></select></div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>无户口原因书面陈述</label><textarea class="form-input" id="bulu-reason" placeholder="本人或监护人说明未登记户口的原因、经历、居住情况"></textarea></div>
       </div>
       <div class="form-step" data-step="2">
@@ -827,16 +823,14 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="form-group"><label class="form-label">监护人信息</label><input class="form-input" placeholder="特殊原因无户口人员：民政部门/村（居）委指定监护人书面材料、法院指定监护判决书"><div class="form-hint">监护代办时必填</div></div>
       </div>
       <div class="form-step" data-step="3">
-      <div class="form-group"><label class="form-label">原户籍地未入户证明</label><input class="form-input" placeholder="原籍未入户且现长期居住的，须原籍派出所出具注明姓名、原籍住址、出生年月日、无迁移并加盖户口专用章"><div class="form-hint">无原始户籍档案时必填</div></div>
-      <div class="form-group"><label class="form-label"><span class="required">*</span>村（居）委会证明</label><input class="form-input" placeholder="出生情况证明、实际居住等基本情况证明"></div>
-      <div class="form-group"><label class="form-label">相片及人像比对（年满16周岁必填）</label><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg></div><div class="upload-info">近期标准证件照片2张 + 人像/指纹比对</div><div class="upload-status">已完成</div></div></div>
-      <div class="form-group"><label class="form-label">社区民警调查意见</label><div class="info-block"><div class="info-row"><span class="label">调查结论</span><span class="value">待调查</span></div><div class="info-row"><span class="label">询问笔录</span><span class="value">2名社区民警+2名知情人</span></div></div><div class="form-hint">两名以上民警询问申请人及两名以上知情人，制作询问笔录；出具补录户口综合调查报告并署名加盖派出所公章</div></div>
+                  <div class="form-group"><label class="form-label"><span class="required">*</span>相片上传（年满16周岁必填）</label><div class="upload-add" onclick="toast('上传证件照片')" style="padding:12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5L5 19"/></svg><span style="font-size:12px;margin-top:4px">上传近期标准证件照片2张（仅传照片，无需指纹比对）</span></div></div>
+      <div class="form-group"><label class="form-label">社区民警调查（民警上门后由系统出具，无需本人上传）</label><div class="info-block"><div class="info-row"><span class="label">调查结论</span><span class="value">待调查</span></div><div class="info-row"><span class="label">询问笔录</span><span class="value">2名社区民警+2名知情人</span></div></div><div class="form-hint">两名以上民警询问申请人及两名以上知情人，制作询问笔录；出具补录户口综合调查报告并署名加盖派出所公章</div></div>
       <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list">
         <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">本人或监护人书面申请</div><div class="upload-status req">必填</div></div>
         <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">出生证明材料（《出生医学证明》或亲子鉴定）</div><div class="upload-status req">必填</div></div>
         <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">原始户籍档案资料（户口簿/身份证/常住人口登记表）</div><div class="upload-status opt">选填</div></div>
-        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">村（居）委会/乡镇（街道）证明</div><div class="upload-status req">必填</div></div>
-        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">社区民警调查询问笔录（系统流转）</div><div class="upload-status req">必填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">原户籍地未入户证明</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">村（居）委会证明</div><div class="upload-status req">必填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">社区民警调查意见</div><div class="upload-status req">必填</div></div>
         <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">撤销失踪（死亡）文书（适用恢复户口类）</div><div class="upload-status opt">选填</div></div>
         <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">合法收养证明（适用收养类）</div><div class="upload-status opt">选填</div></div>
       </div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
@@ -1068,7 +1062,6 @@ function renderList(){
   document.getElementById('my-list-title').textContent=currentBiz==='all'?'我的申请':biz.name+' · 我的申请';
   document.getElementById('my-list-biz').textContent=currentBiz==='all'?'全部业务记录':biz.name;
   const nab=document.getElementById('new-apply-btn');if(nab)nab.style.display=currentBiz==='all'?'none':'flex';
-  const he=document.getElementById('huzheng-extra');if(he)he.style.display=(currentBiz==='huzheng')?'flex':'none';
   let list=records;if(currentBiz!=='all')list=list.filter(r=>r.biz===currentBiz);if(currentStatus!=='all')list=list.filter(r=>r.status===currentStatus);
   const c=document.getElementById('record-list');
   if(!list.length){
@@ -1268,17 +1261,19 @@ let chushengStep=1;
 // 死亡注销：死亡原因联动
 function onSwReasonChange(){
   const v=document.getElementById('sw-reason').value;
-  document.getElementById('sw-court-block').style.display=(v==='declare')?'block':'none';
-  document.getElementById('sw-cert-block').style.display=(v==='abnormal')?'block':'none';
   const list=document.getElementById('sw-mats');if(!list)return;
   let base=[
-    {n:'死亡医学证明（推断）书',r:1},
     {n:'居民户口簿',r:1},
     {n:'申报人居民身份证',r:1},
     {n:'死者居民身份证（缺失须传情况说明）',r:1}
   ];
-  if(v==='declare')base.push({n:'法院宣告死亡判决书',r:1});
-  if(v==='abnormal')base.push({n:'非正常死亡认定书',r:1});
+  if(v==='declare'){
+    // 宣告死亡：无需死亡医学证明（推断）书，须法院宣告死亡判决书
+    base.push({n:'法院宣告死亡判决书',r:1});
+  }else{
+    base.push({n:'死亡医学证明（推断）书',r:1});
+    if(v==='abnormal')base.push({n:'非正常死亡认定书',r:1});
+  }
   list.innerHTML=base.map(m=>'<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+'</div><div class="upload-status req">必填</div></div>').join('');
 }
 // 出生登记：婚内/婚外切换
@@ -1304,6 +1299,8 @@ function onCsOutSideChange(){
   }else{
     f.style.display='block';m.style.display='block';
   }
+  const luo=document.getElementById('cs-luohu-block');
+  if(luo) luo.style.display=(csType==='out')?'none':'block';
   renderCsMats();
 }
 function onCsLuohuChange(){renderCsMats();}
@@ -1315,6 +1312,24 @@ function onCsParentNationChange(){
   document.getElementById('cs-nation-confirm').style.display=show?'block':'none';
 }
 function onCsNationChange(){/*占位，实际由 onCsParentNationChange 触发*/}
+/* 民族成份确认书：父母双方线上签字（原型演示切换） */
+function csSign(who){
+  const tip=document.getElementById('cs-sign-'+who+'-tip');
+  const box=document.getElementById('cs-sign-'+who);
+  const signed=tip.dataset.signed==='1';
+  if(!signed){
+    tip.dataset.signed='1';
+    tip.textContent='已签署';
+    tip.style.color='#059669';
+    box.style.borderColor='#059669';
+    toast((who==='father'?'父亲':'母亲')+'线上签字完成');
+  }else{
+    tip.dataset.signed='0';
+    tip.textContent='点击进入手写签名（未签）';
+    tip.style.color='';
+    box.style.borderColor='';
+  }
+}
 function renderCsMats(){
   const list=document.getElementById('cs-mats');if(!list)return;
   let mats=[];
@@ -1328,10 +1343,10 @@ function renderCsMats(){
     ];
     const lt=document.getElementById('cs-luohu-type').value;
     if(lt==='unit')mats.push({n:'单位出具的同意落户证明',r:1});
-    if(lt==='family')mats.push({n:'不动产权证书（房产证）',r:1});
+    if(lt==='family')mats.push({n:'不动产权证书（房产证）或村、乡镇街道、派出所落户证明',r:1});
     const f=document.querySelector('[data-group="father"][data-field="nation"]').value;
     const m=document.querySelector('[data-group="mother"][data-field="nation"]').value;
-    if(f&&m&&f!==m)mats.push({n:'《民族成份确认书》（父母签字）',r:1});
+    if(f&&m&&f!==m)mats.push({n:'《民族成份确认书》（父母双方线上签字）',r:1});
   }else{
     const side=document.getElementById('cs-out-side').value;
     if(side==='mother'){
@@ -1361,7 +1376,13 @@ function goStep(d){
   if(next<1||next>3)return;
   const gid=id=>document.getElementById(id);
   if(d>0&&chushengStep===1&&gid('cs-name')&&!gid('cs-name').value.trim()){toast('请先填写新生儿姓名');return}
-  if(d>0&&chushengStep===2&&gid('cs-fname')&&gid('cs-mname')&&(!gid('cs-fname').value.trim()||!gid('cs-mname').value.trim())){toast('请先填写父母双方姓名');return}
+  if(d>0&&chushengStep===2){
+    if(csType==='out'){
+      const side=document.getElementById('cs-out-side').value;
+      const need=side==='father'?gid('cs-fname'):gid('cs-mname');
+      if(need&&!need.value.trim()){toast('请先填写'+(side==='father'?'父亲':'母亲')+'姓名');return}
+    }else if(gid('cs-fname')&&gid('cs-mname')&&(!gid('cs-fname').value.trim()||!gid('cs-mname').value.trim())){toast('请先填写父母双方姓名');return}
+  }
   chushengStep=next;
   document.querySelectorAll('#page-form-chusheng .form-step').forEach(el=>el.classList.toggle('active',+el.dataset.step===next));
   document.querySelectorAll('#page-form-chusheng .step-item').forEach(el=>{
@@ -1407,100 +1428,62 @@ function renderResultPage(){
 
 
 // 主项变更：各变更类别对应的材料清单（必填/选填）
-const BG_MATS={
-  'xm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'出生医学证明（未满18周岁）或父母协商同意材料',r:1},{n:'变更申请书',r:1}],
-  'xb':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'出生医学证明/医学认定材料',r:1},{n:'变更申请书',r:1}],
-  'csrq':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'原始户籍档案材料',r:1},{n:'出生医学证明',r:0},{n:'村（居）委会/乡镇证明',r:0}],
-  'mz':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'地市级民族事务主管部门审核意见',r:1}],
-  'sfzh':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'身份证号码纠错证明材料',r:1}],
-  'xxdm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'血型检验报告',r:1}],
-  'xldm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'学历证书/学信网学历认证',r:1}],
-  'hyzkdm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'结婚证/离婚证/离婚判决书',r:1}],
-  'zjxydm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'宗教身份相关材料',r:0}],
-  'sg':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1}],
-  'byzkdm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'入伍/退伍相关证明',r:1}],
-  'cyzk_dwmc':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'单位在职证明/劳动合同',r:1}],
-  'cyzk_zy':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'职业资格或单位证明',r:1}],
-  'cyzk_zylbdm':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'职业资格或单位证明',r:1}],
-  'csd':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'出生医学证明',r:1}],
-  'lxdh':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1}],
-  'po':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'结婚证',r:1},{n:'配偶居民身份证',r:1}],
-  'fq':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'父亲居民身份证',r:1},{n:'亲属关系材料',r:0}],
-  'mq':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'母亲居民身份证',r:1},{n:'亲属关系材料',r:0}],
-  'jhry':[{n:'居民户口簿',r:1},{n:'居民身份证',r:1},{n:'监护人居民身份证',r:1},{n:'监护关系证明',r:1}]
+
+// 主项变更：二级变更原因（按变更项目联动）
+const BG_REASONS={
+  xm:['自愿改名','重名','生僻字','离婚','收养'],
+  csrq:['一般变更','登记错误'],
+  mz:['与实际不符','随父/随母变更'],
+  jg:['一般','登记错误'],
+  xb:['医学性别变更','登记错误'],
+  sfzh:['号码纠错']
 };
+// 各项目基础材料（dl=1 表示该项提供模板下载）
+const BG_BASE={
+  xm:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'户口本原件及复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'无违法犯罪记录证明',r:1},{n:'2份以上调查笔录',r:1}],
+  csrq:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'户口本原件及复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'出生证明原件及复印件',r:1},{n:'其他能证明出生日期的证件或材料',r:0},{n:'无违法犯罪记录证明',r:1},{n:'2份以上调查笔录',r:1}],
+  mz:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'本人及父母三方户口本原件及复印件',r:1},{n:'父母或继父母婚姻关系证明',r:1},{n:'市一级民宗部门同意变更的批复',r:1},{n:'2份以上调查笔录',r:1},{n:'亲子鉴定（户口本无法体现父母子女关系时提供）',r:0}],
+  jg:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'本人及父亲户口本原件及复印件',r:1},{n:'祖籍地公安机关证明',r:1},{n:'单位、组织、人事部门同意变更的证明',r:1},{n:'2份以上调查笔录',r:1},{n:'亲子鉴定（户口本无法体现父母子女关系时提供）',r:0}],
+  xb:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'三甲医院性别鉴定',r:1},{n:'2份以上调查笔录',r:1}],
+  sfzh:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'户口本原件及复印件',r:1},{n:'本人身份证原件及复印件',r:1},{n:'公民身份号码纠错证明材料',r:1}]
+};
+// 各变更原因的附加材料
+const BG_EXTRA={
+  'xm|重名':[{n:'学校证明及花名册',r:1}],
+  'xm|生僻字':[{n:'户籍地派出所出具证明',r:1}],
+  'xm|离婚':[{n:'离婚判决书、协议书',r:1},{n:'夫妻双方申请及经司法机关公证的知情同意书',r:1}],
+  'xm|收养':[{n:'收养登记证',r:1}],
+  'csrq|登记错误':[{n:'一代证或原始户口本',r:1},{n:'派出所登记错误民警情况说明',r:1}],
+  'jg|登记错误':[{n:'民警录入错误的情况说明',r:1}],
+  'xb|登记错误':[{n:'民警录入错误的情况说明',r:1}]
+};
+function getBgMats(cat,reason){
+  const base=(BG_BASE[cat]||[]).slice();
+  const extra=BG_EXTRA[cat+'|'+reason]||[];
+  return base.concat(extra);
+}
+// 主项变更：拟变更内容录入控件类型（仅6类主项）
+const BG_ITEMS={
+  xm:{type:'text',ph:'拟变更后的姓名（须在《通用规范汉字表》内）'},
+  xb:{type:'select',opts:['男','女']},
+  csrq:{type:'date'},
+  mz:{type:'select',opts:['汉族','藏族','回族','门巴族','珞巴族','其他']},
+  jg:{type:'region'},
+  sfzh:{type:'text',ph:'拟变更后的公民身份号码'}
+};
+const BG_ORIG={xm:'卓玛',xb:'女',csrq:'1992-03-08',mz:'藏族',jg:'—',sfzh:'542623********0024'};
+
 function renderBgMats(v){
   const list=document.getElementById('bg-mats');
   if(!list)return;
-  // 联动：显示/隐藏父母婚姻状况、另一方死亡
-  const ageEl=document.getElementById('bg-age');
-  const marEl=document.getElementById('bg-parents-marriage');
-  const dthEl=document.getElementById('bg-other-death');
-  const age=ageEl?ageEl.value:'';
-  if(marEl)marEl.style.display=(age==='minor')?'block':'none';
-  if(dthEl)dthEl.style.display=(age==='minor'&&document.getElementById('bg-marriage')&&document.getElementById('bg-marriage').value==='divorced')?'block':'none';
-
   const cat=v||(document.getElementById('bg-category')?document.getElementById('bg-category').value:'');
-  const def=(cat&&BG_MATS[cat])?BG_MATS[cat]:[{n:'居民户口簿',r:1},{n:'居民身份证',r:1}];
-  let mats=def.slice();
-  // 满16周岁追加无犯罪记录证明
-  if(age==='adult')mats.push({n:'无犯罪记录证明',r:1});
-  // 未成年人 + 姓名变更：补出生证 + 父母协商同意材料（替换原笼统项）
-  if(age==='minor'&&cat==='xm'){
-    mats=mats.filter(m=>!m.n.includes('出生医学证明'));
-    mats.push({n:'出生医学证明',r:1});
-    mats.push({n:'父母双方协商同意变更姓名材料',r:1});
-    // 父母婚姻状况联动
-    const mar=document.getElementById('bg-marriage')?document.getElementById('bg-marriage').value:'';
-    if(mar==='within'){
-      mats.push({n:'父母结婚证',r:1});
-    }else if(mar==='divorced'){
-      mats.push({n:'离婚证 / 离婚判决书',r:1});
-      const od=document.getElementById('bg-other-death-sel')?document.getElementById('bg-other-death-sel').value:'';
-      if(od==='dead')mats.push({n:'另一方父/母死亡证明',r:1});
-      else mats.push({n:'另一方父/母同意变更姓名公证书',r:1});
-    }
-  }
-  // 变更申请书：带下载链接
-  mats=mats.map(m=>{
-    if(m.n==='变更申请书'){
-      return {n:m.n+'（<a style="color:var(--accent);cursor:pointer;text-decoration:underline" onclick="event.stopPropagation();toast(&quot;演示下载变更申请书模板&quot;)">下载模板</a>，填写后上传）',r:m.r,dl:1};
-    }
-    return m;
-  });
-  list.innerHTML=mats.map(m=>'<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>').join('');
+  const reason=document.getElementById('bg-reason')?document.getElementById('bg-reason').value:'';
+  const mats=getBgMats(cat,reason);
+  list.innerHTML=mats.map(m=>{
+    const dl=m.dl?'<a style="color:var(--accent);cursor:pointer;text-decoration:underline;margin-left:6px" onclick="event.stopPropagation();toast(&quot;演示下载变更审批表模板&quot;)">下载模板</a>':'';
+    return '<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+dl+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>';
+  }).join('');
 }
-
-// 非主项变更：服务处所联动户籍地址
-function onFzxCatChange(){
-  const v=document.getElementById('fzx-category').value;
-  const box=document.getElementById('fzx-hjdz-sync');
-  if(box)box.style.display=(v==='cs')?'block':'none';
-}
-// 主项变更：变更类别 ↔ 接口变更数据项标识符 绑定
-const BG_ITEMS={
-  'xm':{type:'text',ph:'拟变更后的姓名（须在《通用规范汉字表》内）'},
-  'xb':{type:'select',opts:['男','女']},
-  'csrq':{type:'date'},
-  'mz':{type:'select',opts:['汉族','藏族','回族','门巴族','珞巴族','其他']},
-  'sfzh':{type:'text',ph:'拟变更后的公民身份号码'},
-  'xxdm':{type:'select',opts:['A型','B型','AB型','O型','不详']},
-  'xldm':{type:'select',opts:['研究生','大学本科','大学专科','中专','高中','初中','小学','文盲或半文盲']},
-  'hyzkdm':{type:'select',opts:['未婚','已婚','离异','丧偶']},
-  'zjxydm':{type:'select',opts:['无','佛教','道教','基督教','天主教','伊斯兰教','其他']},
-  'sg':{type:'number',ph:'拟变更后的身高（厘米）'},
-  'byzkdm':{type:'select',opts:['未服兵役','服现役','退出现役','其他']},
-  'cyzk_dwmc':{type:'text',ph:'拟变更后的服务处所 / 单位名称'},
-  'cyzk_zy':{type:'text',ph:'拟变更后的职业'},
-  'cyzk_zylbdm':{type:'select',opts:['国家机关负责人','专业技术人员','办事人员','商业、服务业人员','生产运输设备操作人员','农、林、牧、渔、水利业生产人员','其他']},
-  'csd':{type:'region'},
-  'lxdh':{type:'text',ph:'拟变更后的联系电话'},
-  'po':{type:'text',ph:'配偶姓名 / 公民身份号码（变更后）'},
-  'fq':{type:'text',ph:'父亲姓名 / 公民身份号码（变更后）'},
-  'mq':{type:'text',ph:'母亲姓名 / 公民身份号码（变更后）'},
-  'jhry':{type:'text',ph:'监护人姓名 / 公民身份号码（变更后）'}
-};
-const BG_ORIG={xm:'卓玛',xb:'女',csrq:'1992-03-08',mz:'藏族',sfzh:'542623********0024',xxdm:'O型',xldm:'大学专科',hyzkdm:'未婚',zjxydm:'无',sg:'168',byzkdm:'未服兵役',cyzk_dwmc:'自由职业',cyzk_zy:'服务人员',cyzk_zylbdm:'商业、服务业人员',csd:'西藏自治区·林芝市·波密县',lxdh:'139****5678',po:'—',fq:'—',mq:'—',jhry:'—'};
 function onBgCatChange(){
   const v=document.getElementById('bg-category').value;
   const c=document.getElementById('bg-content');
@@ -1518,7 +1501,62 @@ function onBgCatChange(){
     c.innerHTML='<input class="form-input" id="bg-new-value" type="'+(it.type==='number'?'number':'text')+'" placeholder="'+(it.ph||'')+'">';
   }
   if(c.querySelector('.select-wrap'))initDropdowns();
+  // 联动二级变更原因
+  const rb=document.getElementById('bg-reason-block');
+  const rs=document.getElementById('bg-reason');
+  if(rb&&rs){
+    const list=BG_REASONS[v]||[];
+    rs.innerHTML='<option value="">请选择变更原因</option>'+list.map(x=>'<option>'+x+'</option>').join('');
+    rb.style.display=list.length?'block':'none';
+    refreshDropdown(rs);
+  }
   renderBgMats(v);
+}
+
+// ===== 主项变更：第二版「办理指引」（流程告知 + 材料下载，不在线填报） =====
+const BG_GUIDE_FLOW=[
+  '林安码提交申报，填写变更项目并上传材料',
+  '材料传输至户籍系统进行形式审核',
+  '形式审核通过后，推送管辖单位社区民警上门调查、制作笔录',
+  '笔录回传户籍系统进行实质审核',
+  '大队、大队分管领导、支队逐级审批',
+  '审核完成后办结，并由林安码向群众发送结果短信'
+];
+function switchBgVersion(v){
+  const guide=document.getElementById('bg-version-guide');
+  const ta=document.getElementById('bg-tab-apply');
+  const tg=document.getElementById('bg-tab-guide');
+  const items=document.querySelectorAll('#page-form-biangeng .bg-apply-only');
+  const base='flex:1;text-align:center;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;';
+  const on=base+'background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,0.08)';
+  const off=base+'background:transparent;color:var(--muted-foreground);box-shadow:none';
+  if(v==='apply'){
+    guide.style.display='none';
+    items.forEach(e=>e.style.display='');
+    ta.style.cssText=on;tg.style.cssText=off;
+  }else{
+    guide.style.display='block';
+    items.forEach(e=>e.style.display='none');
+    tg.style.cssText=on;ta.style.cssText=off;
+  }
+}
+function onBgGuideCatChange(){
+  const cat=document.getElementById('bg-guide-cat').value;
+  const flow=document.getElementById('bg-guide-flow');
+  const mats=document.getElementById('bg-guide-mats');
+  if(!cat){flow.innerHTML='';mats.innerHTML='';return;}
+  // 流程告知
+  flow.innerHTML='<div class="form-group"><label class="form-label">办理流程告知</label><div style="background:var(--muted);border-radius:12px;padding:14px">'
+    +BG_GUIDE_FLOW.map((t,i)=>'<div style="display:flex;gap:10px;margin-bottom:12px"><div style="width:22px;height:22px;flex:none;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">'+(i+1)+'</div><div style="font-size:12.5px;line-height:1.6;color:var(--foreground);padding-top:1px">'+t+'</div></div>').join('')
+    +'</div></div>';
+  // 材料 + 模板下载
+  const def=getBgMats(cat,'');
+  let html=def.map(m=>{
+    const dl=m.dl?'<a style="color:var(--accent);cursor:pointer;text-decoration:underline;margin-left:6px" onclick="event.stopPropagation();toast(&quot;演示下载变更审批表模板&quot;)">下载模板</a>':'';
+    return '<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+dl+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>';
+  }).join('');
+  html+='<div onclick="toast(&quot;演示下载变更更正申请表模板&quot;)" style="display:flex;align-items:center;gap:8px;padding:12px;background:var(--muted);border-radius:10px;margin-top:8px;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span style="font-size:12.5px;color:var(--accent)">下载《户口登记项目变更更正申请表》模板</span></div>';
+  mats.innerHTML=html;
 }
 
 // 行政区划选择器（省→市→县/区 三级联动）
@@ -1632,6 +1670,32 @@ function simulateScan(){
 function closeScan(){document.getElementById('scan-overlay').classList.remove('show');clearTimeout(scanTimer)}
 
 // 自定义下拉组件（兼容小程序 WebView 环境，点击稳定弹出）
+// 刷新单个自定义下拉（重填 option 后调用）
+function refreshDropdown(sel){
+  const wrap=sel.closest('.select-wrap');
+  if(!wrap)return;
+  wrap.querySelectorAll('.select-box,.dropdown-list').forEach(n=>n.remove());
+  const box=document.createElement('div');box.className='select-box';
+  const list=document.createElement('div');list.className='dropdown-list';
+  const show=()=>{const o=sel.options[sel.selectedIndex];box.textContent=o?o.textContent:'请选择变更原因';box.classList.toggle('placeholder',!sel.selectedIndex)};
+  show();
+  [...sel.options].forEach((o,idx)=>{
+    const it=document.createElement('div');it.className='dropdown-item'+(o.selected?' sel':'');
+    it.textContent=o.textContent;
+    it.onclick=()=>{sel.selectedIndex=idx;show();list.classList.remove('open');box.classList.remove('open');[...list.children].forEach((x,i)=>x.classList.toggle('sel',i===idx));sel.dispatchEvent(new Event('change'))};
+    list.appendChild(it);
+  });
+  box.onclick=(e)=>{
+    e.stopPropagation();
+    const open=list.classList.toggle('open');
+    box.classList.toggle('open',open);
+    if(open){
+      const r=wrap.getBoundingClientRect();
+      list.classList.toggle('drop-up',(window.innerHeight-r.bottom)<Math.min(240,list.scrollHeight+20));
+    }
+  };
+  wrap.appendChild(box);wrap.appendChild(list);
+}
 function initDropdowns(){
   document.querySelectorAll('.select-wrap select').forEach(sel=>{
     if(sel.dataset.done)return;sel.dataset.done='1';
