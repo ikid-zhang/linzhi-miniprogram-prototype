@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>林芝公安 · 户政服务小程序原型</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230052FF'/%3E%3Ctext x='32' y='44' font-size='32' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'%3E%E6%88%B7%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Calistoga&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--background:#FAFAFA;--foreground:#0F172A;--muted:#F1F5F9;--muted-foreground:#64748B;--accent:#0052FF;--accent-secondary:#4D7CFF;--border:#E2E8F0;--card:#FFFFFF;--shadow-sm:0 1px 3px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07);--shadow-lg:0 10px 15px rgba(0,0,0,0.08);--shadow-xl:0 20px 25px rgba(0,0,0,0.1);--shadow-accent:0 4px 14px rgba(0,82,255,0.25);--shadow-accent-lg:0 8px 24px rgba(0,82,255,0.35);--gradient:linear-gradient(135deg,#0052FF,#4D7CFF)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC",system-ui,sans-serif;background:#e8e8e8;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px 0}
+.phone-frame{width:375px;height:812px;background:var(--background);border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;position:relative;border:8px solid #1a1a1a}
+.status-bar{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:14px;font-weight:600;color:var(--foreground);position:relative;z-index:100}
+.status-bar .time{font-size:15px}.status-bar .icons{display:flex;gap:5px;align-items:center}
+.page-container{width:100%;height:calc(100% - 44px);overflow:hidden;position:relative}
+.page{position:absolute;top:0;left:0;width:100%;height:100%;overflow-y:hidden;display:none;flex-direction:column;background:var(--background)}
+.page.active{display:flex}
+.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page-scroll::-webkit-scrollbar{display:none}
+.navbar{height:44px;display:flex;align-items:center;position:relative;background:transparent;flex-shrink:0}
+.navbar .back-btn{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;z-index:2}
+.navbar .back-btn:active{background:var(--muted)}
+.navbar .nav-title{flex:1;min-width:0;margin:0 46px;font-size:17px;font-weight:600;color:var(--foreground);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.navbar .nav-action{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:3px;height:28px;padding:0 11px;background:var(--gradient);color:#fff;border-radius:14px;font-size:12px;font-weight:600;cursor:pointer;border:none;box-shadow:var(--shadow-accent);z-index:2}
+.gradient-text{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section-label{display:inline-flex;align-items:center;gap:8px;padding:4px 14px;border-radius:999px;border:1px solid rgba(0,82,255,0.25);background:rgba(0,82,255,0.05);font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent)}
+.section-label .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.6}}
+/* 首页 */
+.home-header{padding:10px 16px 0}
+.home-mountain{width:100%;height:110px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.home-mountain svg{width:100%;height:100%}
+.home-title{text-align:center;padding:0 16px 16px}
+.home-title .main-title{font-size:30px;font-weight:700;font-family:"Calistoga","Georgia",serif;color:var(--foreground);letter-spacing:1px;line-height:1.1}
+.home-title .sub-title{font-size:12px;color:var(--muted-foreground);margin-top:6px;font-family:"JetBrains Mono",monospace;letter-spacing:0.1em}
+.search-bar{margin:0 16px 20px;height:46px;background:var(--card);border:1px solid var(--border);border-radius:23px;display:flex;align-items:center;padding:0 20px;color:var(--muted-foreground);font-size:15px;box-shadow:var(--shadow-sm)}
+.search-bar .placeholder{flex:1}.search-bar .btn-search{font-size:14px;font-weight:600;cursor:pointer;color:var(--accent)}
+.section-title{font-size:20px;font-weight:700;color:var(--foreground);padding:20px 20px 14px;font-family:"Calistoga","Georgia",serif}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 8px;padding:0 12px 24px}
+.grid-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:4px 0}
+.grid-item:active{transform:scale(.92)}
+.grid-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+.grid-label{font-size:11px;color:var(--foreground);text-align:center;line-height:1.3;font-weight:500}
+.grid-item.highlight .grid-icon{background:var(--gradient);box-shadow:var(--shadow-accent)}
+.grid-item.highlight .grid-label{color:var(--accent);font-weight:600}
+.tab-bar{height:64px;background:var(--card);border-top:1px solid var(--border);display:flex;padding-bottom:8px;flex-shrink:0}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.tab-item .tab-icon{width:24px;height:24px;margin-bottom:2px;color:var(--muted-foreground)}
+.tab-item .tab-label{font-size:10px;color:var(--muted-foreground);font-weight:500}
+.tab-item.active .tab-icon{color:var(--accent)}.tab-item.active .tab-label{color:var(--accent);font-weight:600}
+/* 服务列表 */
+.huzheng-hero{padding:24px 24px 20px;position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(0,82,255,0.04) 0%,transparent 100%)}
+.huzheng-hero .section-label{margin-bottom:14px}
+.huzheng-hero .hero-title{font-size:32px;font-weight:700;color:var(--foreground);font-family:"Calistoga","Georgia",serif;line-height:1.15}
+.huzheng-hero .hero-sub{font-size:13px;color:var(--muted-foreground);margin-top:8px;line-height:1.6}
+.huzheng-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:8px 16px 24px}
+.huzheng-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;cursor:pointer;box-shadow:var(--shadow-md);min-height:160px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.huzheng-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient);opacity:0;transition:opacity .3s}
+.huzheng-card:active{transform:translateY(-3px)}.huzheng-card:active::before{opacity:1}
+.huzheng-card .card-title{font-size:17px;font-weight:700;color:var(--foreground);margin-bottom:6px}
+.huzheng-card .card-icon{width:56px;height:56px;margin:10px auto 8px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(135deg,rgba(0,82,255,0.08),rgba(77,124,255,0.05))}
+.huzheng-card .card-desc{font-size:11px;color:var(--muted-foreground);line-height:1.6;flex:1}
+.huzheng-card.wide{grid-column:span 2}
+.secondary-biz{padding:4px 16px 26px}
+.secondary-title{font-size:12px;color:var(--muted-foreground);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.secondary-title::before{content:'';width:3px;height:12px;border-radius:2px;background:#C7D2FE}
+.secondary-items{display:flex;gap:10px}
+.secondary-item{flex:1;display:flex;align-items:center;gap:8px;background:var(--muted);border:1px solid var(--border);border-radius:10px;padding:9px 12px;cursor:pointer}
+.secondary-item:active{transform:translateY(-1px)}
+.secondary-item .si-name{font-size:13px;font-weight:600;color:var(--foreground)}
+.secondary-item .si-note{font-size:11px;color:var(--muted-foreground);margin-left:auto;white-space:nowrap}
+
+/* ===== 其他户政服务首页优化 ===== */
+.hz-hero-banner{margin:14px 16px 6px;border-radius:18px;padding:20px 18px;color:#fff;position:relative;overflow:hidden;background:linear-gradient(135deg,#0F2A6B 0%,#0052FF 62%,#3B82F6 100%)}
+.hz-hero-banner::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 70%)}
+.hz-hero-banner .hz-tag{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,0.16);font-size:10.5px;letter-spacing:0.1em;margin-bottom:10px}
+.hz-hero-banner .hz-tag .pulse-dot{width:6px;height:6px;border-radius:50%;background:#7DD3FC;animation:pulse 2s ease-in-out infinite}
+.hz-hero-banner h1{font-size:22px;font-weight:800;line-height:1.3;margin:0 0 6px}
+.hz-hero-banner p{font-size:12.5px;opacity:0.88;line-height:1.6;margin:0;max-width:92%}
+.hz-metrics{display:flex;gap:10px;margin-top:16px;position:relative;z-index:1}
+.hz-metric{flex:1;background:rgba(255,255,255,0.13);border-radius:12px;padding:10px 8px;text-align:center}
+.hz-metric b{display:block;font-size:17px;font-weight:800;letter-spacing:0.02em}
+.hz-metric span{font-size:10.5px;opacity:0.85}
+.hz-group-title{display:flex;align-items:center;gap:8px;padding:16px 20px 8px;font-size:13px;font-weight:700;color:var(--foreground)}
+.hz-group-title::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--gradient)}
+.hz-group-title em{font-style:normal;font-size:11px;font-weight:500;color:var(--muted-foreground);margin-left:auto}
+.hz-list{display:flex;flex-direction:column;gap:11px;padding:2px 16px 8px}
+.hz-list-item{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px 16px;cursor:pointer;box-shadow:var(--shadow-md);transition:transform .15s}
+.hz-list-item:active{transform:scale(0.985)}
+.hz-badge{flex:none;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.hz-li-body{flex:1;min-width:0}
+.hz-li-title{font-size:15.5px;font-weight:700;color:var(--foreground);margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.hz-li-title .hz-hot{font-size:9.5px;font-weight:600;color:#EF4444;background:rgba(239,68,68,0.1);padding:2px 7px;border-radius:999px}
+.hz-li-desc{font-size:11.5px;color:var(--muted-foreground);line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hz-arrow{flex:none;color:#CBD5E1}
+.c-blue{background:rgba(0,82,255,0.09)}.c-teal{background:rgba(13,148,136,0.1)}
+.c-slate{background:rgba(71,85,105,0.1)}.c-amber{background:rgba(245,158,11,0.1)}
+.c-violet{background:rgba(139,92,246,0.1)}.c-rose{background:rgba(244,63,94,0.09)}
+.c-cyan{background:rgba(8,145,178,0.1)}.c-indigo{background:rgba(79,70,229,0.1)}
+/* 我的申请列表 */
+.list-header{padding:16px 20px 12px}
+.list-header .list-header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.list-header .list-title{font-size:24px;font-weight:700;color:var(--foreground);font-family:"Calistoga","Georgia",serif}
+.list-header .list-sub{font-size:12px;color:var(--muted-foreground);margin-top:4px}
+.nav-action.list-action{height:28px;padding:0 12px;border-radius:14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px;background:var(--gradient);color:#fff;border:none;box-shadow:var(--shadow-accent);cursor:pointer;flex-shrink:0}
+.status-tabs{display:flex;gap:8px;padding:0 16px 16px;overflow-x:auto}
+.status-tabs::-webkit-scrollbar{display:none}
+.status-tab{flex-shrink:0;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:500;color:var(--muted-foreground);background:var(--muted);cursor:pointer;border:1px solid transparent}
+.status-tab.active{background:rgba(0,82,255,0.08);color:var(--accent);border-color:rgba(0,82,255,0.2)}
+.record-list{padding:0 16px 24px;display:flex;flex-direction:column;gap:12px}
+.record-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);cursor:pointer}
+.record-card:active{transform:scale(0.98)}
+.record-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.record-biz{font-size:15px;font-weight:700;color:var(--foreground)}
+.record-no{font-size:10px;color:var(--muted-foreground);font-family:"JetBrains Mono",monospace;margin-top:2px}
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 10px;border-radius:999px;font-weight:600}
+.status-badge::before{content:"";width:5px;height:5px;border-radius:50%}
+.status-badge.pending{background:rgba(0,82,255,0.08);color:var(--accent)}
+.status-badge.pending::before{background:var(--accent);animation:pulse 2s infinite}
+.status-badge.reviewing{background:rgba(245,158,11,0.1);color:#D97706}
+.status-badge.reviewing::before{background:#F59E0B;animation:pulse 2s infinite}
+.status-badge.done{background:rgba(16,185,129,0.1);color:#059669}
+.status-badge.done::before{background:#10B981}
+.status-badge.rejected{background:rgba(239,68,68,0.1);color:#DC2626}
+.status-badge.rejected::before{background:#EF4444}
+.record-meta{display:flex;gap:16px;font-size:11px;color:var(--muted-foreground);padding:8px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:10px}
+.record-meta .meta-item{display:flex;flex-direction:column;gap:2px}
+.record-meta .meta-label{font-size:10px}.record-meta .meta-value{font-size:12px;color:var(--foreground);font-weight:500}
+.record-actions{display:flex;gap:8px}
+.record-btn{flex:1;height:36px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--foreground);display:flex;align-items:center;justify-content:center;gap:4px}
+.record-btn.primary{background:var(--gradient);color:#fff;border:none;box-shadow:var(--shadow-accent)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted-foreground)}
+.empty-state .empty-icon{width:80px;height:80px;margin:0 auto 16px;opacity:.4}
+/* 表单 */
+.form-header{padding:8px 0 20px;background:linear-gradient(180deg,rgba(0,82,255,0.04) 0%,transparent 100%)}
+.form-header .form-title{font-size:26px;font-weight:700;color:var(--foreground);padding:0 24px;font-family:"Calistoga","Georgia",serif}
+.form-header .form-desc{font-size:13px;color:var(--muted-foreground);padding:6px 24px 0}
+.form-body{flex:1;overflow-y:auto;padding:20px 20px 0;background:var(--card);border-radius:20px 20px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.04)}
+.form-group{margin-bottom:20px}
+.form-label{font-size:14px;font-weight:600;color:var(--foreground);margin-bottom:8px;display:flex;align-items:center}
+.form-label .required{color:#EF4444;margin-right:2px}
+.form-input{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 14px;font-size:15px;color:var(--foreground);background:var(--background);outline:none}
+.form-input.readonly{background:var(--muted);color:var(--muted-foreground)}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,82,255,0.12)}
+textarea.form-input{height:88px;padding:12px 14px;resize:none;line-height:1.6}
+.form-row{display:flex;gap:10px}.form-row .form-group{flex:1}
+.form-hint{font-size:12px;color:var(--muted-foreground);margin-top:6px;line-height:1.6}
+.select-wrap{position:relative}
+.upload-list{display:flex;flex-direction:column;gap:10px}
+.upload-item{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--background)}
+.upload-item .upload-icon{width:40px;height:40px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-item .upload-info{flex:1;font-size:13px;color:var(--foreground);line-height:1.5}
+.upload-item .upload-status{font-size:11px;color:#059669;font-weight:500}
+.upload-item .upload-status.req{color:#DC2626;background:rgba(239,68,68,0.08);padding:3px 8px;border-radius:6px}
+.upload-item .upload-status.opt{color:var(--muted-foreground);background:var(--muted);padding:3px 8px;border-radius:6px}
+.upload-add{width:100%;height:84px;border:1.5px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted-foreground);cursor:pointer;background:var(--background)}
+.agree-box{display:flex;align-items:flex-start;gap:10px;padding:14px 0;font-size:13px;color:var(--muted-foreground);line-height:1.7}
+.agree-checkbox{width:20px;height:20px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.agree-checkbox.checked{background:var(--accent);border-color:var(--accent)}
+.agree-checkbox.checked::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+.form-footer{padding:16px 20px 24px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0}
+.submit-btn{width:100%;height:50px;background:var(--gradient);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-accent);outline:none;-webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:center}
+.info-block{background:var(--background);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.info-block .info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0}
+.info-block .info-row .label{color:var(--muted-foreground)}
+.info-block .info-row .value{color:var(--foreground);font-weight:500}
+
+.select-box{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 14px;font-size:15px;color:var(--foreground);background:var(--background);display:flex;align-items:center;cursor:pointer;position:relative;box-sizing:border-box}
+.select-box.placeholder{color:var(--muted-foreground)}
+.select-box::after{content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%) rotate(45deg);width:8px;height:8px;border-right:2px solid var(--muted-foreground);border-bottom:2px solid var(--muted-foreground);pointer-events:none;transition:transform .2s}
+.select-box.open::after{transform:translateY(-50%) rotate(225deg)}
+.dropdown-list{position:absolute;top:52px;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);z-index:60;display:none;max-height:220px;overflow-y:auto}
+.dropdown-list.drop-up{top:auto;bottom:54px}
+.dropdown-list.open{display:block}
+.dropdown-item{padding:12px 14px;font-size:14px;color:var(--foreground);cursor:pointer;border-bottom:1px solid var(--muted);transition:background .15s}
+.dropdown-item:last-child{border-bottom:none}
+.dropdown-item:active{background:var(--muted)}
+.dropdown-item.sel{color:var(--accent);font-weight:600}
+
+
+.person-card{background:var(--background);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.person-card .id-actions{margin-bottom:0}
+.id-photos{display:flex;gap:10px;margin-top:10px}
+.id-photo{flex:1;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
+.id-photo .ph-img{height:70px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#F1F5F9,#E2E8F0)}
+.id-photo .ph-label{font-size:10px;color:var(--muted-foreground);text-align:center;padding:5px 0;border-top:1px solid var(--muted)}
+.id-photo .ph-ok{position:absolute;right:4px;top:4px;width:14px;height:14px;border-radius:50%;background:#059669;display:flex;align-items:center;justify-content:center}
+
+
+
+/* 按钮全局复位：去默认聚焦黑框与原生外观 */
+button{-webkit-appearance:none;appearance:none;outline:none;-webkit-tap-highlight-color:transparent}
+button:focus{outline:none}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+
+/* 行政区划选择器 */
+.form-static{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 14px;font-size:14px;color:var(--foreground);background:var(--muted);display:flex;align-items:center}
+.region-select{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 14px;font-size:14px;color:var(--foreground);background:var(--background);display:flex;align-items:center;cursor:pointer;position:relative;box-sizing:border-box}
+.region-select .region-value{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.region-select .region-value.placeholder{color:var(--muted-foreground)}
+.region-select .region-arrow{color:var(--muted-foreground);flex-shrink:0;margin-left:8px}
+.region-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,15,30,0.5);z-index:400;display:none;flex-direction:column;justify-content:flex-end;align-items:center}
+.region-overlay.show{display:flex}
+.region-sheet{width:100%;max-width:420px;background:var(--card);border-radius:20px 20px 0 0;max-height:70vh;height:auto;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,0.12)}
+.region-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;font-size:16px;font-weight:700;color:var(--foreground);border-bottom:1px solid var(--border)}
+.region-done{border:none;background:var(--gradient);color:#fff;font-size:13px;font-weight:600;padding:7px 16px;border-radius:10px;cursor:pointer;box-shadow:var(--shadow-accent)}
+.region-tabs{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid var(--border);overflow-x:auto}
+.region-tab{font-size:12px;color:var(--muted-foreground);padding:6px 12px;border-radius:999px;background:var(--muted);white-space:nowrap;cursor:pointer;transition:all .2s}
+.region-tab.active{background:rgba(0,82,255,0.08);color:var(--accent);font-weight:600}
+.region-cols{flex:1;min-height:120px;max-height:46vh;overflow-y:auto;padding:6px 8px 24px;-webkit-overflow-scrolling:touch}
+.region-item{padding:13px 16px;font-size:14px;color:var(--foreground);cursor:pointer;border-radius:10px}
+.region-item:active{background:var(--muted)}
+
+/* 分步表单 */
+.step-bar{display:flex;align-items:center;justify-content:center;padding:2px 20px 18px}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:5px;width:74px}
+.step-dot{width:26px;height:26px;border-radius:50%;background:var(--muted);color:var(--muted-foreground);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.step-item.active .step-dot{background:var(--gradient);color:#fff;box-shadow:var(--shadow-accent)}
+.step-item.done .step-dot{background:#059669;color:#fff}
+.step-name{font-size:10px;color:var(--muted-foreground);white-space:nowrap;transition:color .3s}
+.step-item.active .step-name{color:var(--accent);font-weight:600}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 2px;max-width:52px}
+.form-step{display:none}
+.form-step.active{display:block;animation:fadeInUp .4s cubic-bezier(0.16,1,0.3,1)}
+.step-actions{display:flex;gap:10px}
+.step-btn{flex:1;height:50px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--foreground);font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.step-actions .submit-btn{flex:1;width:auto}
+
+/* 扫林安码 / OCR 读取身份证 */
+.id-actions{display:flex;gap:8px;margin-bottom:10px}
+.id-btn{flex:1;height:34px;border:1px solid rgba(0,82,255,0.25);background:rgba(0,82,255,0.05);color:var(--accent);border-radius:10px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .2s}
+.id-btn:active{background:rgba(0,82,255,0.12)}
+.id-btn svg{flex-shrink:0}
+.scan-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,15,30,0.72);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.scan-overlay.show{display:flex}
+.scan-modal{width:86%;max-width:340px;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-xl)}
+.scan-title{font-size:16px;font-weight:700;color:var(--foreground);text-align:center;padding:18px 20px 14px}
+.scan-camera{position:relative;height:224px;background:linear-gradient(160deg,#0F172A,#1E293B);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.scan-frame{width:150px;height:150px;border:2px solid rgba(255,255,255,0.85);border-radius:18px;position:relative;box-shadow:0 0 0 999px rgba(15,23,42,0.45)}
+.scan-frame::before,.scan-frame::after{content:"";position:absolute;width:24px;height:24px;border:3px solid #4D7CFF}
+.scan-frame::before{top:-3px;left:-3px;border-right:none;border-bottom:none;border-radius:10px 0 0 0}
+.scan-frame::after{bottom:-3px;right:-3px;border-left:none;border-top:none;border-radius:0 0 10px 0}
+.scan-line{position:absolute;left:10px;right:10px;height:2px;background:linear-gradient(90deg,transparent,#4D7CFF,transparent);animation:scanMove 1.6s ease-in-out infinite;box-shadow:0 0 12px rgba(77,124,255,0.8)}
+@keyframes scanMove{0%{top:14px}50%{top:138px}100%{top:14px}}
+.scan-hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:12px;color:rgba(255,255,255,0.85)}
+.scan-actions{display:flex;gap:10px;padding:14px 20px 20px}
+.scan-btn{flex:1;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--background);color:var(--muted-foreground);font-size:14px;font-weight:600;cursor:pointer}
+.scan-btn.primary{background:var(--gradient);color:#fff;border:none;box-shadow:var(--shadow-accent)}
+/* 办理进度 */
+.result-icon{width:88px;height:88px;margin:0 auto 16px}
+.result-title{font-size:24px;font-weight:700;color:var(--foreground);margin-bottom:10px;text-align:center;font-family:"Calistoga","Georgia",serif}
+.result-desc{font-size:14px;color:var(--muted-foreground);text-align:center;padding:0 40px;line-height:1.7;margin-bottom:28px}
+.result-tips{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin:0 24px 28px;font-size:12px;color:var(--muted-foreground);line-height:1.8}
+.result-tips strong{display:block;margin-bottom:8px;font-size:13px;color:var(--foreground)}
+.result-tips code{background:rgba(0,82,255,0.06);padding:2px 6px;border-radius:4px;font-size:10px;color:var(--accent);font-family:"JetBrains Mono",monospace}
+.timeline{padding:20px 24px}
+.timeline-item{display:flex;gap:14px;padding-bottom:24px;position:relative}
+.timeline-item::before{content:"";position:absolute;left:8px;top:20px;bottom:0;width:2px;background:var(--border)}
+.timeline-item:last-child::before{display:none}
+.timeline-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:var(--card);flex-shrink:0;margin-top:2px;z-index:1}
+.timeline-item.done .timeline-dot{border-color:#10B981;background:#10B981}
+.timeline-item.current .timeline-dot{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 4px rgba(0,82,255,0.15)}
+.timeline-content .tl-title{font-size:14px;font-weight:600;color:var(--foreground)}
+.timeline-item.done .tl-title{color:#059669}
+.timeline-item.current .tl-title{color:var(--accent)}
+.timeline-content .tl-time{font-size:11px;color:var(--muted-foreground);margin-top:3px;font-family:"JetBrains Mono",monospace}
+.timeline-content .tl-desc{font-size:12px;color:var(--muted-foreground);margin-top:5px;line-height:1.6}
+/* 电子证件 */
+.cert-preview{margin:20px 16px;background:var(--card);border-radius:20px;box-shadow:var(--shadow-xl);overflow:hidden;position:relative}
+.cert-preview::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient)}
+.cert-inner{padding:28px 24px}
+.cert-header{text-align:center;margin-bottom:20px}
+.cert-header .cert-org{font-size:13px;color:var(--muted-foreground);letter-spacing:0.1em}
+.cert-header .cert-name{font-size:22px;font-weight:700;color:var(--foreground);margin-top:6px;font-family:"Calistoga","Georgia",serif}
+.cert-header .cert-no{font-size:11px;color:var(--muted-foreground);font-family:"JetBrains Mono",monospace;margin-top:8px}
+.cert-seal{position:absolute;right:20px;bottom:20px;width:80px;height:80px;border-radius:50%;border:2px solid rgba(220,38,38,0.3);display:flex;align-items:center;justify-content:center;transform:rotate(-15deg)}
+.cert-seal span{font-size:9px;color:rgba(220,38,38,0.5);text-align:center;line-height:1.3;font-weight:600}
+.cert-info{background:var(--background);border-radius:12px;padding:16px;margin-bottom:16px}
+.cert-info .ci-row{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px dashed var(--border)}
+.cert-info .ci-row:last-child{border-bottom:none}
+.cert-info .ci-label{color:var(--muted-foreground)}
+.cert-info .ci-value{color:var(--foreground);font-weight:500}
+.cert-qrcode{width:90px;height:90px;margin:16px auto;background:var(--muted);border-radius:8px;position:relative}
+.cert-qrcode::after{content:"";position:absolute;inset:8px;background:repeating-linear-gradient(0deg,var(--foreground) 0,var(--foreground) 2px,transparent 2px,transparent 5px),repeating-linear-gradient(90deg,var(--foreground) 0,var(--foreground) 2px,transparent 2px,transparent 5px);opacity:0.15}
+.sms-notice{margin:0 16px 16px;background:rgba(0,82,255,0.05);border:1px solid rgba(0,82,255,0.15);border-radius:14px;padding:14px 16px;display:flex;gap:12px}
+.sms-notice .sms-icon{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sms-notice .sms-text{flex:1;font-size:12px;line-height:1.6}
+.sms-notice .sms-text strong{display:block;margin-bottom:2px;font-size:13px}
+.cert-actions{padding:0 16px 24px;display:flex;gap:10px}
+.cert-action-btn{flex:1;height:48px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.cert-action-btn.primary{background:var(--gradient);color:#fff;box-shadow:var(--shadow-accent)}
+.cert-action-btn.outline{background:var(--card);color:var(--foreground);border:1px solid var(--border)}
+
+/* 我的证照 / 亮码服务 */
+.lic-header{padding:20px 20px 14px}
+.lic-title{font-size:26px;font-weight:700;color:var(--foreground);font-family:"Calistoga","Georgia",serif}
+.lic-sub{font-size:12px;color:var(--muted-foreground);margin-top:4px}
+.lic-tabs{display:flex;margin:0 20px 16px;background:var(--muted);border-radius:12px;padding:3px}
+.lic-tab{flex:1;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--muted-foreground);cursor:pointer;transition:all .2s}
+.lic-tab.active{background:var(--card);color:var(--accent);box-shadow:var(--shadow-sm)}
+.lic-list{padding:8px 16px;display:flex;flex-direction:column;gap:12px}
+.lic-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow-sm);transition:all .2s}
+.lic-item:active{transform:scale(0.98)}
+.lic-icon{width:48px;height:48px;border-radius:14px;background:var(--gradient);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-accent)}
+.lic-info{flex:1}
+.lic-name{font-size:16px;font-weight:600;color:var(--foreground)}
+.lic-desc{font-size:12px;color:var(--muted-foreground);margin-top:3px;line-height:1.5}
+.lic-time{font-size:10px;color:var(--muted-foreground);font-family:"JetBrains Mono",monospace}
+.lic-arrow{color:var(--border);flex-shrink:0}
+.lic-tip{margin:12px 20px 28px;background:rgba(0,82,255,0.05);border:1px solid rgba(0,82,255,0.12);border-radius:12px;padding:12px 14px;font-size:11px;color:var(--muted-foreground);line-height:1.7}
+.lic-tip strong{color:var(--accent)}
+
+/* ===== 民警端 ===== */
+.police-hero{padding:20px 20px 16px;background:var(--gradient);color:#fff;position:relative;overflow:hidden}
+.police-hero::after{content:"";position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.08)}
+.police-hero .ph-greeting{font-size:12px;opacity:0.8;font-family:"JetBrains Mono",monospace;letter-spacing:0.1em}
+.police-hero .ph-name{font-size:22px;font-weight:700;margin-top:4px;font-family:"Calistoga","Georgia",serif}
+.police-hero .ph-dept{font-size:12px;opacity:0.85;margin-top:4px}
+.police-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;margin-top:-24px;position:relative;z-index:2}
+.police-stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;box-shadow:var(--shadow-md)}
+.police-stat .ps-num{font-size:22px;font-weight:700;color:var(--foreground);font-family:"Calistoga","Georgia",serif}
+.police-stat .ps-label{font-size:10px;color:var(--muted-foreground);margin-top:2px}
+.police-stat.alert .ps-num{color:#EF4444}
+.police-stat.wait .ps-num{color:var(--accent)}
+.police-stat.done .ps-num{color:#10B981}
+.police-section{padding:20px 16px 0}
+.police-section .ps-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.police-section .ps-title{font-size:18px;font-weight:700;color:var(--foreground);font-family:"Calistoga","Georgia",serif}
+.police-section .ps-count{font-size:12px;color:var(--muted-foreground)}
+.police-filters{display:flex;gap:8px;padding:0 16px 14px;overflow-x:auto}
+.police-filters::-webkit-scrollbar{display:none}
+.police-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;transition:all .2s;border-left:4px solid var(--accent)}
+.police-card:active{transform:scale(0.98)}
+.police-card.level-2{border-left-color:#F59E0B}
+.police-card.level-3{border-left-color:#EF4444}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.pc-biz{font-size:15px;font-weight:700;color:var(--foreground)}
+.pc-no{font-size:10px;color:var(--muted-foreground);font-family:"JetBrains Mono",monospace;margin-top:2px}
+.pc-level{font-size:9px;padding:2px 8px;border-radius:999px;font-weight:600;font-family:"JetBrains Mono",monospace}
+.pc-level.l1{background:rgba(16,185,129,0.1);color:#059669}
+.pc-level.l2{background:rgba(245,158,11,0.1);color:#D97706}
+.pc-level.l3{background:rgba(239,68,68,0.1);color:#DC2626}
+.pc-body{display:flex;gap:12px;margin-bottom:10px}
+.pc-avatar{width:42px;height:42px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0}
+.pc-info{flex:1}
+.pc-name{font-size:14px;font-weight:600;color:var(--foreground)}
+.pc-phone{font-size:11px;color:var(--muted-foreground);margin-top:2px;font-family:"JetBrains Mono",monospace}
+.pc-summary{font-size:12px;color:var(--muted-foreground);margin-top:6px;line-height:1.5}
+.pc-time{font-size:10px;color:var(--muted-foreground);margin-top:8px;font-family:"JetBrains Mono",monospace}
+.pc-actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.pc-btn{flex:1;height:36px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--foreground)}
+.pc-btn.danger{border-color:rgba(239,68,68,0.3);color:#DC2626}
+.pc-btn.primary{background:var(--gradient);color:#fff;border:none;box-shadow:var(--shadow-accent)}
+/* 审核详情 */
+.review-section{padding:16px 20px}
+.review-block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+.review-block .rb-title{font-size:14px;font-weight:700;color:var(--foreground);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.review-block .rb-title .rb-dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.review-field{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--border)}
+.review-field:last-child{border-bottom:none}
+.review-field .rf-label{color:var(--muted-foreground)}
+.review-field .rf-value{color:var(--foreground);font-weight:500;text-align:right;max-width:60%}
+.material-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.material-thumb{aspect-ratio:3/4;border-radius:10px;background:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative}
+.material-thumb .mt-icon{width:32px;height:32px;border-radius:8px;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.material-thumb .mt-name{font-size:10px;color:var(--muted-foreground);text-align:center;padding:0 4px}
+.review-action-bar{padding:16px 20px 24px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:10px}
+.reject-input{width:100%;min-height:80px;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.6;resize:none;background:var(--background);outline:none;font-family:inherit}
+.reject-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,82,255,0.12)}
+.agree-checkbox{cursor:pointer}
+/* loading/toast */
+.loading-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(250,250,250,0.96);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:200}
+.loading-overlay.show{display:flex}
+.loading-spinner{width:44px;height:44px;border:3px solid rgba(0,82,255,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;color:var(--accent);font-weight:500}
+.toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(15,23,42,0.85);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;z-index:300;display:none;max-width:260px;text-align:center;line-height:1.6}
+.toast.show{display:block}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.page.active .page-scroll{animation:fadeInUp .5s cubic-bezier(0.16,1,0.3,1)}
+/* 端切换条 */
+.end-switch{margin:0 16px 16px;background:var(--muted);border-radius:12px;padding:3px;display:flex;gap:3px}
+.end-switch .es-item{flex:1;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted-foreground);cursor:pointer;transition:all .2s}
+.end-switch .es-item.active{background:var(--card);color:var(--accent);box-shadow:var(--shadow-sm)}
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar"><span class="time">23:52</span><div class="icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="#0F172A"><rect x="0" y="7" width="3" height="5" rx=".5"/><rect x="4.5" y="4.5" width="3" height="7.5" rx=".5"/><rect x="9" y="2" width="3" height="10" rx=".5"/><rect x="13" y="0" width="3" height="12" rx=".5" opacity=".3"/></svg><svg width="24" height="12" viewBox="0 0 24 12"><rect x="0.5" y="0.5" width="20" height="11" rx="2" stroke="#0F172A" fill="none"/><rect x="2" y="2" width="16" height="8" rx="1" fill="#0F172A"/></svg></div></div>
+  <div class="page-container" id="pageContainer">
+
+    <!-- 首页 -->
+    <div class="page active" id="page-home">
+      <div class="page-scroll">
+        <div class="home-header">
+          <div class="home-mountain"><svg viewBox="0 0 375 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="mt1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0F172A" stop-opacity="0.12"/><stop offset="100%" stop-color="#0F172A" stop-opacity="0.04"/></linearGradient></defs><path d="M0,120 L40,60 L80,85 L120,35 L160,70 L200,25 L250,65 L290,45 L330,75 L375,55 L375,120 Z" fill="url(#mt1)"/><path d="M120,35 L140,55 L130,48 Z M200,25 L230,45 L215,38 Z" fill="#fff" opacity=".6"/></svg></div>
+          <div class="home-title"><div class="main-title">波密 · <span class="gradient-text">冰川杯</span></div><div class="sub-title">BIMI GLACIER CUP</div></div>
+        </div>
+        <div class="search-bar"><span class="placeholder">请输入搜索内容</span><span class="btn-search" onclick="toast('演示搜索')">搜索</span></div>
+        <!-- 民警审核端入口已隐藏：端切换条移除（如需恢复，取消注释以下行） -->
+      <!-- <div class="end-switch"><div class="es-item active" onclick="toast('当前为申请人端')">申请人端</div><div class="es-item" onclick="goPage('police-home')">民警审核端</div></div> -->
+        <div class="section-title">便民服务</div>
+        <div class="grid-4">
+          <div class="grid-item" onclick="toast('演示入口')"><div class="grid-icon" style="background:rgba(239,68,68,0.08)"><svg width="26" height="26" viewBox="0 0 24 24" fill="#EF4444"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div><span class="grid-label">一键报警</span></div>
+          <div class="grid-item" onclick="toast('演示入口')"><div class="grid-icon" style="background:rgba(139,92,246,0.08)"><svg width="26" height="26" viewBox="0 0 24 24" fill="#8B5CF6"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/></svg></div><span class="grid-label">失物招领</span></div>
+          <div class="grid-item" onclick="toast('演示入口')"><div class="grid-icon" style="background:rgba(245,158,11,0.08)"><svg width="26" height="26" viewBox="0 0 24 24" fill="#F59E0B"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div><span class="grid-label">平安信箱</span></div>
+          <div class="grid-item" onclick="toast('演示入口')"><div class="grid-icon" style="background:rgba(0,82,255,0.08)"><svg width="26" height="26" viewBox="0 0 24 24" fill="#0052FF"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></div><span class="grid-label">窗口预约</span></div>
+          <div class="grid-item highlight" onclick="goPage('licenses')"><div class="grid-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zm-10 8h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-4 4h3v3h-3v-3zm4-1h3v3h-3v-3z"/></svg></div><span class="grid-label">亮码服务</span></div>
+          <div class="grid-item" onclick="goPage('huzheng-list')"><div class="grid-icon" style="background:rgba(0,82,255,0.08)"><svg width="26" height="26" viewBox="0 0 24 24" fill="#0052FF"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h10v2H4v-2zm13-2l4 4-4 4v-2.5h-3v-3h3V14z"/></svg></div><span class="grid-label">其他户政服务</span></div>
+        </div>
+        <div class="section-title">公安政务服务</div>
+        <div style="height:120px"></div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item active" onclick="goPage('home')"><svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="tab-label">首页</span></div>
+        <div class="tab-item" onclick="goPage('my-list','all')"><svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg><span class="tab-label">我的申请</span></div>
+        <!-- 民警审核端Tab已隐藏 -->
+        <div class="tab-item" onclick="toast('我的')"><svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span class="tab-label">我的</span></div>
+      </div>
+    </div>
+
+    <!-- 服务选择列表 -->
+    <div class="page" id="page-huzheng-list">
+      <div class="navbar"><div class="back-btn" onclick="goPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">其他户政服务</span></div>
+      <div class="page-scroll">
+        <div class="hz-hero-banner">
+          <div class="hz-tag"><span class="pulse-dot"></span>户政业务在线办</div>
+          <h1>公安审批 · 全程网办</h1>
+          <p>在线提交申请，公安机关受理审批，办结结果短信通知，证明可在「亮码服务」出示。</p>
+          <div class="hz-metrics">
+            <div class="hz-metric"><b>7</b><span>在线可办事项</span></div>
+            <div class="hz-metric"><b>免费</b><span>全程零费用</span></div>
+            <div class="hz-metric"><b>10所</b><span>波密派出所覆盖</span></div>
+          </div>
+        </div>
+
+        <div class="hz-group-title">热门办理<em>在线提交 · 进度可查</em></div>
+        <div class="hz-list">
+          <div class="hz-list-item" onclick="goPage('my-list','chusheng')">
+            <div class="hz-badge c-blue"><svg width="26" height="26" viewBox="0 0 32 32"><circle cx="16" cy="12" r="6" fill="#0052FF" opacity="0.45"/><path d="M6 28c0-6 4.5-10 10-10s10 4 10 10" fill="#0052FF" opacity="0.3"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">出生登记 <span class="hz-hot">热门</span></div><div class="hz-li-desc">新生儿入户 · 婚内/非婚生 · 父母民族确认书在线签署</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+          <div class="hz-list-item" onclick="goPage('my-list','huzheng')">
+            <div class="hz-badge c-indigo"><svg width="26" height="26" viewBox="0 0 32 32"><rect x="8" y="6" width="16" height="22" rx="2" fill="#0052FF" opacity="0.3"/><circle cx="22" cy="24" r="4" fill="#0052FF" opacity="0.4"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">户籍证明</div><div class="hz-li-desc">变更更正证明 · 亲属关系证明 · 临时身份证明等</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+          <div class="hz-list-item" onclick="goPage('my-list','biangeng')">
+            <div class="hz-badge c-violet"><svg width="26" height="26" viewBox="0 0 32 32"><rect x="6" y="8" width="20" height="18" rx="2" fill="#0052FF" opacity="0.25"/><path d="M10 14h12M10 18h8M10 22h10" stroke="#0052FF" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">主项变更更正</div><div class="hz-li-desc">姓名 · 性别 · 出生日期 · 民族 · 籍贯 · 身份证号</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+          <div class="hz-list-item" onclick="goPage('my-list','feizhuxiang')">
+            <div class="hz-badge c-teal"><svg width="26" height="26" viewBox="0 0 32 32"><rect x="6" y="8" width="20" height="18" rx="2" fill="#0E9488" opacity="0.2"/><path d="M10 14h12M10 18h10" stroke="#0E9488" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">非主项变更</div><div class="hz-li-desc">职业 · 服务处所 · 文化程度 · 婚姻状况 · 联系电话</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+          <div class="hz-list-item" onclick="goPage('my-list','smrzm')">
+            <div class="hz-badge c-cyan"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M4 16h20M18 10l6 6-6 6" stroke="#0891B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="6" y="20" width="12" height="8" rx="1.5" fill="#0891B2" opacity="0.25" stroke="#0891B2" stroke-width="1.5"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">上门办证服务 <span class="hz-hot">便民</span></div><div class="hz-li-desc">老弱病残无法出门人员 · 预约民警上门补办户口本/身份证</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+          <div class="hz-list-item" onclick="goPage('my-list','bulu')">
+            <div class="hz-badge c-amber"><svg width="26" height="26" viewBox="0 0 32 32"><rect x="8" y="4" width="16" height="24" rx="2" fill="#F59E0B" opacity="0.25"/><circle cx="22" cy="22" r="4" fill="#F59E0B" opacity="0.4"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">户籍补录</div><div class="hz-li-desc">无户口人员补登补录 · 失踪死亡恢复 · 婚嫁注销恢复</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+          <div class="hz-list-item" onclick="goPage('my-list','swzx')" style="opacity:0.85">
+            <div class="hz-badge c-slate"><svg width="26" height="26" viewBox="0 0 32 32"><rect x="9" y="5" width="14" height="22" rx="2" fill="#475569" opacity="0.25"/><path d="M13 12h6M13 17h6" stroke="#475569" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/></svg></div>
+            <div class="hz-li-body"><div class="hz-li-title">死亡注销申报</div><div class="hz-li-desc">申报死亡后注销户口 · 派出所受理 · 县局审批</div></div>
+            <svg class="hz-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="hz-group-title">其他户政服务<em>需到窗口办理</em></div>
+        <div class="secondary-biz" style="padding-top:2px">
+          <div class="secondary-items">
+            <div class="secondary-item" onclick="goPage('my-list','swqr')"><span class="si-name">市外迁入</span><span class="si-note">投靠/购房/人才</span></div>
+            <div class="secondary-item" onclick="goPage('my-list','qianyi')"><span class="si-name">户籍迁移</span><span class="si-note">市内移居</span></div>
+          </div>
+        </div>
+        <div style="height:24px"></div>
+      </div>
+    </div>
+
+    <!-- 我的申请列表 -->
+    <div class="page" id="page-my-list">
+      <div class="navbar"><div class="back-btn" onclick="goPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title" id="my-list-title">我的申请</span></div>
+      <div class="page-scroll">
+        <div class="list-header"><div class="list-header-row"><div class="list-title" id="my-list-biz">全部业务</div><button class="nav-action list-action" id="new-apply-btn" onclick="newApply()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>新建申请</button></div><div class="list-sub" id="my-list-sub">您提交的户政业务申请记录</div></div>
+        <div class="status-tabs" id="status-tabs">
+          <div class="status-tab active" data-status="all" onclick="filterStatus(this)">全部</div>
+          <div class="status-tab" data-status="reviewing" onclick="filterStatus(this)">审核中</div>
+          <div class="status-tab" data-status="done" onclick="filterStatus(this)">已办结</div>
+          <div class="status-tab" data-status="rejected" onclick="filterStatus(this)">已退回</div>
+        </div>
+        <div class="record-list" id="record-list"></div>
+      </div>
+    </div>
+
+    <!-- 办理进度 -->
+    <div class="page" id="page-result">
+      <div class="navbar"><div class="back-btn" onclick="goPage('my-list',currentBiz)"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">办理进度</span></div>
+      <div class="page-scroll">
+        <div style="text-align:center;padding:30px 24px 10px">
+          <div class="result-icon"><svg width="88" height="88" viewBox="0 0 88 88"><circle cx="44" cy="44" r="40" fill="rgba(0,82,255,0.08)"/><circle cx="44" cy="44" r="32" fill="rgba(0,82,255,0.12)"/><path d="M30 46l10 10 20-22" stroke="#0052FF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="result-title" id="result-title">提交成功</div>
+          <div class="result-desc">您的申请已提交成功，正在等待公安机关受理审批。</div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item done"><div class="timeline-dot"></div><div class="timeline-content"><div class="tl-title">提交申请</div><div class="tl-time">2026-09-18 23:52</div><div class="tl-desc">申请表单已提交成功</div></div></div>
+          <div class="timeline-item current"><div class="timeline-dot"></div><div class="timeline-content"><div class="tl-title">窗口受理核验</div><div class="tl-time">审核中</div><div class="tl-desc">户籍民警核验材料、人证一致、电子证照调取</div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="tl-title">社区民警调查核实</div><div class="tl-time">部分业务需走访核实</div><div class="tl-desc">走访调查、询问笔录、调查报告</div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="tl-title">审批流转</div><div class="tl-time">按业务类型自动判定层级</div><div class="tl-desc">户籍窗口当场办结，或报上级机关核准审批</div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="tl-title">办结推送</div><div class="tl-time">短信+小程序消息通知</div><div class="tl-desc">公安机关审批完成，生成电子证照并短信通知申请人</div></div></div>
+        </div>
+        <div style="padding:0 24px 30px;display:flex;gap:10px">
+          <button class="cert-action-btn outline" onclick="goPage('my-list',currentBiz)">返回列表</button>
+          <button class="cert-action-btn primary" id="result-cert-btn" onclick="openCertFromRec(currentRecId)" style="display:none">查看电子证件</button>
+          <button class="cert-action-btn primary" id="result-resubmit-btn" onclick="editResubmit(currentRecId)" style="display:none;background:#DC2626;border-color:#DC2626">编辑重新提交</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 电子证件 -->
+    <div class="page" id="page-cert">
+      <div class="navbar"><div class="back-btn" onclick="goBackFromCert()"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title" id="cert-nav-title">电子证明</span></div>
+      <div class="page-scroll">
+        <div style="text-align:center;padding:20px 24px 4px"><div class="section-label" style="margin-bottom:12px"><span class="pulse-dot"></span>公安系统已办结</div></div>
+        <div class="cert-preview"><div class="cert-inner">
+          <div class="cert-header"><div class="cert-org" id="cert-org">波密县公安局扎木镇派出所</div><div class="cert-name" id="cert-name">户 籍 证 明</div><div class="cert-no" id="cert-no">NO. 542623202609180001</div></div>
+          <div class="cert-info" id="cert-info-body">
+            <div class="ci-row"><span class="ci-label">姓名</span><span class="ci-value">卓玛</span></div>
+            <div class="ci-row"><span class="ci-label">公民身份号码</span><span class="ci-value">542623********0024</span></div>
+          </div>
+          <div class="cert-qrcode"></div>
+          <div class="cert-seal" id="cert-seal"><span>波密县公安局<br>户口专用章</span></div>
+        </div></div>
+        <div class="sms-notice"><div class="sms-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7V9h10v2z"/></svg></div><div class="sms-text"><strong>短信通知已发送</strong>办结结果已通过短信发送至申请人手机 <strong>139****5678</strong><br><span style="color:var(--muted-foreground);font-size:11px">发送时间：2026-09-18 23:55 · 状态：已送达</span></div></div>
+        <div class="cert-actions">
+          <button class="cert-action-btn outline" onclick="toast('演示：分享证件')">分享</button>
+          <button class="cert-action-btn primary" onclick="toast('演示：电子证件已保存')">下载证件</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 亮码服务：我的证照 ===== -->
+    <div class="page" id="page-licenses">
+      <div class="navbar"><div class="back-btn" onclick="goPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">亮码服务</span></div>
+      <div class="page-scroll">
+        <div class="lic-header">
+          <div class="lic-title">我的证照</div>
+          <div class="lic-sub">公安机关出具的电子证明统一亮码出示</div>
+        </div>
+        <div class="lic-tabs">
+          <div class="lic-tab" data-lic="doc" onclick="switchLicTab(this)">证件</div>
+          <div class="lic-tab active" data-lic="cert" onclick="switchLicTab(this)">证明</div>
+        </div>
+        <div class="lic-list" id="lic-cert-list"></div>
+        <div class="lic-list" id="lic-doc-list" style="display:none"></div>
+        <div class="lic-tip"><strong>亮码出示</strong>：向办事窗口出示二维码，扫码核验电子证明，与纸质证明同等效力，全国通用。</div>
+      </div>
+    </div>
+
+
+    <!-- ===== 民警端：工作台 ===== -->
+    <div class="page" id="page-police-home">
+      <div class="police-hero">
+        <div class="ph-greeting">WELCOME · 户籍民警工作台</div>
+        <div class="ph-name">格桑 警官</div>
+        <div class="ph-dept">波密县公安局扎木镇派出所 · 户籍窗口</div>
+      </div>
+      <div class="page-scroll">
+        <div class="police-stats">
+          <div class="police-stat alert"><div class="ps-num">2</div><div class="ps-label">待审核</div></div>
+          <div class="police-stat wait"><div class="ps-num">1</div><div class="ps-label">审核中</div></div>
+          <div class="police-stat done"><div class="ps-num">3</div><div class="ps-label">今日已办</div></div>
+          <div class="police-stat"><div class="ps-num">28</div><div class="ps-label">本月办结</div></div>
+        </div>
+        <div class="police-section">
+          <div class="ps-head"><div class="ps-title">待办申请</div><div class="ps-count">按受理层级自动分派</div></div>
+        </div>
+        <div class="police-filters">
+          <div class="status-tab active" onclick="toast('全部待办')">全部</div>
+          <div class="status-tab" onclick="toast('一级当场办结')">L1 当场</div>
+          <div class="status-tab" onclick="toast('二级县局核准')">L2 县局</div>
+          <div class="status-tab" onclick="toast('三级市局审批')">L3 市局</div>
+        </div>
+        <div style="padding:0 16px 24px" id="police-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== 民警端：审核详情 ===== -->
+    <div class="page" id="page-police-detail">
+      <div class="navbar"><div class="back-btn" onclick="goPage('police-home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">审核详情</span></div>
+      <div class="page-scroll">
+        <div class="review-section" id="police-detail-body"></div>
+      </div>
+      <div class="review-action-bar">
+        <button class="cert-action-btn outline" style="color:#DC2626;border-color:rgba(239,68,68,0.3)" onclick="doReview('rejected')">退回</button>
+        <button class="cert-action-btn primary" onclick="doReview('done')">审核通过</button>
+      </div>
+    </div>
+
+    <!-- 表单页（5个，简化） -->
+<div class="page" id="page-form-chusheng">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','chusheng')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">出生登记</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">新生儿出生登记</div><div class="form-desc">分3步填写 · 婚生婴儿申报户口 · 3周岁以下当场办结</div></div>
+    <div class="form-body">
+      <div class="step-bar">
+        <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-name">基本信息</div></div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2"><div class="step-dot">2</div><div class="step-name">父母及落户</div></div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3"><div class="step-dot">3</div><div class="step-name">材料确认</div></div>
+      </div>
+      <div class="form-step active" data-step="1">
+      <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:14px;margin-bottom:16px"><div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>申报条件</div><div style="font-size:12.5px;color:var(--foreground);line-height:1.8">新生儿 1 岁以内；婚生父母至少一方户口在西藏自治区内；申请人必须为父亲或母亲；新生儿必须落户到波密县内父亲或母亲户内（不能跨县落户）。</div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>申报类型</label>
+        <div class="radio-row" style="display:flex;gap:10px">
+          <label style="flex:1"><div class="radio-card" onclick="setCsType('within')" id="cs-type-within" style="border:2px solid var(--accent);background:rgba(0,82,255,0.06);border-radius:12px;padding:14px;cursor:pointer"><div style="font-size:14px;font-weight:600;color:var(--accent)">婚内出生</div><div style="font-size:11.5px;color:var(--muted-foreground);margin-top:4px">父母已婚，登记父亲+母亲信息</div></div></label>
+          <label style="flex:1"><div class="radio-card" onclick="setCsType('out')" id="cs-type-out" style="border:2px solid var(--border);background:var(--card);border-radius:12px;padding:14px;cursor:pointer"><div style="font-size:14px;font-weight:600;color:var(--foreground)">非婚生</div><div style="font-size:11.5px;color:var(--muted-foreground);margin-top:4px">按随父/随母落户分别登记单方信息</div></div></label>
+        </div>
+      </div>
+
+      <div class="form-group" id="cs-out-parent" style="display:none"><label class="form-label"><span class="required">*</span>非婚生落户方</label><div class="select-wrap"><select class="form-input" id="cs-out-side" onchange="onCsOutSideChange()"><option value="">请选择随父或随母落户</option><option value="mother">随母落户</option><option value="father">随父落户（需亲子鉴定）</option></select></div><div class="form-hint">随父落户须提供亲子鉴定证明；随母落户须提供母亲未婚申明书</div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>新生儿姓名</label><input class="form-input" id="cs-name" placeholder="须与《出生医学证明》记载一致"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>出生医学证明编号</label><input class="form-input" id="cs-csmbh" placeholder="《出生医学证明》编号（11位，见证明右上方）"></div>
+      <div class="form-row"><div class="form-group"><label class="form-label"><span class="required">*</span>性别</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>男</option><option>女</option></select></div></div><div class="form-group"><label class="form-label"><span class="required">*</span>出生日期</label><input class="form-input" type="date"></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>出生地（全国县级行政区划）</label>
+        <div class="region-select" onclick="openRegion('birthplace')"><span class="region-value placeholder" id="region-val-birthplace">请选择出生地省/市/县（支持全国）</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-birthplace">
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>民族成份</label><div class="select-wrap"><select class="form-input" id="cs-mzdm" onchange="onCsNationChange()"><option value="">请选择</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div><div class="form-hint">新生儿民族原则上在父母民族中选择；父母民族不一致时，在第三步「材料确认」上传《民族成份确认书》并双方线上签字</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>籍贯（随祖父居住地）</label>
+        <div class="region-select" onclick="openRegion('native')"><span class="region-value placeholder" id="region-val-native">请选择籍贯行政区划</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-native">
+      </div>
+      </div>
+
+      <div class="form-step" data-step="2">
+      <div class="form-group" id="cs-father-block"><label class="form-label"><span class="required">*</span>父亲信息</label>
+        <div class="person-card">
+          <div class="id-actions"><button class="id-btn" onclick="openScan('code','father')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','father')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div>
+          <div class="form-row"><div class="form-group" style="margin-bottom:0"><input class="form-input" id="cs-fname" data-group="father" data-field="name" placeholder="父亲姓名"></div><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input" data-group="father" data-field="nation" onchange="onCsParentNationChange()"><option value="">民族</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div></div></div>
+          <input class="form-input" style="margin-top:10px" data-group="father" data-field="idcard" placeholder="父亲公民身份号码（18位）">
+          <div class="id-photos"><div class="id-photo" style="position:relative"><div class="ph-img"><svg width="60" height="38" viewBox="0 0 60 38"><rect x="1" y="1" width="58" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1"/><circle cx="16" cy="14" r="5.5" fill="#E2E8F0"/><path d="M8 27c0-3.8 3.6-6 8-6s8 2.2 8 6" fill="#E2E8F0"/><rect x="30" y="8" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="30" y="15" width="24" height="3" rx="1.5" fill="#E2E8F0"/><rect x="30" y="22" width="16" height="3" rx="1.5" fill="#E2E8F0"/></svg></div><div class="ph-label">身份证人像面</div></div><div class="id-photo" style="position:relative"><div class="ph-img"><svg width="60" height="38" viewBox="0 0 60 38"><rect x="1" y="1" width="58" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1"/><circle cx="18" cy="12" r="6" fill="#E2E8F0"/><path d="M12 21l6-9 6 9" fill="#E2E8F0"/><rect x="31" y="8" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="31" y="15" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="31" y="26" width="12" height="3" rx="1.5" fill="#E2E8F0"/></svg></div><div class="ph-label">身份证国徽面</div></div></div>
+        </div>
+      </div>
+      <div class="form-group" id="cs-mother-block"><label class="form-label"><span class="required">*</span>母亲信息</label>
+        <div class="person-card">
+          <div class="id-actions"><button class="id-btn" onclick="openScan('code','mother')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','mother')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div>
+          <div class="form-row"><div class="form-group" style="margin-bottom:0"><input class="form-input" id="cs-mname" data-group="mother" data-field="name" placeholder="母亲姓名"></div><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input" data-group="mother" data-field="nation" onchange="onCsParentNationChange()"><option value="">民族</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div></div></div>
+          <input class="form-input" style="margin-top:10px" data-group="mother" data-field="idcard" placeholder="母亲公民身份号码（18位）">
+          <div class="id-photos"><div class="id-photo" style="position:relative"><div class="ph-img"><svg width="60" height="38" viewBox="0 0 60 38"><rect x="1" y="1" width="58" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1"/><circle cx="16" cy="14" r="5.5" fill="#E2E8F0"/><path d="M8 27c0-3.8 3.6-6 8-6s8 2.2 8 6" fill="#E2E8F0"/><rect x="30" y="8" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="30" y="15" width="24" height="3" rx="1.5" fill="#E2E8F0"/><rect x="30" y="22" width="16" height="3" rx="1.5" fill="#E2E8F0"/></svg></div><div class="ph-label">身份证人像面</div></div><div class="id-photo" style="position:relative"><div class="ph-img"><svg width="60" height="38" viewBox="0 0 60 38"><rect x="1" y="1" width="58" height="36" rx="3" fill="#FFFFFF" stroke="#CBD5E1"/><circle cx="18" cy="12" r="6" fill="#E2E8F0"/><path d="M12 21l6-9 6 9" fill="#E2E8F0"/><rect x="31" y="8" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="31" y="15" width="20" height="3" rx="1.5" fill="#E2E8F0"/><rect x="31" y="26" width="12" height="3" rx="1.5" fill="#E2E8F0"/></svg></div><div class="ph-label">身份证国徽面</div></div></div>
+        </div>
+      </div>
+      <div class="form-group" id="cs-luohu-block"><label class="form-label"><span class="required">*</span>落户方</label><div class="select-wrap"><select class="form-input" id="cs-luohu" onchange="onCsLuohuChange()"><option value="">请选择</option><option value="father">随父落户</option><option value="mother">随母落户</option><option value="other">随祖父母/外祖父母</option></select></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户地派出所（限波密县内）</label><div class="select-wrap"><select class="form-input"><option value="">请选择拟落户派出所</option><option>扎木镇派出所</option><option>倾多镇派出所</option><option>松宗镇派出所</option><option>古乡派出所</option><option>玉普乡派出所</option><option>易贡乡派出所</option><option>多吉乡派出所</option><option>康玉乡派出所</option><option>玉许乡派出所</option><option>八盖乡派出所</option></select></div><div class="form-hint">新生儿须落户在波密县内父/母户内，不支持跨县落户</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>落户类别</label><div class="select-wrap"><select class="form-input" id="cs-luohu-type" onchange="onCsLuohuTypeChange()"><option value="">请选择落户类别</option><option value="family">家庭户（落在房屋上）</option><option value="unit">单位集体户</option><option value="community">社区集体户</option></select></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户户主姓名</label><input class="form-input" placeholder="拟落户户口簿户主姓名"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>与户主关系</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>之子/之女</option><option>之孙/之外孙</option><option>户主本人</option><option>其他</option></select></div></div>
+      </div>
+
+      <div class="form-step" data-step="3">
+      <div class="form-group"><label class="form-label"><span class="required">*</span>申领人身份</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>父亲</option><option>母亲</option><option>其他监护人</option></select></div></div>
+      <div class="form-group"><label class="form-label">申请人信息（自动带出）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value">139****5678</span></div><div class="info-row"><span class="label">户籍住址</span><span class="value">扎木镇居委会</span></div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list" id="cs-mats"></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div><div style="margin-top:10px;padding:10px;background:rgba(0,82,255,0.05);border-radius:8px;font-size:11.5px;color:var(--muted-foreground);line-height:1.6">注：出生登记不生成电子证件，审批通过后由户籍系统回调，林安码向申请人手机发送办理结果短信。</div></div>
+      <div class="form-group" id="cs-nation-confirm" style="display:none"><div style="background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:12px"><div style="font-size:12.5px;font-weight:600;color:#C2410C;margin-bottom:8px">父母民族不一致，须上传《民族成份确认书》并由父母双方线上签字</div><a onclick="toast('演示下载模板')" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--accent);cursor:pointer;margin-bottom:10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>下载《民族成份确认书》模板</a><div class="upload-add" onclick="toast('上传已填写的确认书')" style="padding:10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">上传已填写的《民族成份确认书》</span></div><div style="margin-top:12px;font-size:12.5px;font-weight:600;color:#C2410C;margin-bottom:8px">父母双方线上签字（必备）</div><div style="display:flex;gap:10px"><div id="cs-sign-father" onclick="csSign('father')" style="flex:1;border:1.5px dashed #FDBA74;border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;background:#fff"><div style="font-size:12.5px;font-weight:600;color:var(--foreground)">父亲签字</div><div id="cs-sign-father-tip" style="font-size:11px;color:var(--muted-foreground);margin-top:4px">点击进入手写签名（未签）</div></div><div id="cs-sign-mother" onclick="csSign('mother')" style="flex:1;border:1.5px dashed #FDBA74;border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;background:#fff"><div style="font-size:12.5px;font-weight:600;color:var(--foreground)">母亲签字</div><div id="cs-sign-mother-tip" style="font-size:11px;color:var(--muted-foreground);margin-top:4px">点击进入手写签名（未签）</div></div></div></div></div>
+    </div></div></div>
+    <div class="form-footer"><div class="step-actions">
+      <button class="step-btn" id="step-prev" onclick="goStep(-1)" style="display:none">上一步</button>
+      <button class="submit-btn" id="step-next" onclick="goStep(1)">下一步</button>
+      <button class="submit-btn" id="step-submit" onclick="submitForm('出生登记','csdj','chusheng')" style="display:none">提交申请</button>
+    </div></div>
+</div>
+<div class="page" id="page-form-huzheng">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','huzheng')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">户籍证明</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">开具户籍类证明</div><div class="form-desc">全程网办 · 电子证照下载 · 本辖区当场出具</div></div>
+    <div class="form-body">
+      <div class="form-group"><label class="form-label">申请人信息（读证自动回填）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value" data-group="applicant" data-field="name">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value" data-group="applicant" data-field="idcard">542623********0024</span></div><div class="info-row"><span class="label">户籍地址</span><span class="value" data-group="applicant" data-field="addr">扎木镇居委会</span></div><div class="info-row"><span class="label">联系电话</span><span class="value" data-group="applicant" data-field="phone">139****5678</span></div></div><div class="id-actions"><button class="id-btn" onclick="openScan('code','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>证明事项</label><div class="select-wrap"><select class="form-input" id="hz-matters"><option value="">请选择证明事项</option><option>户口登记项目内容变更更正证明</option><option>注销户口证明</option><option>亲属关系证明</option><option>临时身份证明</option><option>其他户籍证明</option></select></div><div class="form-hint">请选择需要开具的户籍类证明事项</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>证明用途</label><textarea class="form-input" rows="3" style="min-height:88px;resize:none" placeholder="用于判断证明范围与是否属公安主管事项，如：办理社保、子女入学"></textarea></div>
+      <div class="form-group"><label class="form-label">与被证明人关系</label><div class="form-static">本人</div><div class="form-hint">仅限本人申请开具户籍证明，每次办理需做人证核验</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">本人居民身份证</div><div class="upload-status">已上传</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">户口簿（如持有）</div><div class="upload-status">已上传</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填内容及所提交证明材料均真实有效，如有隐瞒事实、弄虚作假，愿承担相应法律责任。</span></div>
+    </div></div>
+    <div class="form-footer"><button class="submit-btn" onclick="submitForm('户籍证明','dysq','huzheng')">提交申请</button></div>
+</div>
+<div class="page" id="page-form-biangeng">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','biangeng')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">主项变更更正</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">户口登记项目变更更正</div><div class="form-desc">主项变更二级审批 · 副项当场办结 · 免费</div></div>
+      <div style="display:flex;background:var(--muted);border-radius:12px;padding:4px;margin-bottom:16px">
+      <div id="bg-tab-apply" onclick="switchBgVersion('apply')" style="flex:1;text-align:center;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,0.08)">在线申报</div>
+      <div id="bg-tab-guide" onclick="switchBgVersion('guide')" style="flex:1;text-align:center;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--muted-foreground)">办理指引</div>
+    </div>
+    <div class="bg-apply-only" style="background:linear-gradient(135deg,#0F172A,#1e3a8a);border-radius:12px;padding:14px;margin-bottom:16px;color:#fff"><div style="font-size:13px;font-weight:600;margin-bottom:10px">办理流程（6 步）</div><div style="display:flex;align-items:flex-start;justify-content:space-between;font-size:10.5px;opacity:0.92;line-height:1.5"><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">1</div>林安码<br>提交申报</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">2</div>户籍系统<br>形式审核</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">3</div>社区民警<br>上门笔录</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">4</div>户籍系统<br>实质审核</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">5</div>大队/分管/<br>支队审批</div><div style="text-align:center;flex:1;margin-top:18px">→</div><div style="text-align:center;flex:1"><div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:10px">6</div>办结+短信<br>通知群众</div></div></div>
+    <div class="form-body bg-apply-only">
+      <div class="form-group"><label class="form-label">变更人信息（登录账号自动带出，不可修改）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value">139****5678</span></div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更项目类别</label><div class="select-wrap"><select class="form-input" id="bg-category" onchange="onBgCatChange()"><option value="">请选择变更项目</option>
+<option value="xm">姓名</option>
+<option value="xb">性别</option>
+<option value="csrq">出生日期（年龄）</option>
+<option value="mz">民族成份</option>
+<option value="jg">籍贯</option>
+<option value="sfzh">公民身份号码</option></select></div><div class="form-hint">仅受理上述主项户口登记项目的变更更正</div></div>
+      <div class="form-group" id="bg-reason-block" style="display:none"><label class="form-label"><span class="required">*</span>变更原因</label><div class="select-wrap"><select class="form-input" id="bg-reason" onchange="renderBgMats()"><option value="">请选择变更原因</option></select></div></div>
+      <div class="form-group"><label class="form-label">原登记内容（系统自动带出，不可编辑）</label><div class="info-block"><div class="info-row"><span class="label">当前登记内容</span><span class="value" id="bg-orig">—</span></div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟变更内容</label><div id="bg-content"><div class="form-input" style="background:var(--muted);color:var(--muted-foreground)">请先选择变更项目类别</div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更事由</label><textarea class="form-input" placeholder="请说明变更事由，如：因宗教信仰需要更改名字 / 出生日期登记错误等"></textarea></div>
+      <div class="form-group"><label class="form-label">申请人与变更人关系</label><div class="form-static">本人（仅受理申请人本人主项变更）</div><div class="form-hint">主项变更仅受理申请人本人；10-18周岁变更姓名须父母双方到场共同申请</div></div>
+      <div class="form-group" style="display:none"><label class="form-label"><span class="required">*</span>变更人年龄</label><div class="select-wrap"><select class="form-input" id="bg-age" onchange="renderBgMats()"><option value="">请选择</option><option value="adult">已满 16 周岁</option><option value="minor">未满 16 周岁（未成年人）</option></select></div><div class="form-hint">满 16 周岁须额外提供无犯罪记录证明；未成年人须监护人代办</div></div>
+      <div class="form-group" id="bg-parents-marriage" style="display:none"><label class="form-label"><span class="required">*</span>父母婚姻状况</label><div class="select-wrap"><select class="form-input" id="bg-marriage" onchange="renderBgMats()"><option value="">请选择</option><option value="within">婚内（父母已婚）</option><option value="divorced">离异</option></select></div><div class="form-hint">仅未成年人变更姓名时选择；离异须补充离婚证及另一方父/母同意变更的公证书</div></div>
+      <div class="form-group" id="bg-other-death" style="display:none"><label class="form-label">另一方父/母是否已死亡</label><div class="select-wrap"><select class="form-input" id="bg-other-death-sel" onchange="renderBgMats()"><option value="">请选择</option><option value="alive">另一方在世（须提供公证书）</option><option value="dead">另一方已死亡（须提供死亡证明）</option></select></div></div>
+      <div class="form-group"><label class="form-label">监护人信息（未满18周岁必填）</label><div class="id-actions"><button class="id-btn" onclick="openScan('code','guardian')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','guardian')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div>
+        <div class="form-row"><div class="form-group" style="margin-bottom:0"><input class="form-input" data-group="guardian" data-field="name" placeholder="监护人姓名"></div><div class="form-group" style="margin-bottom:0"><input class="form-input" data-group="guardian" data-field="idcard" placeholder="监护人公民身份号码"></div></div>
+        <input class="form-input" style="margin-top:10px" data-group="guardian" data-field="phone" placeholder="监护人联系电话（手机号）">
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="form-hint" style="margin-top:6px;margin-bottom:10px">材料清单随变更类别自动生成，标注"必填"的须上传</div><div class="upload-list" id="bg-mats"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民户口簿</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民身份证</div><div class="upload-status req">必填</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
+      <div class="form-group" style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:14px"><div style="font-size:12px;color:#DC2626;line-height:1.7"><strong>不予受理情形：</strong>刑罚未执行完毕或被采取刑事强制措施；民事案件未审结或未执行完毕；选取姓名违反公序良俗；已由本人/监护人申请并更正过出生日期；年满18周岁后两年内未提出民族成份变更申请。</div></div>
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填内容及所提交证明材料均真实有效，如有隐瞒事实、弄虚作假，愿承担相应法律责任。</span></div>
+    </div>
+    <div class="form-footer bg-apply-only"><button class="submit-btn" onclick="submitForm('主项变更更正','bggzsq','biangeng')">提交申请</button></div>
+    <div id="bg-version-guide" style="display:none">
+      <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:var(--foreground);line-height:1.7">本版仅提供办理流程告知与所需材料、模板下载，无需在线填写与上传；准备齐全后可切换到「在线申报」提交。</div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更项目类别</label><div class="select-wrap"><select class="form-input" id="bg-guide-cat" onchange="onBgGuideCatChange()"><option value="">请选择变更类别</option><option value="xm">姓名</option><option value="xb">性别</option><option value="csrq">出生日期</option><option value="mz">民族成份</option><option value="jg">籍贯</option><option value="sfzh">公民身份号码</option></select></div></div>
+      <div id="bg-guide-flow"></div>
+      <div class="form-group"><label class="form-label">所需材料与模板下载</label><div class="upload-list" id="bg-guide-mats"></div></div>
+    </div>
+  </div>
+
+</div>
+<div class="page" id="page-form-feizhuxiang">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','feizhuxiang')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">非主项变更</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">非主项户口登记项目变更</div><div class="form-desc">林安码初审 → 短信通知 → 资料无误后转户籍系统办结</div></div>
+    <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--accent);margin-bottom:6px">办理流程</div>
+      <div style="font-size:12px;color:var(--foreground);line-height:1.7">① 群众在林安码提交申请并上传材料 → ② 林安码工作人员初审，初审结果短信告知申请人 → ③ 初审通过的申请推送至户籍系统正式审核办结，办结后再次短信通知。</div>
+    </div>
+    <div class="form-body">
+      <div class="form-group"><label class="form-label">变更人信息（登录账号自动带出，不可修改）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value">139****5678</span></div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更项目类别</label><div class="select-wrap"><select class="form-input" id="fzx-category" onchange="onFzxCatChange()"><option value="">请选择非主项变更类别</option><option value="zy">职业</option><option value="cs">服务处所（从业单位）</option><option value="whcd">文化程度</option><option value="hyzk">婚姻状况</option><option value="sg">身高</option><option value="xx">血型</option><option value="byzk">兵役状况</option><option value="zjxy">宗教信仰</option><option value="lxdh">联系电话</option><option value="hjdz">常住户口所在地住址</option></select></div><div class="form-hint">仅可变更本人的非主项户口登记信息</div></div>
+      <div class="form-group" id="fzx-hjdz-sync" style="display:none;background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:12px">
+        <div style="font-size:12.5px;font-weight:600;color:#C2410C;margin-bottom:8px">检测到"服务处所"变更，请同步更新户籍地址</div>
+        <div class="form-group" style="margin-bottom:10px"><label class="form-label"><span class="required">*</span>户籍地址省/市/县</label><div class="region-select" onclick="openRegion('fzx_hjdz')"><span class="region-value placeholder" id="region-val-fzx_hjdz">请选择行政区划</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-fzx_hjdz"></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>户籍详细地址</label><input class="form-input" placeholder="门牌号、小区、楼栋单元等"></div>
+      </div>
+      <div class="form-group"><label class="form-label">原登记内容（系统自动带出，不可编辑）</label><div class="info-block"><div class="info-row"><span class="label">当前登记内容</span><span class="value">—</span></div></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟变更内容</label><input class="form-input" placeholder="请输入变更后的内容（如：教师/本科/已婚/168cm）"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>变更事由</label><textarea class="form-input" placeholder="请简要说明变更事由"></textarea></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民户口簿</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民身份证</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">对应变更事项证明材料（学历证/单位证明/结婚证等）</div><div class="upload-status opt">选填</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填内容及所提交证明材料均真实有效，如有隐瞒事实、弄虚作假，愿承担相应法律责任。</span></div>
+    </div></div>
+    <div class="form-footer"><button class="submit-btn" onclick="submitForm('非主项变更','bggzsq','feizhuxiang')">提交申请</button></div>
+</div>
+
+<div class="page" id="page-form-swzx">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','swzx')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">死亡注销申报</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">死亡人员户口注销申报</div><div class="form-desc">申报死亡后注销户口 · 重要户政事项 · 派出所审核</div></div>
+    <div class="form-body">
+      <div class="form-group"><label class="form-label"><span class="required">*</span>死者姓名</label><input class="form-input" placeholder="请输入死者姓名"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>死者公民身份号码</label><input class="form-input" placeholder="请输入死者18位公民身份号码"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>死者原户籍地址</label><input class="form-input" placeholder="请输入死者户口簿上登记的户籍地址"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>死亡日期</label><input class="form-input" type="date"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>死亡原因</label><div class="select-wrap"><select class="form-input" id="sw-reason" onchange="onSwReasonChange()"><option value="">请选择</option><option value="normal">正常死亡（病亡）</option><option value="abnormal">非正常死亡</option><option value="declare">宣告死亡</option></select></div></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span>申报人信息</label>
+        <div class="form-row"><div class="form-group" style="margin-bottom:0"><input class="form-input" data-group="applicant" data-field="name" placeholder="申报人姓名"></div><div class="form-group" style="margin-bottom:0"><input class="form-input" placeholder="申报人公民身份号码"></div></div>
+        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input"><option value="">与死者关系</option><option>配偶</option><option>子女</option><option>父母</option><option>兄弟姐妹</option><option>其他亲属</option><option>村居委会</option></select></div></div><div class="form-group" style="margin-bottom:0"><input class="form-input" placeholder="联系电话"></div></div>
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label>
+        <div class="upload-list" id="sw-mats">
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">死亡医学证明（推断）书</div><div class="upload-status req">必填</div></div>
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">居民户口簿</div><div class="upload-status req">必填</div></div>
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">申报人居民身份证</div><div class="upload-status req">必填</div></div>
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">死者居民身份证（如无法提供须上传情况说明）</div><div class="upload-status req">必填</div></div>
+        </div>
+        <div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div>
+      </div>
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>申报人承诺所申报死亡事实真实，所附材料有效，同意依法注销死者户口。</span></div>
+    </div>
+  </div>
+  <div class="form-footer"><button class="submit-btn" onclick="submitForm('死亡注销申报','/swzx','swzx')">提交申报</button></div>
+</div>
+<div class="page" id="page-form-smrzm">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','smrzm')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">上门办证服务</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">预约上门办证</div><div class="form-desc">仅限老弱病残等无法出门人员 · 民警上门办理 · 公安上班时间</div></div>
+    <div class="form-body">
+      <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:14px;margin-bottom:16px"><div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:6px">服务说明</div><div style="font-size:12.5px;color:var(--foreground);line-height:1.8">本服务仅针对因年老、疾病、残疾等原因无法到派出所现场办理户籍业务的群众，民警将在预约时间上门办理。请如实填写办证人信息并上传佐证材料，审核通过后民警将电话联系确认上门时间。</div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>办理业务类型</label>
+        <div class="radio-row" style="display:flex;gap:10px">
+          <label style="flex:1"><div class="radio-card" onclick="setSmrzmType('hukou')" id="smrzm-type-hukou" style="border:2px solid var(--accent);background:rgba(0,82,255,0.06);border-radius:12px;padding:14px;cursor:pointer;text-align:center"><div style="font-size:14px;font-weight:600;color:var(--accent)">户口本补办</div></div></label>
+          <label style="flex:1"><div class="radio-card" onclick="setSmrzmType('shenfen')" id="smrzm-type-shenfen" style="border:2px solid var(--border);background:var(--card);border-radius:12px;padding:14px;cursor:pointer;text-align:center"><div style="font-size:14px;font-weight:600;color:var(--foreground)">身份证补办</div></div></label>
+        </div>
+      </div>
+
+      <div class="form-group"><label class="form-label" style="font-size:14px;font-weight:600;margin-bottom:10px;display:block">申请人信息（联系人）</label></div>
+      <div class="form-row"><div class="form-group"><label class="form-label"><span class="required">*</span>申请人姓名</label><input class="form-input" placeholder="联系人姓名"></div><div class="form-group"><label class="form-label"><span class="required">*</span>联系电话</label><input class="form-input" placeholder="手机号"></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>申请人公民身份号码</label><input class="form-input" placeholder="联系人18位身份证号"></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上门地址</label><input class="form-input" placeholder="详细到门牌号，如：扎木镇XX路XX号XX单元XX室"></div>
+
+      <div class="form-group"><label class="form-label" style="font-size:14px;font-weight:600;margin-bottom:10px;display:block">办证人信息（实际需上门办理的人员）</label></div>
+      <div class="form-row"><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>办证人姓名</label><input class="form-input" placeholder="需上门办证人员姓名"></div><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>办证人公民身份号码</label><input class="form-input" placeholder="18位身份证号"></div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>预约上门日期</label><input class="form-input" type="date" min="2026-10-17"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>预约上门时段</label><div class="select-wrap"><select class="form-input"><option value="">请选择时段（公安上班时间）</option><option>上午 09:00-10:00</option><option>上午 10:00-11:00</option><option>上午 11:00-12:00</option><option>下午 15:00-16:00</option><option>下午 16:00-17:00</option><option>下午 17:00-18:00</option></select></div><div class="form-hint">仅工作日可预约，节假日顺延</div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>佐证材料上传</label>
+        <div class="upload-list">
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">办证人居民身份证或户口簿照片</div><div class="upload-status req">必填</div></div>
+          <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">残疾证或医院出具的无法出门证明或现场照片</div><div class="upload-status req">必填</div></div>
+        </div>
+        <div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传佐证材料</span></div>
+      </div>
+
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填信息真实，办证人确因老弱病残等原因无法出门，如有虚假愿承担相应法律责任。</span></div>
+    </div></div>
+    <div class="form-footer"><button class="submit-btn" onclick="submitForm('上门办证服务','/smrzm','smrzm')">提交预约申请</button></div>
+</div>
+<div class="page" id="page-form-swqr">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','swqr')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">市外迁入</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">户口市外迁入申报</div><div class="form-desc">由波密县公安局一站式受理 · 推送接口 /swqr</div></div>
+    <div class="form-body">
+      <div class="form-group"><label class="form-label">迁移人信息（读证自动回填，接口 gmsfhm）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value" data-group="applicant" data-field="name">罗布</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value" data-group="applicant" data-field="idcard">5101********1234</span></div></div><div class="id-actions"><button class="id-btn" onclick="openScan('code','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>市外迁入事由（接口 qyldyydm / sqlx）</label><div class="select-wrap"><select class="form-input" id="swqr-sqlx" onchange="onSwqrReasonChange()"><option value="">请选择迁入事由</option><option value="0623">0623 夫妻投靠（市外）</option><option value="0624">0624 父母投靠成年子女（市外）</option><option value="0625">0625 未成年子女投靠父母（市外）</option><option value="0626">0626 其他亲属投靠（市外）</option><option value="0627">0627 已就业大中专毕业生落单位集体户</option><option value="0628">0628 未就业大中专毕业生回市</option><option value="0629">0629 往届大中专毕业生回市</option><option value="0630">0630 干部职工调动落单位集体户</option><option value="0631">0631 录聘公务员落单位集体户</option><option value="0632">0632 随军家属迁入</option></select></div><div class="form-hint">选定后自动绑定申请类型 sqlx，推送户籍系统对应审批流</div></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟迁入户主公民身份号码（接口 hz_gmsfhm）</label><input class="form-input" id="swqr-hz" placeholder="拟落入户主18位公民身份号码"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>申请人联系电话（接口 lxdh）</label><input class="form-input" id="swqr-lxdh" placeholder="11位手机号码，用于接收审批进度短信"></div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>迁出地省市县（接口 qcd_ssxqdm）</label>
+        <div class="region-select" onclick="openRegion('swqrout')"><span class="region-value placeholder" id="region-val-swqrout">请选择原户籍所在省/市/县</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-swqrout">
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>迁出地区划内详细地址（接口 qcd_qhnxxdz）</label><input class="form-input" placeholder="原户籍地详细地址（乡镇/街道 + 门牌号）"></div>
+
+      <div class="form-group"><label class="form-label">拟落户地（受理辅助，不推送接口）</label>
+        <div class="form-static">西藏自治区 · 林芝市 · 波密县</div>
+        <div class="select-wrap" style="margin-top:10px"><select class="form-input"><option value="">请选择拟落户地派出所</option><option>扎木镇派出所</option><option>倾多镇派出所</option><option>松宗镇派出所</option><option>古乡派出所</option><option>玉普乡派出所</option><option>易贡乡派出所</option><option>多吉乡派出所</option><option>康玉乡派出所</option><option>玉许乡派出所</option><option>八盖乡派出所</option></select></div>
+        <input class="form-input" style="margin-top:10px" placeholder="拟落户详细地址（乡镇→社区村→街路巷→门牌号）">
+      </div>
+
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list" id="swqr-mats"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">迁移人居民身份证</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">户主居民户口簿及身份证</div><div class="upload-status req">必填</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
+
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填迁移事由、迁出地及所附材料真实有效，如有弄虚作假愿承担法律责任。</span></div>
+    </div></div>
+    <div class="form-footer"><button class="submit-btn" onclick="submitForm('市外迁入','/swqr','swqr')">提交申请</button></div>
+</div>
+
+<div class="page" id="page-form-bulu">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','bulu')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">户籍补录</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">无户口人员补登补录</div><div class="form-desc">分3步填写 · 三级审批 · 派出所→县局→市局 · 10-27个工作日</div></div>
+    <div style="background:rgba(0,82,255,0.06);border:1px solid rgba(0,82,255,0.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:var(--foreground);line-height:1.7">除以下可在线办理的补录情形外，其他户籍补录业务请携带相关材料到当地派出所咨询办理。</div>
+    <div class="form-body">
+      <div class="step-bar">
+        <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-name">申请信息</div></div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2"><div class="step-dot">2</div><div class="step-name">身份落户</div></div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3"><div class="step-dot">3</div><div class="step-name">材料确认</div></div>
+      </div>
+      <div class="form-step active" data-step="1">
+      <div class="form-group"><label class="form-label">申请人信息（读证自动回填）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value" data-group="applicant" data-field="name">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value" data-group="applicant" data-field="idcard">542623********0024</span></div><div class="info-row"><span class="label">联系电话</span><span class="value" data-group="applicant" data-field="phone">139****5678</span></div><div class="info-row"><span class="label">户籍住址</span><span class="value" data-group="applicant" data-field="addr">扎木镇居委会</span></div></div><div class="id-actions"><button class="id-btn" onclick="openScan('code','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>补录类型</label><div class="select-wrap"><select class="form-input" id="bulu-type"><option value="">请选择</option><option>被宣告失踪或者宣告死亡后户口被注销人员</option><option>农村地区因婚嫁被注销原籍户口的人员</option><option>户口迁移证件遗失或者超过有效期限造成的无户口人员</option><option>我国公民与外国人、无国籍人非婚生育的无户口人员</option></select></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>无户口原因书面陈述</label><textarea class="form-input" id="bulu-reason" placeholder="本人或监护人说明未登记户口的原因、经历、居住情况"></textarea></div>
+      </div>
+      <div class="form-step" data-step="2">
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟登记身份信息</label>
+        <div class="form-row"><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>姓名</label><input class="form-input" id="bulu-name" data-group="bulu" data-field="name" placeholder="请输入姓名"></div><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>性别</label><div class="select-wrap"><select class="form-input" data-group="bulu" data-field="gender"><option value="">请选择</option><option>男</option><option>女</option></select></div></div></div>
+        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>出生日期</label><input class="form-input" type="date" data-group="bulu" data-field="birth"></div><div class="form-group" style="margin-bottom:0"><label class="form-label"><span class="required">*</span>民族</label><div class="select-wrap"><select class="form-input" data-group="bulu" data-field="nation"><option value="">请选择</option><option>藏族</option><option>汉族</option><option>回族</option><option>其他</option></select></div></div></div>
+        <div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><label class="form-label">籍贯</label><div class="region-select" onclick="openRegion('bulu_native')"><span class="region-value placeholder" id="region-val-bulu_native">请选择</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bulu_native"></div><div class="form-group" style="margin-bottom:0"><label class="form-label">出生地</label><div class="region-select" onclick="openRegion('bulu_birth')"><span class="region-value placeholder" id="region-val-bulu_birth">请选择</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bulu_birth"></div></div>
+        <div class="form-hint">无原始材料的由调查结论确定</div>
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户户主姓名</label><input class="form-input" placeholder="请输入拟落户户主姓名"><div class="form-hint">在居住地或监护人户口所在地派出所申报</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>与户主关系</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>本人</option><option>之子/之女</option><option>之孙/之外孙</option><option>其他</option></select></div></div>
+      <div class="form-group"><label class="form-label">监护人信息</label><input class="form-input" placeholder="特殊原因无户口人员：民政部门/村（居）委指定监护人书面材料、法院指定监护判决书"><div class="form-hint">监护代办时必填</div></div>
+      </div>
+      <div class="form-step" data-step="3">
+                  <div class="form-group"><label class="form-label"><span class="required">*</span>相片上传（年满16周岁必填）</label><div class="upload-add" onclick="toast('上传证件照片')" style="padding:12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5L5 19"/></svg><span style="font-size:12px;margin-top:4px">上传近期标准证件照片2张（仅传照片，无需指纹比对）</span></div></div>
+      <div class="form-group"><label class="form-label">社区民警调查（民警上门后由系统出具，无需本人上传）</label><div class="info-block"><div class="info-row"><span class="label">调查结论</span><span class="value">待调查</span></div><div class="info-row"><span class="label">询问笔录</span><span class="value">2名社区民警+2名知情人</span></div></div><div class="form-hint">两名以上民警询问申请人及两名以上知情人，制作询问笔录；出具补录户口综合调查报告并署名加盖派出所公章</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="upload-list">
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">本人或监护人书面申请</div><div class="upload-status req">必填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">出生证明材料（《出生医学证明》或亲子鉴定）</div><div class="upload-status req">必填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">原始户籍档案资料（户口簿/身份证/常住人口登记表）</div><div class="upload-status opt">选填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">原户籍地未入户证明</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">村（居）委会证明</div><div class="upload-status req">必填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">社区民警调查意见</div><div class="upload-status req">必填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">撤销失踪（死亡）文书（适用恢复户口类）</div><div class="upload-status opt">选填</div></div>
+        <div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">合法收养证明（适用收养类）</div><div class="upload-status opt">选填</div></div>
+      </div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填内容及所提交证明材料均真实有效，如有隐瞒事实、弄虚作假，愿承担相应法律责任。</span></div>
+      </div>
+    </div></div>
+    <div class="form-footer"><div class="step-actions">
+      <button class="step-btn" id="bulu-step-prev" onclick="goStepBulu(-1)" style="display:none">上一步</button>
+      <button class="submit-btn" id="bulu-step-next" onclick="goStepBulu(1)">下一步</button>
+      <button class="submit-btn" id="bulu-step-submit" onclick="submitForm('户籍补录','bulu','bulu')" style="display:none">提交申请</button>
+    </div></div>
+</div>
+<div class="page" id="page-form-qianyi">
+  <div class="navbar"><div class="back-btn" onclick="goPage('my-list','qianyi')"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div><span class="nav-title">户籍迁移</span></div>
+  <div class="page-scroll">
+    <div class="form-header"><div class="form-title">户口市外迁入申报</div><div class="form-desc">分3步填写 · 户口由市外迁入波密 · 跨省通办一站式办理</div></div>
+    <div class="form-body">
+      <div class="step-bar">
+        <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-name">申请信息</div></div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2"><div class="step-dot">2</div><div class="step-name">迁移信息</div></div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3"><div class="step-dot">3</div><div class="step-name">材料确认</div></div>
+      </div>
+      <div class="form-step active" data-step="1">
+      <div class="form-group"><label class="form-label">申请人信息（读证自动回填）</label><div class="info-block"><div class="info-row"><span class="label">姓名</span><span class="value" data-group="applicant" data-field="name">卓玛</span></div><div class="info-row"><span class="label">公民身份号码</span><span class="value" data-group="applicant" data-field="idcard">542623********0024</span></div><div class="info-row"><span class="label">现户籍地址</span><span class="value" data-group="applicant" data-field="addr">扎木镇居委会</span></div></div><div class="id-actions"><button class="id-btn" onclick="openScan('code','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','applicant')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>市外迁入事由</label><div class="select-wrap"><select class="form-input" id="qy-reason" onchange="onQyReasonChange()"><option value="">请选择迁入事由</option><option value="fq">夫妻投靠落户</option><option value="fz">年老父母投靠成年子女</option><option value="zf">未成年子女投靠父母</option><option value="gf">购买商品住宅落户</option><option value="rc">引进人才落户</option><option value="gz">录用公务员 / 事业单位招聘</option><option value="dx">大中专院校毕业回原籍落户</option><option value="wg">务工居住（社保满年限）</option><option value="sj">随军 / 退役军人易地安置</option><option value="tz">投资兴业落户</option></select></div><div class="form-hint">对应接口迁入事由字典（sqlx 0601-0632），材料清单随事由自动生成</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>迁移范围</label><div class="select-wrap"><select class="form-input" id="qy-scope"><option value="ks" selected>跨省 / 市外迁入（由波密县公安局受理）</option><option value="sn">省内跨市迁入</option></select></div><div class="form-hint">本事项为市外迁入，由迁入地波密县公安局一站式受理，无需返回原户籍地办理</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟迁移人</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>本人</option><option>随迁家庭成员（详见材料确认）</option></select></div><div class="form-hint">迁移人公民身份号码（gmsfhm）读证回填</div></div>
+      </div>
+      <div class="form-step" data-step="2">
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟迁出地（原户籍地址）</label>
+        <div class="region-select" onclick="openRegion('qyout')"><span class="region-value placeholder" id="region-val-qyout">请选择行政区划</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-qyout">
+        <input class="form-input" style="margin-top:10px" placeholder="迁出地区划内详细地址（乡镇/街道 + 门牌号）">
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟迁出地派出所</label><input class="form-input" placeholder="原户籍所在地派出所"></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟迁入地</label>
+        <div class="form-static">西藏自治区 · 林芝市 · 波密县</div>
+        <input class="form-input" style="margin-top:10px" placeholder="迁入地详细地址（乡镇街道→社区村→街路巷→门牌号）">
+      </div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>拟落户地派出所</label><div class="select-wrap"><select class="form-input" id="qy-paichusuo"><option value="">请选择</option><option>扎木镇派出所</option><option>倾多镇派出所</option><option>松宗镇派出所</option><option>古乡派出所</option><option>玉普乡派出所</option><option>易贡乡派出所</option><option>多吉乡派出所</option><option>康玉乡派出所</option><option>玉许乡派出所</option><option>八盖乡派出所</option></select></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>落户类别</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>家庭户</option><option>单位集体户</option><option>社区公共户</option><option>学生集体户</option><option>人才服务中心集体户</option></select></div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>户主公民身份号码（接口字段 hz_gmsfhm）</label><input class="form-input" placeholder="拟迁入户主公民身份号码（18位）"><div class="form-hint">落户家庭户时必填；被投靠人应为具有完全民事行为能力的户主</div></div>
+      <div class="form-group"><label class="form-label">被投靠人信息（投靠类必填）</label><div class="id-actions"><button class="id-btn" onclick="openScan('code','beitoukao')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>扫林安码</button><button class="id-btn" onclick="openScan('ocr','beitoukao')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 9h8M8 12h5M8 15h3"/></svg>OCR识别</button></div>
+<input class="form-input" data-group="beitoukao" data-field="name" placeholder="被投靠人姓名（应为具有完全民事行为能力的户主）"><div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input"><option value="">与申请人关系</option><option>夫妻</option><option>父母</option><option>子女</option><option>祖父母/外祖父母</option><option>其他亲属</option></select></div></div><div class="form-group" style="margin-bottom:0"><input class="form-input" data-group="beitoukao" data-field="idcard" placeholder="被投靠人公民身份号码"></div></div></div>
+      <div class="form-group"><label class="form-label">单位信息（人才引进/工作调动/务工经商必填）</label><input class="form-input" placeholder="单位名称"><input class="form-input" style="margin-top:10px" placeholder="单位地址"><div class="form-row" style="margin-top:10px"><div class="form-group" style="margin-bottom:0"><div class="select-wrap"><select class="form-input"><option value="">社保缴纳情况</option><option>已连续缴纳6个月以上</option><option>已缴纳</option><option>未缴纳</option></select></div></div></div></div>
+      </div>
+      <div class="form-step" data-step="3">
+      <div class="form-group"><label class="form-label"><span class="required">*</span>落户地址证明</label><div class="select-wrap"><select class="form-input" id="qy-addr-proof" onchange="onAddrProofChange()"><option value="">请选择</option><option value="fang">不动产权证</option><option value="jiti">单位集体户口簿首页</option><option value="gonggong">公共集体户地址证明</option><option value="zulin">经备案的租赁合同</option></select></div><div id="qy-proof-up" style="margin-top:10px"></div></div>
+      <div class="form-group"><label class="form-label">随迁人员信息（条件）</label><div class="info-block"><div class="info-row"><span class="label">随迁人员</span><span class="value">无</span></div></div><div class="form-hint">与申请人关系、姓名、公民身份号码、户籍地址；须提供亲属关系证明</div></div>
+      <div class="form-group"><label class="form-label">是否选择「跨省通办」</label><div class="select-wrap"><select class="form-input"><option value="">请选择</option><option>是（自愿选择）</option><option>否（按原规定办理）</option></select></div><div class="form-hint">跨省迁移且属5类适用事项的，由申请人自愿选择；拒绝选择的按原规定办理</div></div>
+      <div class="form-group"><label class="form-label"><span class="required">*</span>上传材料</label><div class="form-hint" style="margin-top:6px;margin-bottom:10px">材料清单随迁移原因自动生成，标注"必填"的须上传</div><div class="upload-list" id="qy-mats"><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">书面申请</div><div class="upload-status req">必填</div></div><div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">双方户口簿及身份证</div><div class="upload-status req">必填</div></div></div><div class="upload-add" onclick="toast('演示上传')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传材料</span></div></div>
+      <div class="agree-box"><div class="agree-checkbox" onclick="this.classList.toggle('checked')"></div><span>本人承诺所填内容及所提交证明材料均真实有效，如有隐瞒事实、弄虚作假，愿承担相应法律责任。</span></div>
+      </div>
+    </div></div>
+    <div class="form-footer"><div class="step-actions">
+      <button class="step-btn" id="qy-step-prev" onclick="goStepQy(-1)" style="display:none">上一步</button>
+      <button class="submit-btn" id="qy-step-next" onclick="goStepQy(1)">下一步</button>
+      <button class="submit-btn" id="qy-step-submit" onclick="submitForm('户籍迁移','swqr','qianyi')" style="display:none">提交申请</button>
+    </div></div>
+</div>
+
+    <div class="region-overlay" id="region-overlay" onclick="closeRegion()">
+      <div class="region-sheet" onclick="event.stopPropagation()">
+        <div class="region-head"><span>选择行政区划</span><button class="region-done" onclick="closeRegion()">完成</button></div>
+        <div class="region-tabs">
+          <div class="region-tab active" id="region-tab-prov" onclick="regionTab('prov')">请选择省</div>
+          <div class="region-tab" id="region-tab-city" onclick="regionTab('city')">请选择市</div>
+          <div class="region-tab" id="region-tab-county" onclick="regionTab('county')">请选择县(区)</div>
+        </div>
+        <div class="region-cols" id="region-col"></div>
+      </div>
+    </div>
+
+    <div class="scan-overlay" id="scan-overlay" onclick="closeScan()">
+      <div class="scan-modal" onclick="event.stopPropagation()">
+        <div class="scan-title" id="scan-title">扫林安码</div>
+        <div class="scan-camera">
+          <div class="scan-frame"><div class="scan-line"></div></div>
+          <div class="scan-hint" id="scan-hint">将林安码个人码置于取景框内</div>
+        </div>
+        <div class="scan-actions">
+          <button class="scan-btn" onclick="closeScan()">取消</button>
+          <button class="scan-btn primary" onclick="simulateScan()">模拟识别</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-overlay" id="loading"><div class="loading-spinner"></div><div class="loading-text" id="loading-text">正在提交申请...</div></div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script>
+const BIZ_MAP={all:{name:'全部',form:null},chusheng:{name:'出生登记',form:'chusheng',ep:'/csdj',sqlx:'0101'},huzheng:{name:'户籍证明',form:'huzheng',ep:'/dysq',sqlx:'-'},swzx:{name:'死亡注销申报',form:'swzx',ep:'/swzx',sqlx:'0401'},biangeng:{name:'主项变更更正',form:'biangeng',ep:'/bggzsq',sqlx:'1201'},feizhuxiang:{name:'非主项变更',form:'feizhuxiang',ep:'/bggzsq',sqlx:'1210'},bulu:{name:'户籍补录',form:'bulu',ep:'/bulu',sqlx:'-'},swqr:{name:'市外迁入',form:'swqr',ep:'/swqr',sqlx:'0623'},qianyi:{name:'户籍迁移',form:'qianyi',ep:'/swqr',sqlx:'0601'},smrzm:{name:'上门办证服务',form:'smrzm',ep:'/smrzm',sqlx:'-'}};
+
+// 各业务操作指南 + 可下载模板
+const GUIDE_MAP={
+  chusheng:{title:'出生登记办理指南',desc:'婚生婴儿出生后1年内，由父母一方在林安码提交申请，上传出生医学证明、父母身份证、户口本等材料，波密县公安局受理后办结。',templates:['出生登记申请表（模板）','民族成份确认书（父母民族不一致时）']},
+  huzheng:{title:'户籍证明开具指南',desc:'本人在林安码提交申请，系统自动调取户籍信息生成电子户籍证明，办结后可在「亮码服务」出示。',templates:[]},
+  biangeng:{title:'主项变更更正指南',desc:'姓名、性别、出生日期、民族、籍贯等主项变更，需经林安码初审、社区民警上门调查、县局审批后办结。',templates:['变更更正申请表（模板）','父母双方协商同意姓名变更意见书（未成年人）']},
+  feizhuxiang:{title:'非主项变更指南',desc:'职业、服务处所、文化程度、婚姻状况等非主项信息变更，林安码初审后推送户籍系统办结。',templates:['服务处所变更单位证明（模板）']},
+  bulu:{title:'户籍补录办理指南',desc:'无户口人员补登补录，需提供村居委会证明、实际居住情况说明等，经社区民警调查后报县局审批。',templates:['无户口人员情况说明（模板）']},
+  swqr:{title:'市外迁入落户指南',desc:'市外户口迁入波密，按投靠、购房、就业、毕业、调动等事由分类提交材料，县公安局一站式受理。',templates:['准予迁入证明申请表（模板）']},
+  qianyi:{title:'市内移居指南',desc:'波密县内户口迁移，迁入合法稳定住所或亲属户内，派出所当场办理。',templates:[]},
+  smrzm:{title:'上门办证服务指南',desc:'老弱病残等无法出门人员，可预约民警上门补办户口本或身份证，请提前准备好身份证/户口本、残疾证或医院证明。',templates:[]},
+  swzx:{title:'死亡注销申报指南',desc:'亲属申报死亡人员户口注销，需上传死亡证明材料，派出所核实后注销户口。',templates:['死亡注销申报表（模板）']}
+};
+function showGuide(biz){
+  const g=GUIDE_MAP[biz];if(!g){toast('该业务暂无操作指南');return}
+  let html='<div style="padding:20px"><div style="font-size:17px;font-weight:700;color:var(--foreground);margin-bottom:8px">'+g.title+'</div>';
+  html+='<div style="font-size:13px;color:var(--foreground);line-height:1.7;margin-bottom:14px">'+g.desc+'</div>';
+  if(g.templates.length){
+    html+='<div style="font-size:13px;font-weight:600;margin-bottom:8px">可下载表格模板：</div>';
+    g.templates.forEach(t=>{
+      html+='<div onclick="toast(\'演示下载：'+t+'\')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--muted);border-radius:10px;margin-bottom:8px;cursor:pointer"><div style="font-size:13px">📄 '+t+'</div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>';
+    });
+  }else{
+    html+='<div style="font-size:12px;color:var(--muted-foreground)">该业务无需下载表格，在线填写即可。</div>';
+  }
+  html+='</div><div style="padding:0 20px 20px"><button onclick="closeModal();newApply()" style="width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600">我知道了，去申请</button></div>';
+  openModal(html);
+}
+function openModal(html){
+  let m=document.getElementById('guide-modal');
+  if(!m){
+    m=document.createElement('div');m.id='guide-modal';
+    m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+    m.onclick=function(e){if(e.target===m)closeModal()};
+    document.body.appendChild(m);
+  }
+  m.innerHTML='<div style="background:#fff;width:100%;max-width:420px;border-radius:18px 18px 0 0;max-height:80vh;overflow-y:auto">'+html+'</div>';
+  m.style.display='flex';
+}
+function closeModal(){const m=document.getElementById('guide-modal');if(m)m.style.display='none'}
+let currentBiz='all',currentStatus='all';
+let records=[
+  {id:'HLW20260918001',biz:'huzheng',bizName:'户籍证明',time:'2026-09-18 23:52',status:'reviewing',statusText:'审核中',summary:'办理社保用',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{证明事项:'户籍证明（户口登记项目内容）',证明用途:'办理社保',出具方式:'电子证照（平台下载）'},mats:['身份证人像面','身份证国徽面','人证核验照','户口簿首页']},
+  {id:'HLW20260915002',biz:'huzheng',bizName:'户籍证明',time:'2026-09-15 10:23',status:'done',statusText:'已办结',summary:'办理社保用',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{证明事项:'户籍证明',证明用途:'办理社保',出具方式:'电子证照'},mats:['身份证人像面','身份证国徽面','人证核验照']},
+  {id:'HLW20260910003',biz:'qianyi',bizName:'户籍迁移',time:'2026-09-10 14:08',status:'reviewing',statusText:'审核中',summary:'夫妻投靠至拉萨',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{迁移原因:'夫妻投靠',迁出地:'西藏林芝波密县扎木镇',迁入地:'西藏拉萨市城关区',投靠人:'扎西（配偶）',迁移类型:'市内迁移'},mats:['身份证人像面','身份证国徽面','结婚证','被投靠人户口簿','人证核验照']},
+  {id:'HLW20260908004',biz:'chusheng',bizName:'出生登记',time:'2026-09-08 09:45',status:'done',statusText:'已办结',summary:'新生儿：次仁旺堆',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{新生儿姓名:'次仁旺堆',性别:'男',出生日期:'2026-09-05',出生医学证明编号:'R540012345',父亲:'扎西',母亲:'卓玛',拟入户地:'扎木镇居委会'},mats:['出生医学证明','父母结婚证','父母身份证','人证核验照']},
+  {id:'HLW20260905005',biz:'biangeng',bizName:'主项变更更正',time:'2026-09-05 16:30',status:'rejected',statusText:'已退回',summary:'姓名变更：卓玛→卓玛措',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:2,rejectReason:'材料不齐全，请补充户口本原件照片',detail:{变更项目:'姓名',原信息:'卓玛',申请变更为:'卓玛措',变更事由:'因宗教信仰需要更改名字',审批层级:'县局核准'},mats:['身份证人像面','身份证国徽面','姓名变更申请','人证核验照']},
+  {id:'HLW20260902006',biz:'bulu',bizName:'户籍补录',time:'2026-09-02 11:12',status:'reviewing',statusText:'审核中',summary:'3岁以上从未申报户口',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:3,detail:{补录人员:'卓玛（本人）',补录人员出生日期:'1990-05-12',无户口原因:'历史原因未申报',拟入户地:'扎木镇居委会',调查情况:'需社区民警走访核实',审批层级:'市局审批'},mats:['身份证人像面','身份证国徽面','无户口情况说明','人证核验照','社区证明']}
+,{id:'HLW20260916007',biz:'swzx',bizName:'死亡注销申报',time:'2026-09-16 15:30',status:'done',statusText:'已办结',summary:'死者：扎西（配偶）',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{死者:'扎西',死亡日期:'2026-09-14',死亡原因:'正常死亡（病亡）',申报人关系:'配偶',注销结果:'户口已注销'},mats:['死亡医学证明','户口簿','申报人身份证']}
+,{id:'HLW20260917008',biz:'chusheng',bizName:'出生登记',time:'2026-09-17 10:15',status:'reviewing',statusText:'审核中',summary:'新生儿：格桑梅朵',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{新生儿姓名:'格桑梅朵',性别:'女',出生日期:'2026-09-16',父亲:'扎西',母亲:'卓玛',拟入户地:'扎木镇居委会'},mats:['出生医学证明','父母结婚证','父母身份证']}
+,{id:'HLW20260903009',biz:'chusheng',bizName:'出生登记',time:'2026-09-03 14:20',status:'rejected',statusText:'已退回',summary:'新生儿：旦增',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,rejectReason:'出生医学证明信息与身份证信息不一致，请核对后重新上传',detail:{新生儿姓名:'旦增',出生日期:'2026-08-20',拟入户地:'扎木镇居委会'},mats:['出生医学证明','父母身份证']}
+,{id:'HLW20260912010',biz:'huzheng',bizName:'户籍证明',time:'2026-09-12 09:30',status:'reviewing',statusText:'审核中',summary:'子女上学用',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{证明事项:'户籍证明',证明用途:'子女入学',出具方式:'电子证照'},mats:['身份证人像面','身份证国徽面','人证核验照']}
+,{id:'HLW20260828011',biz:'huzheng',bizName:'户籍证明',time:'2026-08-28 16:45',status:'rejected',statusText:'已退回',summary:'办理护照用',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,rejectReason:'人证核验照模糊不清，请重新拍摄上传',detail:{证明事项:'户籍证明',证明用途:'办理护照'},mats:['身份证人像面','身份证国徽面','人证核验照']}
+,{id:'HLW20260914012',biz:'biangeng',bizName:'主项变更更正',time:'2026-09-14 11:00',status:'done',statusText:'已办结',summary:'民族变更：藏族→藏族',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:2,detail:{变更项目:'民族',原信息:'藏族',申请变更为:'藏族（更正登记）',变更事由:'登记差错更正',审批层级:'县局核准'},mats:['身份证','户口簿','民族成份更正证明']}
+,{id:'HLW20260911013',biz:'biangeng',bizName:'主项变更更正',time:'2026-09-11 15:20',status:'reviewing',statusText:'审核中',summary:'出生日期更正',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:2,detail:{变更项目:'出生日期',原信息:'1990-05-12',申请变更为:'1990-06-12',变更事由:'登记错误',审批层级:'市局审批'},mats:['身份证','户口簿','出生医学证明']}
+,{id:'HLW20260918014',biz:'feizhuxiang',bizName:'非主项变更',time:'2026-09-18 09:10',status:'done',statusText:'已办结',summary:'文化程度：高中→本科',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{变更项目:'文化程度',原信息:'高中',申请变更为:'本科',变更事由:'取得大学本科学历',审批层级:'派出所当场办结'},mats:['身份证','户口簿','毕业证书']}
+,{id:'HLW20260917015',biz:'feizhuxiang',bizName:'非主项变更',time:'2026-09-17 17:30',status:'reviewing',statusText:'审核中',summary:'婚姻状况：未婚→已婚',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{变更项目:'婚姻状况',原信息:'未婚',申请变更为:'已婚',变更事由:'办理结婚登记',审批层级:'派出所当场办结'},mats:['身份证','户口簿','结婚证']}
+,{id:'HLW20260909016',biz:'bulu',bizName:'户籍补录',time:'2026-09-09 10:40',status:'reviewing',statusText:'审核中',summary:'收养补登户口',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:3,detail:{补录人员:'格桑（收养儿童）',补录人员出生日期:'2020-03-15',无户口原因:'捡拾/收养未落户',拟入户地:'扎木镇居委会',审批层级:'市局审批'},mats:['收养登记证','村委会证明','人证核验照']}
+,{id:'HLW20260825017',biz:'bulu',bizName:'户籍补录',time:'2026-08-25 13:15',status:'done',statusText:'已办结',summary:'历史漏登补录',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'松宗镇',level:3,detail:{补录人员:'卓玛（本人）',无户口原因:'历史原因漏登',拟入户地:'松宗镇居委会',审批层级:'市局审批'},mats:['社区证明','无户口情况说明','人证核验照']}
+,{id:'HLW20260820018',biz:'bulu',bizName:'户籍补录',time:'2026-08-20 15:50',status:'rejected',statusText:'已退回',summary:'补录申请',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:3,rejectReason:'社区民警走访核实材料缺失，请补充村委会出具的实际居住证明',detail:{无户口原因:'历史原因未申报',拟入户地:'扎木镇居委会'},mats:['无户口情况说明']}
+,{id:'HLW20260913019',biz:'qianyi',bizName:'户籍迁移',time:'2026-09-13 10:25',status:'done',statusText:'已办结',summary:'购房落户至林芝巴宜区',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{迁移原因:'购房落户',迁出地:'西藏林芝波密县扎木镇',迁入地:'西藏林芝巴宜区',迁移类型:'区内迁移'},mats:['身份证','房产证','户口簿']}
+,{id:'HLW20260918020',biz:'qianyi',bizName:'户籍迁移',time:'2026-09-18 08:50',status:'reviewing',statusText:'审核中',summary:'人才引进落户拉萨',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,detail:{迁移原因:'人才引进',迁出地:'西藏林芝波密县扎木镇',迁入地:'西藏拉萨市城关区'},mats:['身份证','学历证书','引进单位证明']}
+,{id:'HLW20260901021',biz:'qianyi',bizName:'户籍迁移',time:'2026-09-01 14:30',status:'rejected',statusText:'已退回',summary:'父母子女投靠',applicant:'卓玛',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇',level:1,rejectReason:'被投靠人户口簿不完整，请补充被投靠人全户户籍资料',detail:{迁移原因:'父母子女投靠',迁入地:'西藏拉萨市城关区',投靠人:'母亲'},mats:['身份证','被投靠人户口簿']}
+,{id:'HLW20260918031',biz:'swqr',bizName:'市外迁入',time:'2026-09-18 09:12',status:'reviewing',statusText:'审核中',summary:'夫妻投靠市外迁入（四川成都→波密）',applicant:'罗布',idcard:'5101********1234',phone:'139****8866',addr:'扎木镇',level:1,detail:{迁入事由:'0623 夫妻投靠（市外）',迁出地:'四川省成都市武侯区XX路XX号',拟落入户主:'扎西（配偶）542623********0011',拟落户地:'西藏林芝波密县扎木镇'},mats:['迁移人居民身份证','户主户口簿及身份证','结婚证']}
+,{id:'HLW20260912032',biz:'swqr',bizName:'市外迁入',time:'2026-09-12 10:40',status:'done',statusText:'已办结',summary:'已就业大中专毕业生落单位集体户',applicant:'央金',idcard:'542623********0088',phone:'139****2233',addr:'扎木镇',level:1,detail:{迁入事由:'0627 已就业大中专毕业生落单位集体户',迁出地:'陕西省西安市雁塔区XX小区',拟落户地:'波密县XX单位集体户',审批单位:'波密县公安局扎木镇派出所'},mats:['迁移人居民身份证','毕业证 / 报到证','单位接收证明及劳动合同','单位集体户口簿首页']}
+,{id:'HLW20260905033',biz:'swqr',bizName:'市外迁入',time:'2026-09-05 16:22',status:'rejected',statusText:'已退回',summary:'父母投靠成年子女（市外）',applicant:'卓玛',idcard:'5101********5678',phone:'139****9900',addr:'扎木镇',level:1,rejectReason:'亲属关系证明材料不全，需补充经公证的亲属关系文书或出生医学证明；结婚证照片模糊，请重新上传',detail:{迁入事由:'0624 父母投靠成年子女（市外）',迁出地:'四川省成都市青羊区XX街XX号',拟落入户主:'卓玛（子女）542623********0024'},mats:['迁移人居民身份证','户主户口簿及身份证','亲属关系证明（待补）']}
+];
+let currentPoliceRec=null;
+
+// 亮码服务：我的证照
+let currentCertFrom='my-list', currentCertType='huzheng';
+const CERT_TYPES={
+  huzheng:{name:'户 籍 证 明',org:'波密县公安局扎木镇派出所',no:'542623202609180001',seal:'波密县公安局<br>户口专用章',
+    rows:[['姓名','卓玛'],['公民身份号码','542623********0024'],['户口所在地','西藏林芝波密县扎木镇'],['户别','居民户口'],['事由','办理社保'],['出具日期','2026-09-15'],['有效期至','2027-09-15']]},
+  chusheng:{name:'出生医学证明',org:'波密县人民医院',no:'R540012345',seal:'出生医学证明<br>专用章',
+    rows:[['新生儿姓名','次仁旺堆'],['性别','男'],['出生日期','2026-09-05'],['出生地点','西藏林芝市波密县'],['父亲','扎西'],['母亲','卓玛'],['签发日期','2026-09-08']]}
+};
+const LIC_ICONS={huzheng:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
+  chusheng:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="9" r="4"/><path d="M4 22c0-4.5 3.6-7 8-7s8 2.5 8 7"/></svg>',
+  doc:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h10M7 14h6"/></svg>',
+  book:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 5c-2-1.5-4.5-2-8-2v15c3.5 0 6 .5 8 2 2-1.5 4.5-2 8-2V3c-3.5 0-6 .5-8 2zm1 13.5c-1.6-.8-3.3-1.2-5-1.3V6.7c1.7.1 3.4.5 5 1.3v10.5zm2-1.3c1.7.1 3.4.5 5 1.3V5.4c-1.7-.1-3.4-.5-5-1.3v10.5z"/></svg>'};
+function renderLicenses(){
+  const certs=[];const docs=[];
+  const done=records.filter(r=>r.status==='done');
+  const hz=done.find(r=>r.biz==='huzheng');
+  if(hz)certs.push({t:'huzheng',name:'户籍证明',desc:'主要用于证明公民身份、家庭关系及户籍信息',time:hz.time});
+  certs.push({t:'',name:'无犯罪记录证明',desc:'由国家公安机关开具，用于证明居民无犯罪事实',time:'2026-08-12',demo:true});
+  docs.push({name:'居民身份证',desc:'用于证明公民身份的法定证件',demo:true});
+  docs.push({name:'电子户口簿',desc:'用于证明户籍登记信息的电子证照',demo:true});
+  const item=(c)=>{const ic=c.t?LIC_ICONS[c.t]:LIC_ICONS.doc;
+    const onclick=c.demo?"toast('演示：该证照办理中')":("openCertFromLic('"+c.t+"')");
+    return '<div class="lic-item" onclick="'+onclick+'"><div class="lic-icon">'+ic+'</div><div class="lic-info"><div class="lic-name">'+c.name+'</div><div class="lic-desc">'+c.desc+'</div></div><div class="lic-time">'+(c.time?c.time.slice(5):'')+'</div><svg class="lic-arrow" width="16" height="16" viewBox="0 0 24 24" fill="#94A3B8"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>';
+  };
+  document.getElementById('lic-cert-list').innerHTML=certs.map(item).join('');
+  document.getElementById('lic-doc-list').innerHTML=docs.map(item).join('');
+}
+function switchLicTab(el){
+  document.querySelectorAll('.lic-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const k=el.dataset.lic;
+  document.getElementById('lic-cert-list').style.display=k==='cert'?'flex':'none';
+  document.getElementById('lic-doc-list').style.display=k==='doc'?'flex':'none';
+}
+function openCertFromLic(type){renderCert(type,'licenses');goPage('cert');}
+function renderCert(type,from){
+  currentCertType=type||'huzheng';currentCertFrom=from||'my-list';
+  const c=CERT_TYPES[currentCertType];
+  document.getElementById('cert-name').textContent=c.name;
+  document.getElementById('cert-org').textContent=c.org;
+  document.getElementById('cert-no').textContent='NO. '+c.no;
+  document.getElementById('cert-info-body').innerHTML=c.rows.map(r=>'<div class="ci-row"><span class="ci-label">'+r[0]+'</span><span class="ci-value">'+r[1]+'</span></div>').join('');
+  document.getElementById('cert-seal').innerHTML='<span>'+c.seal+'</span>';
+  document.getElementById('cert-nav-title').textContent=c.name.replace(/ /g,'')||'电子证明';
+}
+function goBackFromCert(){ currentCertFrom==='licenses'?goPage('licenses'):goPage('my-list',currentBiz); }
+
+function goPage(name,biz){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));if(biz!==undefined)currentBiz=biz;if(name==='my-list')renderList();if(name==='police-home')renderPoliceList();if(name==='licenses')renderLicenses();if(name==='form-chusheng')resetFormStep();if(name==='form-bulu')resetFormStepBulu();if(name==='form-qianyi')resetFormStepQy();if(name==='result')renderResultPage();if(name==='police-detail'&&currentPoliceRec)renderPoliceDetail(currentPoliceRec);document.getElementById('page-'+name).classList.add('active');injectGuideBtn(name)}
+function injectGuideBtn(pageName){
+  if(!pageName||!pageName.startsWith('form-'))return;
+  const bizKey=pageName.replace('form-','');
+  const bizMap={chusheng:'chusheng',huzheng:'huzheng',biangeng:'biangeng',feizhuxiang:'feizhuxiang',bulu:'bulu',swqr:'swqr',qianyi:'qianyi',smrzm:'smrzm',swzx:'swzx'};
+  const gk=bizMap[bizKey];if(!gk)return;
+  const page=document.getElementById('page-'+pageName);if(!page)return;
+  const nav=page.querySelector('.navbar');if(!nav)return;
+  if(nav.querySelector('.guide-btn'))return;
+  const btn=document.createElement('div');
+  btn.className='guide-btn';
+  btn.style.cssText='margin-left:auto;width:30px;height:30px;border-radius:50%;background:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:600;color:var(--accent)';
+  btn.textContent='?';
+  btn.onclick=function(){showGuide(gk)};
+  nav.appendChild(btn);
+}
+function renderList(){
+  const biz=BIZ_MAP[currentBiz];
+  document.getElementById('my-list-title').textContent=currentBiz==='all'?'我的申请':biz.name+' · 我的申请';
+  document.getElementById('my-list-biz').textContent=currentBiz==='all'?'全部业务记录':biz.name;
+  const nab=document.getElementById('new-apply-btn');if(nab)nab.style.display=currentBiz==='all'?'none':'flex';
+  let list=records;if(currentBiz!=='all')list=list.filter(r=>r.biz===currentBiz);if(currentStatus!=='all')list=list.filter(r=>r.status===currentStatus);
+  const c=document.getElementById('record-list');
+  if(!list.length){
+    if(currentBiz!=='all'&&GUIDE_MAP[currentBiz]){
+      const g=GUIDE_MAP[currentBiz];
+      let tplHtml='';
+      if(g.templates.length){
+        tplHtml='<div style="margin-top:14px;text-align:left"><div style="font-size:12px;font-weight:600;color:var(--foreground);margin-bottom:8px">所需表格模板：</div>'+g.templates.map(t=>'<div onclick="event.stopPropagation();toast(\'演示下载：'+t+'\')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--muted);border-radius:8px;margin-bottom:6px;cursor:pointer"><span style="font-size:12.5px">📄 '+t+'</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>').join('')+'</div>';
+      }
+      c.innerHTML='<div style="padding:40px 24px;text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:rgba(0,82,255,0.08);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0052FF" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div><div style="font-size:16px;font-weight:700;color:var(--foreground);margin-bottom:6px">'+g.title+'</div><div style="font-size:12.5px;color:var(--muted-foreground);line-height:1.7;margin-bottom:8px">'+g.desc+'</div>'+tplHtml+'<button onclick="event.stopPropagation();newApply()" style="margin-top:16px;padding:10px 28px;background:var(--accent);color:#fff;border:none;border-radius:20px;font-size:13.5px;font-weight:600;cursor:pointer">立即申请</button></div>';
+    }else{
+      c.innerHTML='<div class="empty-state"><div class="empty-text">暂无相关申请记录</div></div>';
+    }
+    return
+  }
+  c.innerHTML=list.map(r=>'<div class="record-card" onclick="openResult(\''+r.id+'\')"><div class="record-top"><div><div class="record-biz">'+r.bizName+'</div><div class="record-no">'+r.id+'</div></div><span class="status-badge '+r.status+'">'+r.statusText+'</span></div><div class="record-meta"><div class="meta-item"><span class="meta-label">申请人</span><span class="meta-value">'+r.applicant+'</span></div><div class="meta-item"><span class="meta-label">时间</span><span class="meta-value">'+r.time+'</span></div></div><div style="font-size:12px;color:var(--muted-foreground);margin-bottom:10px">'+r.summary+'</div>'+(r.status==='rejected'?'<div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.28);border-radius:10px;padding:10px 12px;margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:#DC2626;margin-bottom:4px;display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>退回原因</div><div style="font-size:12px;color:#B91C1C;line-height:1.6">'+(r.rejectReason||'材料不齐全或不符合要求，请查看审批意见后重新提交')+'</div></div>':'')+'<div class="record-actions"><button class="record-btn" onclick="event.stopPropagation();openResult(\''+r.id+'\')">查看进度</button>'+(r.status==='done'&&r.biz==='huzheng'?'<button class="record-btn primary" onclick="event.stopPropagation();openCertFromRec(\''+r.id+'\')">查看电子证件</button>':'')+(r.status==='rejected'?'<button class="record-btn primary" onclick="event.stopPropagation();editResubmit(\''+r.id+'\')">编辑重新提交</button>':'')+'</div></div>').join('');
+}
+function filterStatus(el){document.querySelectorAll('.status-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');currentStatus=el.dataset.status;renderList()}
+function newApply(){const b=BIZ_MAP[currentBiz];if(b.form)goPage('form-'+b.form)}
+const BIZ_FORM={chusheng:'chusheng',huzheng:'huzheng',biangeng:'biangeng',feizhuxiang:'feizhuxiang',bulu:'bulu',swzx:'swzx',smrzm:'smrzm',swqr:'swqr',qianyi:'qianyi'};
+function editResubmit(id){const r=records.find(x=>x.id===id);if(!r)return;const f=BIZ_FORM[r.biz];if(!f){toast('该业务暂不支持线上编辑重报');return}toast('已载入原申请信息，请核对修改后重新提交');goPage('form-'+f)}
+// 民警端列表
+function renderPoliceList(){
+  const pending=records.filter(r=>r.status==='pending'||r.status==='reviewing');
+  const c=document.getElementById('police-list');
+  c.innerHTML=pending.map((r,i)=>{
+    const lv=r.level===1?'<span class="pc-level l1">L1 当场</span>':r.level===2?'<span class="pc-level l2">L2 县局</span>':'<span class="pc-level l3">L3 市局</span>';
+    const cls=r.level===2?'level-2':r.level===3?'level-3':'';
+    return '<div class="police-card '+cls+'" onclick="openPoliceDetail('+i+')">'+
+      '<div class="pc-top"><div><div class="pc-biz">'+r.bizName+'</div><div class="pc-no">'+r.id+'</div></div>'+lv+'</div>'+
+      '<div class="pc-body"><div class="pc-avatar">'+r.applicant[0]+'</div><div class="pc-info"><div class="pc-name">'+r.applicant+'</div><div class="pc-phone">'+r.phone+'</div><div class="pc-summary">'+r.summary+'</div><div class="pc-time">提交于 '+r.time+'</div></div></div>'+
+      '<div class="pc-actions"><button class="pc-btn" onclick="event.stopPropagation();openPoliceDetail('+i+')">查看详情</button><button class="pc-btn primary" onclick="event.stopPropagation();openPoliceDetail('+i+')">去审核</button></div>'+
+    '</div>';
+  }).join('')||'<div class="empty-state"><div class="empty-text">暂无待办申请</div></div>';
+}
+function openPoliceDetail(idx){
+  const pending=records.filter(r=>r.status==='pending'||r.status==='reviewing');
+  currentPoliceRec=pending[idx];
+  goPage('police-detail');
+}
+function renderPoliceDetail(r){
+  const b=BIZ_MAP[r.biz];
+  const lv=r.level===1?'<span style="color:#059669">L1 当场办结</span>':r.level===2?'<span style="color:#D97706">L2 县局核准</span>':'<span style="color:#DC2626">L3 市局审批</span>';
+  const mats=(r.mats||[]).map(m=>'<div class="material-thumb" onclick="toast(\'预览：'+m+'\')"><div class="mt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="mt-name">'+m+'</div></div>').join('');
+  const rows=Object.entries(r.detail||{}).map(([k,v])=>'<div class="review-field"><span class="rf-label">'+k+'</span><span class="rf-value">'+v+'</span></div>').join('');
+  const rejected = r.status==='rejected' ? '<div class="review-block"><div class="rb-title" style="color:#DC2626"><span class="rb-dot" style="background:#DC2626"></span>退回原因</div><div style="font-size:13px;color:#DC2626;line-height:1.7">'+(r.rejectReason||'')+'</div></div>' : '';
+  document.getElementById('police-detail-body').innerHTML =
+    '<div class="review-block"><div class="rb-title"><span class="rb-dot"></span>申请基本信息</div>'+
+    '<div class="review-field"><span class="rf-label">业务类型</span><span class="rf-value">'+r.bizName+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">申请编号</span><span class="rf-value">'+r.id+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">受理层级</span><span class="rf-value">'+lv+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">提交时间</span><span class="rf-value">'+r.time+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">推送接口</span><span class="rf-value">'+b.ep+'</span></div></div>'+
+    '<div class="review-block"><div class="rb-title"><span class="rb-dot"></span>申请人信息</div>'+
+    '<div class="review-field"><span class="rf-label">姓名</span><span class="rf-value">'+r.applicant+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">公民身份号码</span><span class="rf-value">'+r.idcard+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">联系电话</span><span class="rf-value">'+r.phone+'</span></div>'+
+    '<div class="review-field"><span class="rf-label">户籍所在地</span><span class="rf-value">'+r.addr+'</span></div></div>'+
+    '<div class="review-block"><div class="rb-title"><span class="rb-dot"></span>申请内容（'+r.bizName+'）</div>'+rows+'</div>'+
+    '<div class="review-block"><div class="rb-title"><span class="rb-dot"></span>已上传材料（'+(r.mats||[]).length+'份）</div><div class="material-grid">'+mats+'</div></div>'+
+    rejected+
+    '<div class="review-block"><div class="rb-title"><span class="rb-dot"></span>审批意见</div><textarea class="reject-input" id="review-opinion" placeholder="请输入审批意见（退回时必填）..."></textarea></div>';
+}
+function doReview(action){
+  const op=document.getElementById('review-opinion').value;
+  if(action==='rejected'&&!op.trim()){toast('退回时请填写审批意见');return}
+  const loading=document.getElementById('loading'),lt=document.getElementById('loading-text');
+  lt.textContent=action==='done'?'审核通过，正在推送结果...':'已退回，正在通知申请人...';
+  loading.classList.add('show');
+  setTimeout(()=>{loading.classList.remove('show');toast(action==='done'?'已通过，短信通知已发送':'已退回，短信通知已发送');setTimeout(()=>goPage('police-home'),1200)},1000);
+}
+
+
+
+
+
+// 市外迁入：事由(sqlx)联动材料清单
+const SWQR_MATS={
+  '0623':[{n:'迁移人居民身份证',r:1},{n:'户主居民户口簿及身份证',r:1},{n:'结婚证',r:1}],
+  '0624':[{n:'迁移人居民身份证',r:1},{n:'户主居民户口簿及身份证',r:1},{n:'亲属关系证明（出生医学证明等）',r:1}],
+  '0625':[{n:'迁移人居民身份证',r:1},{n:'户主居民户口簿及身份证',r:1},{n:'亲属关系证明',r:1}],
+  '0626':[{n:'迁移人居民身份证',r:1},{n:'户主居民户口簿及身份证',r:1},{n:'经公证的亲属关系证明',r:1}],
+  '0627':[{n:'迁移人居民身份证',r:1},{n:'毕业证 / 报到证',r:1},{n:'单位接收证明及劳动合同',r:1},{n:'单位集体户口簿首页',r:1}],
+  '0628':[{n:'迁移人居民身份证',r:1},{n:'毕业证',r:1},{n:'迁回原籍地证明',r:1}],
+  '0629':[{n:'迁移人居民身份证',r:1},{n:'毕业证',r:1},{n:'就业/未就业证明',r:1}],
+  '0630':[{n:'迁移人居民身份证',r:1},{n:'组织人事/劳动部门调令',r:1},{n:'单位接收证明及集体户口簿首页',r:1}],
+  '0631':[{n:'迁移人居民身份证',r:1},{n:'录聘公务员审批材料',r:1},{n:'单位集体户口簿首页',r:1}],
+  '0632':[{n:'迁移人居民身份证',r:1},{n:'部队师旅级以上政治部门批准手续',r:1},{n:'结婚证',r:1}]
+};
+function onSwqrReasonChange(){
+  const v=document.getElementById('swqr-sqlx').value;
+  const list=document.getElementById('swqr-mats');
+  if(!list)return;
+  const def=v&&SWQR_MATS[v]?SWQR_MATS[v]:[{n:'迁移人居民身份证',r:1},{n:'户主居民户口簿及身份证',r:1}];
+  list.innerHTML=def.map(m=>'<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>').join('');
+}
+
+// 户籍迁移：落户地址证明上传入口
+const QY_PROOF={
+  'fang':'不动产权证书（权利人页）',
+  'jiti':'单位集体户口簿首页',
+  'gonggong':'公共集体户地址证明',
+  'zulin':'经房管部门备案的租赁合同'
+};
+function onAddrProofChange(){
+  const v=document.getElementById('qy-addr-proof').value;
+  const up=document.getElementById('qy-proof-up');
+  if(!up)return;
+  if(!v){up.innerHTML='';return}
+  up.innerHTML='<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+(QY_PROOF[v]||'')+'</div><div class="upload-status req">待上传</div></div><div class="upload-add" style="margin-top:10px;height:64px" onclick="toast(\'演示上传\')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;margin-top:4px">点击上传'+(QY_PROOF[v]||'')+'</span></div>';
+}
+
+// 户籍迁移分步表单
+let qyStep=1;
+const QY_MATS={
+  'fq':[{n:'书面申请',r:1},{n:'双方居民户口簿',r:1},{n:'双方居民身份证',r:1},{n:'结婚证',r:1}],
+  'fz':[{n:'书面申请',r:1},{n:'双方户口簿及身份证',r:1},{n:'亲属关系证明（出生医学证明或其他有效材料）',r:1}],
+  'zf':[{n:'书面申请',r:1},{n:'双方户口簿及身份证',r:1},{n:'亲属关系证明（出生医学证明或其他有效材料）',r:1}],
+  'gf':[{n:'书面申请',r:1},{n:'户口簿',r:1},{n:'居民身份证',r:1},{n:'不动产权证书（或备案购房合同及发票）',r:1},{n:'房屋所有权人同意迁入声明',r:0},{n:'随迁亲属关系证明',r:0}],
+  'zf2':[{n:'房屋合法产权证明',r:1},{n:'房屋所有权人书面同意落户证明',r:1},{n:'房管部门备案租赁合同/公有房屋租赁证明',r:1}],
+  'gz':[{n:'书面申请',r:1},{n:'户口簿',r:1},{n:'居民身份证',r:1},{n:'组织人事或劳动部门调动文件（调令）',r:1},{n:'单位接收证明（落单位集体户）',r:0}],
+  'dx':[{n:'录取通知书/毕业证或退学证明',r:1},{n:'户口簿',r:1},{n:'居民身份证',r:1},{n:'劳动合同',r:0},{n:'报到证',r:0},{n:'单位营业执照',r:0}],
+  'rc':[{n:'学历学位证书',r:1},{n:'职称证书',r:1},{n:'人社部门引进证明',r:1}],
+  'wg':[{n:'劳动合同（劳动部门备案）/营业执照',r:1},{n:'租房协议/完税凭证',r:1},{n:'入户审批表',r:1}],
+  'sj':[{n:'部队师（旅）级以上政治部门批准手续',r:1},{n:'军官证',r:1},{n:'结婚证',r:0},{n:'家属户口簿及身份证',r:1}],
+  'hg':[{n:'护照/旅行证',r:1},{n:'原籍户籍档案材料',r:0}]
+};
+function onQyReasonChange(){
+  const v=document.getElementById('qy-reason').value;
+  const list=document.getElementById('qy-mats');
+  if(!list)return;
+  const def=v&&QY_MATS[v]?QY_MATS[v]:[{n:'书面申请',r:1},{n:'双方户口簿及身份证',r:1}];
+  list.innerHTML=def.map(m=>'<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>').join('');
+}
+function goStepQy(d){
+  const next=qyStep+d;
+  if(next<1||next>3)return;
+  const gid=id=>document.getElementById(id);
+  if(d>0&&qyStep===1&&gid('qy-reason')&&!gid('qy-reason').value){toast('请先选择迁移原因');return}
+  if(d>0&&qyStep===2&&gid('region-input-qyin')&&!gid('region-input-qyin').value){toast('请先选择拟迁入地行政区划');return}
+  qyStep=next;
+  document.querySelectorAll('#page-form-qianyi .form-step').forEach(el=>el.classList.toggle('active',+el.dataset.step===next));
+  document.querySelectorAll('#page-form-qianyi .step-item').forEach(el=>{
+    el.classList.toggle('active',+el.dataset.step===next);
+    if(+el.dataset.step<next){el.classList.add('done');el.querySelector('.step-dot').textContent='✓'}
+    else{el.classList.remove('done')}
+  });
+  gid('qy-step-prev').style.display=next===1?'none':'block';
+  gid('qy-step-next').style.display=next===3?'none':'block';
+  gid('qy-step-submit').style.display=next===3?'block':'none';
+}
+function resetFormStepQy(){
+  qyStep=1;
+  document.querySelectorAll('#page-form-qianyi .form-step').forEach(el=>el.classList.toggle('active',el.dataset.step==='1'));
+  document.querySelectorAll('#page-form-qianyi .step-item').forEach(el=>{
+    const on=el.dataset.step==='1';el.classList.toggle('active',on);el.classList.remove('done');
+    el.querySelector('.step-dot').textContent=el.dataset.step;
+  });
+  const gid=id=>document.getElementById(id);
+  if(gid('qy-step-prev'))gid('qy-step-prev').style.display='none';
+  if(gid('qy-step-next'))gid('qy-step-next').style.display='block';
+  if(gid('qy-step-submit'))gid('qy-step-submit').style.display='none';
+}
+
+// 户籍补录分步表单
+let buluStep=1;
+function goStepBulu(d){
+  const next=buluStep+d;
+  if(next<1||next>3)return;
+  const gid=id=>document.getElementById(id);
+  if(d>0&&buluStep===1&&gid('bulu-reason')&&!gid('bulu-reason').value.trim()){toast('请先填写无户口原因书面陈述');return}
+  if(d>0&&buluStep===2&&gid('bulu-name')&&!gid('bulu-name').value.trim()){toast('请先填写拟登记姓名');return}
+  buluStep=next;
+  document.querySelectorAll('#page-form-bulu .form-step').forEach(el=>el.classList.toggle('active',+el.dataset.step===next));
+  document.querySelectorAll('#page-form-bulu .step-item').forEach(el=>{
+    el.classList.toggle('active',+el.dataset.step===next);
+    if(+el.dataset.step<next){el.classList.add('done');el.querySelector('.step-dot').textContent='✓'}
+    else{el.classList.remove('done')}
+  });
+  gid('bulu-step-prev').style.display=next===1?'none':'block';
+  gid('bulu-step-next').style.display=next===3?'none':'block';
+  gid('bulu-step-submit').style.display=next===3?'block':'none';
+}
+function resetFormStepBulu(){
+  buluStep=1;
+  document.querySelectorAll('#page-form-bulu .form-step').forEach(el=>el.classList.toggle('active',el.dataset.step==='1'));
+  document.querySelectorAll('#page-form-bulu .step-item').forEach(el=>{
+    const on=el.dataset.step==='1';el.classList.toggle('active',on);el.classList.remove('done');
+    el.querySelector('.step-dot').textContent=el.dataset.step;
+  });
+  const gid=id=>document.getElementById(id);
+  if(gid('bulu-step-prev'))gid('bulu-step-prev').style.display='none';
+  if(gid('bulu-step-next'))gid('bulu-step-next').style.display='block';
+  if(gid('bulu-step-submit'))gid('bulu-step-submit').style.display='none';
+}
+
+// 出生登记分步表单
+let chushengStep=1;
+// 死亡注销：死亡原因联动
+function onSwReasonChange(){
+  const v=document.getElementById('sw-reason').value;
+  const list=document.getElementById('sw-mats');if(!list)return;
+  let base=[
+    {n:'居民户口簿',r:1},
+    {n:'申报人居民身份证',r:1},
+    {n:'死者居民身份证（缺失须传情况说明）',r:1}
+  ];
+  if(v==='declare'){
+    // 宣告死亡：无需死亡医学证明（推断）书，须法院宣告死亡判决书
+    base.push({n:'法院宣告死亡判决书',r:1});
+  }else{
+    base.push({n:'死亡医学证明（推断）书',r:1});
+    if(v==='abnormal')base.push({n:'非正常死亡认定书',r:1});
+  }
+  list.innerHTML=base.map(m=>'<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+'</div><div class="upload-status req">必填</div></div>').join('');
+}
+// 出生登记：婚内/婚外切换
+let csType='within';
+function setCsType(t){
+  csType=t;
+  document.getElementById('cs-type-within').style.borderColor=t==='within'?'var(--accent)':'var(--border)';
+  document.getElementById('cs-type-within').style.background=t==='within'?'rgba(0,82,255,0.06)':'var(--card)';
+  document.getElementById('cs-type-within').querySelector('div').style.color=t==='within'?'var(--accent)':'var(--foreground)';
+  document.getElementById('cs-type-out').style.borderColor=t==='out'?'var(--accent)':'var(--border)';
+  document.getElementById('cs-type-out').style.background=t==='out'?'rgba(0,82,255,0.06)':'var(--card)';
+  document.getElementById('cs-type-out').querySelector('div').style.color=t==='out'?'var(--accent)':'var(--foreground)';
+  document.getElementById('cs-out-parent').style.display=t==='out'?'block':'none';
+  onCsOutSideChange();
+}
+function onCsOutSideChange(){
+  const side=document.getElementById('cs-out-side').value;
+  const f=document.getElementById('cs-father-block');
+  const m=document.getElementById('cs-mother-block');
+  if(csType==='out'){
+    f.style.display=(side==='father')?'block':'none';
+    m.style.display=(side==='mother')?'block':'none';
+  }else{
+    f.style.display='block';m.style.display='block';
+  }
+  const luo=document.getElementById('cs-luohu-block');
+  if(luo) luo.style.display=(csType==='out')?'none':'block';
+  renderCsMats();
+}
+function onCsLuohuChange(){renderCsMats();}
+function onCsLuohuTypeChange(){renderCsMats();}
+function onCsParentNationChange(){
+  const f=document.querySelector('[data-group="father"][data-field="nation"]').value;
+  const m=document.querySelector('[data-group="mother"][data-field="nation"]').value;
+  const show=f&&m&&f!==m;
+  document.getElementById('cs-nation-confirm').style.display=show?'block':'none';
+}
+function onCsNationChange(){/*占位，实际由 onCsParentNationChange 触发*/}
+/* 民族成份确认书：父母双方线上签字（原型演示切换） */
+function csSign(who){
+  const tip=document.getElementById('cs-sign-'+who+'-tip');
+  const box=document.getElementById('cs-sign-'+who);
+  const signed=tip.dataset.signed==='1';
+  if(!signed){
+    tip.dataset.signed='1';
+    tip.textContent='已签署';
+    tip.style.color='#059669';
+    box.style.borderColor='#059669';
+    toast((who==='father'?'父亲':'母亲')+'线上签字完成');
+  }else{
+    tip.dataset.signed='0';
+    tip.textContent='点击进入手写签名（未签）';
+    tip.style.color='';
+    box.style.borderColor='';
+  }
+}
+function renderCsMats(){
+  const list=document.getElementById('cs-mats');if(!list)return;
+  let mats=[];
+  if(csType==='within'){
+    mats=[
+      {n:'《出生医学证明》',r:1},
+      {n:'父母双方居民身份证',r:1},
+      {n:'父亲居民户口簿',r:1},
+      {n:'母亲居民户口簿',r:1},
+      {n:'结婚证',r:1}
+    ];
+    const lt=document.getElementById('cs-luohu-type').value;
+    if(lt==='unit')mats.push({n:'单位出具的同意落户证明',r:1});
+    if(lt==='family')mats.push({n:'不动产权证书（房产证）或村、乡镇街道、派出所落户证明',r:1});
+    const f=document.querySelector('[data-group="father"][data-field="nation"]').value;
+    const m=document.querySelector('[data-group="mother"][data-field="nation"]').value;
+    if(f&&m&&f!==m)mats.push({n:'《民族成份确认书》（父母双方线上签字）',r:1});
+  }else{
+    const side=document.getElementById('cs-out-side').value;
+    if(side==='mother'){
+      mats=[
+        {n:'《出生医学证明》',r:1},
+        {n:'母亲居民身份证',r:1},
+        {n:'母亲居民户口簿',r:1},
+        {n:'母亲未婚申明书',r:1},
+        {n:'派出所调查笔录',r:1}
+      ];
+    }else if(side==='father'){
+      mats=[
+        {n:'《出生医学证明》',r:1},
+        {n:'父亲居民身份证',r:1},
+        {n:'父亲居民户口簿',r:1},
+        {n:'父亲未婚申明书',r:1},
+        {n:'派出所调查笔录',r:1},
+        {n:'亲子鉴定证明',r:1}
+      ];
+    }
+  }
+  list.innerHTML=mats.map(m=>'<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>').join('');
+}
+
+function goStep(d){
+  const next=chushengStep+d;
+  if(next<1||next>3)return;
+  const gid=id=>document.getElementById(id);
+  if(d>0&&chushengStep===1&&gid('cs-name')&&!gid('cs-name').value.trim()){toast('请先填写新生儿姓名');return}
+  if(d>0&&chushengStep===2){
+    if(csType==='out'){
+      const side=document.getElementById('cs-out-side').value;
+      const need=side==='father'?gid('cs-fname'):gid('cs-mname');
+      if(need&&!need.value.trim()){toast('请先填写'+(side==='father'?'父亲':'母亲')+'姓名');return}
+    }else if(gid('cs-fname')&&gid('cs-mname')&&(!gid('cs-fname').value.trim()||!gid('cs-mname').value.trim())){toast('请先填写父母双方姓名');return}
+  }
+  chushengStep=next;
+  document.querySelectorAll('#page-form-chusheng .form-step').forEach(el=>el.classList.toggle('active',+el.dataset.step===next));
+  document.querySelectorAll('#page-form-chusheng .step-item').forEach(el=>{
+    el.classList.toggle('active',+el.dataset.step===next);
+    if(+el.dataset.step<next){el.classList.add('done');el.querySelector('.step-dot').textContent='✓'}
+    else{el.classList.remove('done')}
+  });
+  gid('step-prev').style.display=next===1?'none':'block';
+  gid('step-next').style.display=next===3?'none':'block';
+  gid('step-submit').style.display=next===3?'block':'none';
+}
+function resetFormStep(){
+  chushengStep=1;
+  document.querySelectorAll('#page-form-chusheng .form-step').forEach(el=>el.classList.toggle('active',el.dataset.step==='1'));
+  document.querySelectorAll('#page-form-chusheng .step-item').forEach(el=>{
+    const on=el.dataset.step==='1';el.classList.toggle('active',on);el.classList.remove('done');
+    el.querySelector('.step-dot').textContent=el.dataset.step;
+  });
+  const gid=id=>document.getElementById(id);
+  if(gid('step-prev'))gid('step-prev').style.display='none';
+  if(gid('step-next'))gid('step-next').style.display='block';
+  if(gid('step-submit'))gid('step-submit').style.display='none';
+}
+
+// 记录查看与电子证件
+let currentRecId='';
+function openResult(id){currentRecId=id;goPage('result')}
+function openCertFromRec(id){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  if(r.biz!=='huzheng'){toast('该业务办结后暂无电子证明');return}
+  renderCert('huzheng','my-list');goPage('cert');
+}
+function renderResultPage(){
+  const btn=document.getElementById('result-cert-btn');
+  const r=records.find(x=>x.id===currentRecId);
+  const t=document.getElementById('result-title');
+  if(r){t.textContent=r.status==='done'?r.bizName+' · 已办结':r.status==='rejected'?r.bizName+' · 已退回':r.bizName+' · 办理中'}
+  const can=r&&r.status==='done'&&r.biz==='huzheng';
+  if(btn)btn.style.display=can?'flex':'none';
+  const rb=document.getElementById('result-resubmit-btn');
+  if(rb)rb.style.display=(r&&r.status==='rejected')?'flex':'none';
+}
+
+
+
+
+// 主项变更：各变更类别对应的材料清单（必填/选填）
+
+// 主项变更：二级变更原因（按变更项目联动）
+const BG_REASONS={
+  xm:['自愿改名','重名','生僻字','离婚','收养'],
+  csrq:['一般变更','登记错误'],
+  mz:['与实际不符','随父/随母变更'],
+  jg:['一般','登记错误'],
+  xb:['医学性别变更','登记错误'],
+  sfzh:['号码纠错']
+};
+// 各项目基础材料（dl=1 表示该项提供模板下载）
+const BG_BASE={
+  xm:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'户口本原件及复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'无违法犯罪记录证明',r:1},{n:'2份以上调查笔录',r:1}],
+  csrq:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'户口本原件及复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'出生证明原件及复印件',r:1},{n:'其他能证明出生日期的证件或材料',r:0},{n:'无违法犯罪记录证明',r:1},{n:'2份以上调查笔录',r:1}],
+  mz:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'本人及父母三方户口本原件及复印件',r:1},{n:'父母或继父母婚姻关系证明',r:1},{n:'市一级民宗部门同意变更的批复',r:1},{n:'2份以上调查笔录',r:1},{n:'亲子鉴定（户口本无法体现父母子女关系时提供）',r:0}],
+  jg:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'本人及父亲户口本原件及复印件',r:1},{n:'祖籍地公安机关证明',r:1},{n:'单位、组织、人事部门同意变更的证明',r:1},{n:'2份以上调查笔录',r:1},{n:'亲子鉴定（户口本无法体现父母子女关系时提供）',r:0}],
+  xb:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'常住人口登记表复印件',r:1},{n:'本人身份证原件及复印件（未成年或无身份证人员提供监护人身份证及复印件）',r:1},{n:'三甲医院性别鉴定',r:1},{n:'2份以上调查笔录',r:1}],
+  sfzh:[{n:'变更审批表（本人或监护人申请）',r:1,dl:1},{n:'户口本原件及复印件',r:1},{n:'本人身份证原件及复印件',r:1},{n:'公民身份号码纠错证明材料',r:1}]
+};
+// 各变更原因的附加材料
+const BG_EXTRA={
+  'xm|重名':[{n:'学校证明及花名册',r:1}],
+  'xm|生僻字':[{n:'户籍地派出所出具证明',r:1}],
+  'xm|离婚':[{n:'离婚判决书、协议书',r:1},{n:'夫妻双方申请及经司法机关公证的知情同意书',r:1}],
+  'xm|收养':[{n:'收养登记证',r:1}],
+  'csrq|登记错误':[{n:'一代证或原始户口本',r:1},{n:'派出所登记错误民警情况说明',r:1}],
+  'jg|登记错误':[{n:'民警录入错误的情况说明',r:1}],
+  'xb|登记错误':[{n:'民警录入错误的情况说明',r:1}]
+};
+function getBgMats(cat,reason){
+  const base=(BG_BASE[cat]||[]).slice();
+  const extra=BG_EXTRA[cat+'|'+reason]||[];
+  return base.concat(extra);
+}
+// 主项变更：拟变更内容录入控件类型（仅6类主项）
+const BG_ITEMS={
+  xm:{type:'text',ph:'拟变更后的姓名（须在《通用规范汉字表》内）'},
+  xb:{type:'select',opts:['男','女']},
+  csrq:{type:'date'},
+  mz:{type:'select',opts:['汉族','藏族','回族','门巴族','珞巴族','其他']},
+  jg:{type:'region'},
+  sfzh:{type:'text',ph:'拟变更后的公民身份号码'}
+};
+const BG_ORIG={xm:'卓玛',xb:'女',csrq:'1992-03-08',mz:'藏族',jg:'—',sfzh:'542623********0024'};
+
+function renderBgMats(v){
+  const list=document.getElementById('bg-mats');
+  if(!list)return;
+  const cat=v||(document.getElementById('bg-category')?document.getElementById('bg-category').value:'');
+  const reason=document.getElementById('bg-reason')?document.getElementById('bg-reason').value:'';
+  const mats=getBgMats(cat,reason);
+  list.innerHTML=mats.map(m=>{
+    const dl=m.dl?'<a style="color:var(--accent);cursor:pointer;text-decoration:underline;margin-left:6px" onclick="event.stopPropagation();toast(&quot;演示下载变更审批表模板&quot;)">下载模板</a>':'';
+    return '<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+dl+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>';
+  }).join('');
+}
+function onBgCatChange(){
+  const v=document.getElementById('bg-category').value;
+  const c=document.getElementById('bg-content');
+  const o=document.getElementById('bg-orig');
+  if(!v){c.innerHTML='<div class="form-input" style="background:var(--muted);color:var(--muted-foreground)">请先选择变更项目类别</div>';o.textContent='—';return}
+  const it=BG_ITEMS[v];
+  o.textContent=BG_ORIG[v]||'—';
+  if(it.type==='select'){
+    c.innerHTML='<div class="select-wrap"><select class="form-input" id="bg-new-value"><option value="">请选择</option>'+it.opts.map(x=>'<option>'+x+'</option>').join('')+'</select></div>';
+  }else if(it.type==='date'){
+    c.innerHTML='<input class="form-input" id="bg-new-value" type="date">';
+  }else if(it.type==='region'){
+    c.innerHTML='<div class="region-select" onclick="openRegion(\'bgcsd\')"><span class="region-value placeholder" id="region-val-bgcsd">请选择行政区划</span><svg class="region-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div><input type="hidden" id="region-input-bgcsd"><input class="form-input" style="margin-top:10px" placeholder="出生地区划内详细地址">';
+  }else{
+    c.innerHTML='<input class="form-input" id="bg-new-value" type="'+(it.type==='number'?'number':'text')+'" placeholder="'+(it.ph||'')+'">';
+  }
+  if(c.querySelector('.select-wrap'))initDropdowns();
+  // 联动二级变更原因
+  const rb=document.getElementById('bg-reason-block');
+  const rs=document.getElementById('bg-reason');
+  if(rb&&rs){
+    const list=BG_REASONS[v]||[];
+    rs.innerHTML='<option value="">请选择变更原因</option>'+list.map(x=>'<option>'+x+'</option>').join('');
+    rb.style.display=list.length?'block':'none';
+    refreshDropdown(rs);
+  }
+  renderBgMats(v);
+}
+
+// ===== 主项变更：第二版「办理指引」（流程告知 + 材料下载，不在线填报） =====
+const BG_GUIDE_FLOW=[
+  '林安码提交申报，填写变更项目并上传材料',
+  '材料传输至户籍系统进行形式审核',
+  '形式审核通过后，推送管辖单位社区民警上门调查、制作笔录',
+  '笔录回传户籍系统进行实质审核',
+  '大队、大队分管领导、支队逐级审批',
+  '审核完成后办结，并由林安码向群众发送结果短信'
+];
+function switchBgVersion(v){
+  const guide=document.getElementById('bg-version-guide');
+  const ta=document.getElementById('bg-tab-apply');
+  const tg=document.getElementById('bg-tab-guide');
+  const items=document.querySelectorAll('#page-form-biangeng .bg-apply-only');
+  const base='flex:1;text-align:center;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;';
+  const on=base+'background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,0.08)';
+  const off=base+'background:transparent;color:var(--muted-foreground);box-shadow:none';
+  if(v==='apply'){
+    guide.style.display='none';
+    items.forEach(e=>e.style.display='');
+    ta.style.cssText=on;tg.style.cssText=off;
+  }else{
+    guide.style.display='block';
+    items.forEach(e=>e.style.display='none');
+    tg.style.cssText=on;ta.style.cssText=off;
+  }
+}
+function onBgGuideCatChange(){
+  const cat=document.getElementById('bg-guide-cat').value;
+  const flow=document.getElementById('bg-guide-flow');
+  const mats=document.getElementById('bg-guide-mats');
+  if(!cat){flow.innerHTML='';mats.innerHTML='';return;}
+  // 流程告知
+  flow.innerHTML='<div class="form-group"><label class="form-label">办理流程告知</label><div style="background:var(--muted);border-radius:12px;padding:14px">'
+    +BG_GUIDE_FLOW.map((t,i)=>'<div style="display:flex;gap:10px;margin-bottom:12px"><div style="width:22px;height:22px;flex:none;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">'+(i+1)+'</div><div style="font-size:12.5px;line-height:1.6;color:var(--foreground);padding-top:1px">'+t+'</div></div>').join('')
+    +'</div></div>';
+  // 材料 + 模板下载
+  const def=getBgMats(cat,'');
+  let html=def.map(m=>{
+    const dl=m.dl?'<a style="color:var(--accent);cursor:pointer;text-decoration:underline;margin-left:6px" onclick="event.stopPropagation();toast(&quot;演示下载变更审批表模板&quot;)">下载模板</a>':'';
+    return '<div class="upload-item"><div class="upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div><div class="upload-info">'+m.n+dl+'</div><div class="upload-status '+(m.r?'req':'opt')+'">'+(m.r?'必填':'选填')+'</div></div>';
+  }).join('');
+  html+='<div onclick="toast(&quot;演示下载变更更正申请表模板&quot;)" style="display:flex;align-items:center;gap:8px;padding:12px;background:var(--muted);border-radius:10px;margin-top:8px;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span style="font-size:12.5px;color:var(--accent)">下载《户口登记项目变更更正申请表》模板</span></div>';
+  mats.innerHTML=html;
+}
+
+// 行政区划选择器（省→市→县/区 三级联动）
+let regionKey='',regionProv='',regionCity='',regionCounty='';
+const REGION_DATA={
+  '西藏自治区':{
+    '林芝市':['巴宜区','工布江达县','米林市','墨脱县','波密县','察隅县','朗县'],
+    '拉萨市':['城关区','堆龙德庆区','达孜区','林周县','当雄县','尼木县','曲水县','墨竹工卡县'],
+    '日喀则市':['桑珠孜区','南木林县','江孜县','定日县','萨迦县','拉孜县','昂仁县','谢通门县','白朗县','仁布县','康马县','定结县','仲巴县','亚东县','吉隆县','聂拉木县','萨嘎县','岗巴县'],
+    '昌都市':['卡若区','江达县','贡觉县','类乌齐县','丁青县','察雅县','八宿县','左贡县','芒康县','洛隆县','边坝县'],
+    '山南市':['乃东区','扎囊县','贡嘎县','桑日县','琼结县','曲松县','措美县','洛扎县','加查县','隆子县','错那市','浪卡子县'],
+    '那曲市':['色尼区','嘉黎县','比如县','聂荣县','安多县','申扎县','索县','班戈县','巴青县','尼玛县','双湖县'],
+    '阿里地区':['噶尔县','普兰县','札达县','日土县','革吉县','改则县','措勤县']
+  }
+};
+function openRegion(key){
+  regionKey=key;regionProv='';regionCity='';regionCounty='';
+  document.getElementById('region-tab-prov').textContent='请选择省';
+  document.getElementById('region-tab-city').textContent='请选择市';
+  document.getElementById('region-tab-county').textContent='请选择县(区)';
+  document.getElementById('region-tab-prov').classList.add('active');
+  document.getElementById('region-tab-city').classList.remove('active');
+  document.getElementById('region-tab-county').classList.remove('active');
+  document.getElementById('region-col').innerHTML=Object.keys(REGION_DATA).map(p=>'<div class="region-item" onclick="regionPick(\'prov\',\''+p+'\')">'+p+'</div>').join('');
+  document.getElementById('region-overlay').classList.add('show');
+}
+function regionPick(level,val){
+  if(level==='prov'){
+    regionProv=val;regionCity='';regionCounty='';
+    document.getElementById('region-tab-prov').textContent=val;
+    document.getElementById('region-tab-prov').classList.add('active');
+    document.getElementById('region-tab-city').classList.remove('active');
+    document.getElementById('region-tab-county').classList.remove('active');
+    document.getElementById('region-tab-city').textContent='请选择市';
+    document.getElementById('region-tab-county').textContent='请选择县(区)';
+    document.getElementById('region-col').innerHTML=Object.keys(REGION_DATA[val]).map(c=>'<div class="region-item" onclick="regionPick(\'city\',\''+c+'\')">'+c+'</div>').join('');
+  }else if(level==='city'){
+    regionCity=val;regionCounty='';
+    document.getElementById('region-tab-city').textContent=val;
+    document.getElementById('region-tab-city').classList.add('active');
+    document.getElementById('region-tab-county').classList.remove('active');
+    document.getElementById('region-tab-county').textContent='请选择县(区)';
+    document.getElementById('region-col').innerHTML=REGION_DATA[regionProv][val].map(x=>'<div class="region-item" onclick="regionPick(\'county\',\''+x+'\')">'+x+'</div>').join('');
+  }else{
+    regionCounty=val;
+    const full=regionProv+'·'+regionCity+'·'+regionCounty;
+    const rv=document.getElementById('region-val-'+regionKey);
+    if(rv){rv.textContent=full;rv.classList.remove('placeholder')}
+    const ri=document.getElementById('region-input-'+regionKey);
+    if(ri)ri.value=full;
+    closeRegion();
+  }
+}
+function regionTab(level){
+  if(level==='prov'){
+    document.getElementById('region-tab-prov').classList.add('active');
+    document.getElementById('region-tab-city').classList.remove('active');
+    document.getElementById('region-tab-county').classList.remove('active');
+    document.getElementById('region-col').innerHTML=Object.keys(REGION_DATA).map(p=>'<div class="region-item" onclick="regionPick(\'prov\',\''+p+'\')">'+p+'</div>').join('');
+  }else if(level==='city'){
+    if(!regionProv)return;
+    document.getElementById('region-tab-city').classList.add('active');
+    document.getElementById('region-tab-county').classList.remove('active');
+    document.getElementById('region-col').innerHTML=Object.keys(REGION_DATA[regionProv]).map(c=>'<div class="region-item" onclick="regionPick(\'city\',\''+c+'\')">'+c+'</div>').join('');
+  }else{
+    if(!regionCity)return;
+    document.getElementById('region-tab-county').classList.add('active');
+    document.getElementById('region-col').innerHTML=REGION_DATA[regionProv][regionCity].map(x=>'<div class="region-item" onclick="regionPick(\'county\',\''+x+'\')">'+x+'</div>').join('');
+  }
+}
+function closeRegion(){document.getElementById('region-overlay').classList.remove('show')}
+
+// 扫林安码 / OCR 读取身份证（统一身份采集）
+let scanGroup='',scanMode='',scanTimer=null;
+const SCAN_DATA={
+  applicant:{name:'卓玛',nation:'藏族',idcard:'542623********0024',phone:'139****5678',addr:'扎木镇居委会'},
+  father:{name:'扎西',nation:'藏族',idcard:'542623********0012'},
+  mother:{name:'卓玛',nation:'藏族',idcard:'542623********0024'},
+  guardian:{name:'扎西',nation:'藏族',idcard:'542623********0012'},
+  bulu:{name:'罗布',nation:'藏族',idcard:'542623********0068',gender:'男',birth:'1990-05-12',native:'西藏自治区·林芝市·波密县',birthplace:'西藏自治区·林芝市·波密县'}
+};
+function openScan(mode,group){
+  scanGroup=group;scanMode=mode;
+  document.getElementById('scan-title').textContent=mode==='code'?'扫林安码':'OCR读取身份证';
+  document.getElementById('scan-hint').textContent=mode==='code'?'将林安码个人码置于取景框内':'将身份证正面置于取景框内，自动识别';
+  document.getElementById('scan-overlay').classList.add('show');
+  clearTimeout(scanTimer);
+  scanTimer=setTimeout(simulateScan,2200);
+}
+function simulateScan(){
+  const data=SCAN_DATA[scanGroup]||SCAN_DATA.applicant;
+  Object.entries(data).forEach(([k,v])=>{
+    document.querySelectorAll('[data-group="'+scanGroup+'"][data-field="'+k+'"]').forEach(el=>{
+      if(el.tagName==='SELECT'){
+        let idx=[...el.options].findIndex(o=>o.textContent===v);
+        if(idx<0)idx=[...el.options].findIndex(o=>o.value===v);
+        if(idx>0){el.selectedIndex=idx;const wrap=el.closest('.select-wrap');const box=wrap?wrap.querySelector('.select-box'):null;
+          if(box){box.textContent=v;box.classList.remove('placeholder');const list=box.nextElementSibling;
+            if(list&&list.classList&&list.classList.contains('dropdown-list')){[...list.children].forEach((x,i)=>x.classList.toggle('sel',i===idx))}}}
+      } else if(el.tagName==='INPUT'){
+        el.value=v;
+        const rid=el.id&&el.id.indexOf('region-input-')===0?el.id.slice('region-input-'.length):null;
+        if(rid){const rv=document.getElementById('region-val-'+rid);if(rv){rv.textContent=v;rv.classList.remove('placeholder')}}
+      }
+      else {el.textContent=v}
+    });
+  });
+  closeScan();
+  toast(scanMode==='code'?'林安码识别成功，已自动回填':'身份证OCR识别成功，已自动回填');
+}
+function closeScan(){document.getElementById('scan-overlay').classList.remove('show');clearTimeout(scanTimer)}
+
+// 自定义下拉组件（兼容小程序 WebView 环境，点击稳定弹出）
+// 刷新单个自定义下拉（重填 option 后调用）
+function refreshDropdown(sel){
+  const wrap=sel.closest('.select-wrap');
+  if(!wrap)return;
+  wrap.querySelectorAll('.select-box,.dropdown-list').forEach(n=>n.remove());
+  const box=document.createElement('div');box.className='select-box';
+  const list=document.createElement('div');list.className='dropdown-list';
+  const show=()=>{const o=sel.options[sel.selectedIndex];box.textContent=o?o.textContent:'请选择变更原因';box.classList.toggle('placeholder',!sel.selectedIndex)};
+  show();
+  [...sel.options].forEach((o,idx)=>{
+    const it=document.createElement('div');it.className='dropdown-item'+(o.selected?' sel':'');
+    it.textContent=o.textContent;
+    it.onclick=()=>{sel.selectedIndex=idx;show();list.classList.remove('open');box.classList.remove('open');[...list.children].forEach((x,i)=>x.classList.toggle('sel',i===idx));sel.dispatchEvent(new Event('change'))};
+    list.appendChild(it);
+  });
+  box.onclick=(e)=>{
+    e.stopPropagation();
+    const open=list.classList.toggle('open');
+    box.classList.toggle('open',open);
+    if(open){
+      const r=wrap.getBoundingClientRect();
+      list.classList.toggle('drop-up',(window.innerHeight-r.bottom)<Math.min(240,list.scrollHeight+20));
+    }
+  };
+  wrap.appendChild(box);wrap.appendChild(list);
+}
+function initDropdowns(){
+  document.querySelectorAll('.select-wrap select').forEach(sel=>{
+    if(sel.dataset.done)return;sel.dataset.done='1';
+    const wrap=sel.closest('.select-wrap');
+    const box=document.createElement('div');box.className='select-box';
+    const list=document.createElement('div');list.className='dropdown-list';
+    const show=()=>{const o=sel.options[sel.selectedIndex];box.textContent=o?o.textContent:'请选择';box.classList.toggle('placeholder',!sel.selectedIndex)};
+    show();
+    [...sel.options].forEach((o,idx)=>{
+      const it=document.createElement('div');it.className='dropdown-item'+(o.selected?' sel':'');
+      it.textContent=o.textContent;
+      it.onclick=()=>{sel.selectedIndex=idx;show();list.classList.remove('open');box.classList.remove('open');[...list.children].forEach((x,i)=>x.classList.toggle('sel',i===idx));sel.dispatchEvent(new Event('change'))};
+      list.appendChild(it);
+    });
+    box.onclick=(e)=>{
+      e.stopPropagation();
+      const open=list.classList.toggle('open');
+      box.classList.toggle('open',open);
+      if(open){
+        const r=wrap.getBoundingClientRect();
+        list.classList.toggle('drop-up',(window.innerHeight-r.bottom)<Math.min(240,list.scrollHeight+20));
+      }
+    };
+    sel.style.display='none';
+    wrap.appendChild(box);wrap.appendChild(list);
+  });
+}
+document.addEventListener('click',()=>{document.querySelectorAll('.dropdown-list.open').forEach(l=>{l.classList.remove('open');const b=l.previousElementSibling;if(b&&b.classList)b.classList.remove('open')})});
+initDropdowns();
+
+let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2000)}
+function submitForm(bizName,ep,bizKey){
+  const loading=document.getElementById('loading'),lt=document.getElementById('loading-text');
+  lt.textContent='正在提交申请...';loading.classList.add('show');
+  setTimeout(()=>{lt.textContent='人证核验中...';setTimeout(()=>{lt.textContent='等待公安机关受理...';setTimeout(()=>{loading.classList.remove('show');
+    records.unshift({id:'HLW2026091800'+(records.length+1),biz:bizKey,bizName:bizName,time:'2026-09-18 23:52',status:'reviewing',statusText:'审核中',summary:'新提交申请',applicant:'卓玛',phone:'139****5678',level:1});
+    currentRecId=records[0].id;
+    document.getElementById('result-title').textContent=bizName+' · 提交成功';
+    goPage('result',bizKey);
+  },1200)},800)},1000);
+}
+</script>
+</body>
+</html>
